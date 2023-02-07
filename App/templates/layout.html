@@ -12,22 +12,17 @@
 
   </head>
   <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/users">Users Jinja</a></li>
-                <li><a href="/static/users">Users JS</a></li>
-            </ul>
-        </div>
+    <div class="uk-navbar-container">
+      <div class="uk-container uk-container-expand uk-background-primary uk-light">
+        <nav class="uk-navbar">
+          <div class="uk-navbar-left uk-heading-small">MyeSearch</div>
+        </nav>
       </div>
-    </nav>
+    </div>
     
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
+      <nav class="white black-text" style="padding: 10px"> <!--update classes to uikit-->
         <div class="nav-wrapper">
             <ul class="flashes">
             {% for message in messages %}
@@ -39,8 +34,7 @@
       {% endif %}
     {% endwith %}
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <div class="uk-container" id="content">{% block content %}{% endblock %}</div>
+    <script src="/workspace/MyESearch/App/static/main.js"></script>
   </body>
 </html>

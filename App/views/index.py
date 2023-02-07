@@ -9,3 +9,7 @@ def index_page():
 @index_views.route('/', methods=['GET'])
 def health_check():
     return jsonify({'status':'healthy'})
+
+@index_views.route('/login', methods=['GET'])
+def login_page():
+    return render_template('login.html')
