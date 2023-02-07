@@ -5,41 +5,22 @@
 {{ super() }}
 
 {% block content %}
-    <div class="uk-flex uk-height-viewport uk-background-cover uk-height-viewport uk-width-viewport" data-src="/static/images/loginBG.jpg" uk-img>
-        <div class="uk-container uk-margin-auto-vertical">
-            <div class="uk-grid-collapse" uk-grid>
-                <div class="uk-transition-toggle" tabindex="0">
-                    <a class="uk-card uk-card-body uk-card-default uk-transition-scale-up uk-transition-opaque">
-                        <h3 class="uk-text-center uk-text-middle uk-margin-top">Student Login</h3>
-                        <div class="uk-height-medium uk-background-cover" data-src="/static/images/Student.jpeg" uk-img="loading: eager"></div>
-                    </a>
-                </div>
-                <div class="uk-transition-toggle" tabindex="0">
-                    <a class="uk-card uk-card-body uk-card-default uk-transition-scale-up uk-transition-opaque">
-                        <h3 class="uk-text-center uk-text-middle uk-margin-top">Researcher Login</h3>
-                        <div class="uk-height-medium uk-background-cover" data-src="/static/images/Researcher.jpeg" uk-img="loading: eager"></div>
-                    </a>
-                </div>
+    <div class="uk-height-viewport uk-background-cover" data-src="/static/images/loginBG2.jpg" uk-img>
+        <div class="uk-flex uk-height-viewport uk-responsive-width">
+            <div class="uk-grid-collapse uk-margin-auto uk-margin-auto-vertical uk-width-2-3 
+                        uk-child-width-auto uk-text-center uk-transition-toggle" uk-grid tab-index="0">
+                <a class="uk-height-large uk-box-shadow-large uk-text-decoration-none uk-transition-scale-up uk-transition-opaque">
+                    <div class="uk-tile uk-height-1-1 uk-border-rounded uk-padding-remove uk-background-cover" data-src="/static/images/Student.jpeg" uk-img="loading: eager">
+                        <div class="uk-background-default uk-width-1-1 uk-padding-small uk-h4">Student</div>
+                    </div>
+                </a>
+                <div class="uk-height-1-1">|</div>
+                <a class="uk-height-large uk-box-shadow-large uk-text-decoration-none">
+                    <div class="uk-tile uk-height-1-1 uk-border-rounded uk-padding-remove uk-background-cover" data-src="/static/images/Researcher.jpeg" uk-img="loading: eager">
+                        <div class="uk-background-default uk-width-1-1 uk-padding-small uk-h4">Researcher</div>
+                    </div>
+                </a>
             </div>
-            
         </div>
-
-
-
-
-
-
-
-
-        <!-- <div class="uk-container uk-container-small uk-column-1-2">
-            <a class="uk-card uk-card-default uk-card-body uk-text-decoration-none uk-text-center uk-height-large">
-                <h5 class="uk-card-title">Student Login</h5>
-                <div class="uk-height-medium uk-background-cover" data-src="/static/images/Student.jpeg" uk-img="loading: eager"></div>
-            </a>
-            <a class="uk-card uk-card-default uk-card-body uk-text-decoration-none uk-text-center uk-height-large">
-                <h5 class="uk-card-title">Researcher Login</h5>
-                <div class="uk-height-medium uk-background-cover" data-src="/static/images/Researcher.jpeg" uk-img="loading: eager"></div>
-            </a>
-        </div> -->
     </div>
 {% endblock %}
