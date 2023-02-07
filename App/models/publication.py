@@ -6,6 +6,7 @@ class Publication(db.Model):
     title = db.Column(db.String(120), unique=True, nullable=False)
     abstract = db.Column(db.String(500), nullable=False)
     free_access = db.Column(db.Boolean, nullable=False)
+    pub_type = db.Column(db.String(30), nullable=False)
     pub_records = db.relationship("PubRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
 
