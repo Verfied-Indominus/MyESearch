@@ -5,22 +5,26 @@
 {{ super() }}
 
 {% block content %}
-    <div class="uk-height-viewport uk-background-cover" data-src="/static/images/loginBG2.jpg" uk-img>
-        <div class="uk-flex uk-height-viewport uk-responsive-width">
-            <div class="uk-grid-collapse uk-margin-auto uk-margin-auto-vertical uk-width-2-3 
-                        uk-child-width-auto uk-text-center uk-transition-toggle" uk-grid tab-index="0">
-                <a class="uk-height-large uk-box-shadow-large uk-text-decoration-none uk-transition-scale-up uk-transition-opaque">
-                    <div class="uk-tile uk-height-1-1 uk-border-rounded uk-padding-remove uk-background-cover" data-src="/static/images/Student.jpeg" uk-img="loading: eager">
-                        <div class="uk-background-default uk-width-1-1 uk-padding-small uk-h4">Student</div>
-                    </div>
-                </a>
-                <div class="uk-height-1-1">|</div>
-                <a class="uk-height-large uk-box-shadow-large uk-text-decoration-none">
-                    <div class="uk-tile uk-height-1-1 uk-border-rounded uk-padding-remove uk-background-cover" data-src="/static/images/Researcher.jpeg" uk-img="loading: eager">
-                        <div class="uk-background-default uk-width-1-1 uk-padding-small uk-h4">Researcher</div>
-                    </div>
-                </a>
+    <div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover" data-src="/static/images/loginBG2.jpg" uk-img tabindex="-1">
+        <div class="uk-grid uk-width-3-5 uk-background-primary" uk-height-viewport="offset-top: true; offset-bottom: 15" uk-grid>
+            <div class="uk-padding-remove uk-width-2-5" uk-slideshow="animation: fade; autoplay: true; autoplay-interval: 6000">
+                <ul class="uk-slideshow-items">
+                    <li><img src="/static/images/Student.jpeg" alt="" uk-cover></li>
+                    <li><img src="/static/images/Researcher.jpeg" alt=""uk-cover></li>
+                </ul>
             </div>
-        </div>
+            <div>Test2</div>
+        </div>   
+        <!-- <a class="uk-height-large uk-width-1-2 uk-border-rounded uk-box-shadow-large uk-text-decoration-none uk-transition-toggle">
+            <div class="uk-tile uk-height-1-1 uk-padding-remove uk-background-cover uk-transition-scale-up uk-transition-opaque" data-src="/static/images/Student.jpeg" uk-img="loading: eager">
+                <div class="uk-light uk-background-primary uk-width-1-1 uk-padding-small uk-h4">Student</div>
+            </div>
+        </a>
+        <div class="uk-height-1-1"></div>
+        <a class="uk-height-large uk-width-expand uk-border-rounded uk-box-shadow-large uk-text-decoration-none uk-transition-toggle">
+            <div class="uk-tile uk-height-1-1 uk-padding-remove uk-background-cover uk-transition-scale-up uk-transition-opaque" data-src="/static/images/Researcher.jpeg" uk-img="loading: eager">
+                <div class="uk-light uk-background-primary uk-width-1-1 uk-padding-small uk-h4">Researcher</div>
+            </div>
+        </a> -->
     </div>
 {% endblock %}
