@@ -5,15 +5,52 @@
 {{ super() }}
 
 {% block content %}
-    <div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover" data-src="/static/images/loginBG2.jpg" uk-img tabindex="-1">
-        <div class="uk-grid uk-width-3-5 uk-background-primary" uk-height-viewport="offset-top: true; offset-bottom: 15" uk-grid>
-            <div class="uk-padding-remove uk-width-2-5" uk-slideshow="animation: fade; autoplay: true; autoplay-interval: 6000">
-                <ul class="uk-slideshow-items">
-                    <li><img src="/static/images/Student.jpeg" alt="" uk-cover></li>
-                    <li><img src="/static/images/Researcher.jpeg" alt=""uk-cover></li>
+    <div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover" data-src="/static/images/loginBG.jpg" uk-img tabindex="-1">
+        <div class="uk-card uk-card-default uk-box-shadow-xlarge uk-grid-collapse uk-width-3-5@l uk-width-4-5@m uk-child-width-1-2@s" uk-height-viewport="offset-top: true; offset-bottom: 15" uk-grid>
+            <div class="uk-padding-remove" uk-slideshow="animation: fade; autoplay: true; autoplay-interval: 6000">
+                <ul class="uk-slideshow-items uk-height-1-1">
+                    <li class=""><img src="/static/images/Student.jpeg" alt="" uk-cover></li>
+                    <li><img src="/static/images/Researcher.jpeg" alt="" uk-cover></li>
                 </ul>
             </div>
-            <div>Test2</div>
+            <div>
+                <div class="uk-flex uk-flex-center uk-margin">
+                    <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
+                </div>
+                
+                <form action="/login" method="post" class="uk-form-stacked uk-margin uk-margin-auto uk-margin-large-bottom uk-width-4-5">
+                    <div class="uk-margin">
+                        <label for="email" class="uk-form-label">Email</label>
+                        <div class="uk-inline uk-form-controls uk-width-expand">
+                            <span class="uk-form-icon" uk-icon="mail"></span>
+                            <input class="uk-input" name="email" type="text">
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label for="password" class="uk-form-label">Password</label>
+                        <div class="uk-inline uk-form-controls uk-width-expand">
+                            <span class="uk-form-icon" uk-icon="lock"></span>
+                            <input class="uk-input" name="password" type="password">
+                        </div>
+                    </div>
+
+                    <div class="uk-margin uk-flex">
+                        <span>
+                            Remember Me
+                            <input class="uk-checkbox" name="email" type="checkbox">
+                        </span>
+                        <button class="uk-button uk-button-text uk-text-capitalize uk-margin-auto-left">Forgot your password?</button>
+                    </div>
+
+                    <div class="uk-margin-medium-top uk-margin uk-flex uk-flex-center">
+                        <button type="submit" class="uk-button uk-button-primary">Login</button>
+                    </div>
+                </form>
+                <div class="uk-margin-large-top uk-flex uk-flex-center">
+                    <span class="uk-flex uk-flex-middle">Don't Have An Account? <button class="uk-button uk-button-text uk-text-capitalize uk-margin-small-left">Sign Up Here</button></span>
+                </div>
+            </div>
         </div>   
         <!-- <a class="uk-height-large uk-width-1-2 uk-border-rounded uk-box-shadow-large uk-text-decoration-none uk-transition-toggle">
             <div class="uk-tile uk-height-1-1 uk-padding-remove uk-background-cover uk-transition-scale-up uk-transition-opaque" data-src="/static/images/Student.jpeg" uk-img="loading: eager">
