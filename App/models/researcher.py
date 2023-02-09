@@ -15,7 +15,7 @@ class Researcher(UserMixin, User, Subject):
     introduction = db.Column(db.String(500), nullable=True)
     research_interests = db.relationship("ResearcherTag", backref="researcher", lazy=True, cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="researcher", lazy=True, cascade="all, delete-orphan")
-    sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="researcher", lazy=True, cascade="all, delete-orphan")
+    sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy=True, cascade="all, delete-orphan")
 
     def __init__(self):
         pass
