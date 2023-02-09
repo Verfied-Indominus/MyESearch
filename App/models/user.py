@@ -12,6 +12,7 @@ class User(db.Model):
     institution = db.Column(db.String(120), nullable=False)
     faculty = db.Column(db.String(120), nullable=False)
     department = db.Column(db.String(120), nullable=False)
+    library = db.relationship("Library", backref="user", lazy=True)
     researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy=True, cascade="all, delete-orphan")
     topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy=True, cascade="all, delete-orphan")
     notification_records = db.relationship("NotificationRecord", backref="user", lazy=True, cascade="all, delete-orphan")
