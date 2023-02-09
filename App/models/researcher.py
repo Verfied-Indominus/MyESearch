@@ -3,7 +3,7 @@ from .subject import Subject
 from App.database import db
 from flask_login import UserMixin
 
-class Researcher(UserMixin, User, Subject):
+class Researcher(UserMixin, User):
     __tablename__="researcher"
     title = db.Column(db.String(8), nullable=False)
     position = db.Column(db.String(32), nullable=False)
@@ -20,13 +20,17 @@ class Researcher(UserMixin, User, Subject):
     def __init__(self):
         pass
 
-    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, title, position, start_year, qualifications, skills):
+    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, title, 
+    #               position, start_year, qualifications, certifications, skills, website_url, introduction):
     #     super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department) #need to populate arguments
-    #     self.title = title
-    #     self.position = position
-    #     self.start_year = start_year
-    #     self.qualifications = qualifications
-    #     self.skills = skills
+        # self.title = title
+        # self.position = position
+        # self.start_year = start_year
+        # self.qualifications = qualifications
+        # self.certifications = certifications
+        # self.skills = skills
+        # self.website_url = website_url
+        # self.introduction = introduction
 
     # def __init__(self, title, position, start_year, qualifications, skills):
     #     super().__init__() #need to populate arguments
