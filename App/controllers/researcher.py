@@ -3,10 +3,10 @@ from App.models import Researcher
 
 
 # this would change when builder design pattern is applied
-def create_researcher(email, password, first_name, middle_name, last_name, institution, faculty, department, title, position, 
-                    start_year, qualifications, certifications, skills, website_url, introduction):
-    newresearcher = Researcher(email, password, first_name, middle_name, last_name, institution, faculty, department, title, 
-                                position, start_year, qualifications, certifications, skills, website_url, introduction)
+def create_researcher(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
+                        position, start_year, qualifications, certifications, skills, website_url, introduction):
+    newresearcher = Researcher(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, 
+                                title, position, start_year, qualifications, certifications, skills, website_url, introduction)
     db.session.add(newresearcher)
     db.session.commit()
     return newresearcher
@@ -67,6 +67,15 @@ def update_researcher_department(id, department):
     if not researcher:
         return False
     researcher.department = department
+    db.session.add(researcher)
+    db.session.commit()
+    return True
+
+def update_researcher_image_url(id, image_url):
+    researcher = get_researcher(id)
+    if not researcher:
+        return False
+    researcher.image_url = image_url
     db.session.add(researcher)
     db.session.commit()
     return True

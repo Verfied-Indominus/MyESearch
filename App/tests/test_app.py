@@ -2,8 +2,8 @@ import os, tempfile, logging, unittest, pytest, datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
-from App.database import create_db
-from App.models import Researcher, Student, Topic, Library, Publication, Notification
+from App.database import create_db, drop_db
+from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
 from App.controllers.library import *
 from App.controllers.researcher import *
 # from App.controllers.publication import *
@@ -21,7 +21,8 @@ LOGGER = logging.getLogger(__name__)
 '''
 
 class ResearcherUnitTests(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         email = 'test@mail.com'
         password = 'password'
         first_name = 'Bob'
@@ -39,7 +40,7 @@ class ResearcherUnitTests(unittest.TestCase):
         skills = 'Data Mining'
         website_url = ''
         introduction = 'My name is Bob.'
-        self.researcher = Researcher(
+        cls.researcher = Researcher(
             email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
             position, start_year, qualifications, certifications, skills, website_url, introduction)
     
@@ -117,22 +118,89 @@ def empty_db():
     yield app.test_client()
     os.unlink(os.getcwd()+'/instance/test.db')
 
+class ResearcherIntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        email = 'test@mail.com'
+        password = 'password'
+        first_name = 'Bob'
+        middle_name = ''
+        last_name = 'Burger'
+        institution = 'UWI'
+        faculty = 'FST'
+        department = 'DCIT'
+        image_url = ''
+        title = 'Dr.'
+        position = 'Lecturer'
+        start_year = '2015'
+        qualifications = 'B.Sc. Computer Science (UWI)'
+        certifications = ''
+        skills = 'Data Mining'
+        website_url = ''
+        introduction = 'My name is Bob.'
+        cls.researcher = create_researcher(
+            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
+            position, start_year, qualifications, certifications, skills, website_url, introduction)
+    
+    def test01_new_researcher_created(self):
+        assert isinstance(self.researcher, Researcher) and self.researcher.id == 1
 
-def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert authenticate("bob", "bobpass") != None
+    def test02_int_researcher_toDict(self):
+        researcher_dict = self.researcher.toDict()
+        self.assertIsInstance(researcher_dict, dict)
+        self.assertDictEqual(researcher_dict, {
+            'id': 1,
+            'email': 'test@mail.com',
+            'first_name': 'Bob',
+            'middle_name': '',
+            'last_name': 'Burger',
+            'institution': 'UWI',
+            'faculty': 'FST',
+            'department': 'DCIT',
+            'image_url': '',
+            'title': 'Dr.',
+            'position': 'Lecturer',
+            'start_year': '2015',
+            'qualifications': 'B.Sc. Computer Science (UWI)',
+            'certifications': '',
+            'skills': 'Data Mining',
+            'website_url': '',
+            'introduction': 'My name is Bob.'
+        })
 
-class UsersIntegrationTests(unittest.TestCase):
-    def test_create_user(self):
-        user = create_user("rick", "bobpass")
-        assert user.username == "rick"
+    def test03_update_researcher_name(self):
+        update_researcher_fname(self.researcher.id, 'Robbert')
+        assert self.researcher.first_name == 'Robbert'
 
-    def test_get_all_users_json(self):
-        users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
+    def test04_add_researcher_website(self):
+        update_researcher_website_url(self.researcher.id, 'google.com')
+        assert self.researcher.website_url == 'google.com'
 
-    # Tests data changes in the database
-    def test_update_user(self):
-        update_user(1, "ronnie")
-        user = get_user(1)
-        assert user.username == "ronnie"
+    def test05_update_researcher_middle_name(self):
+        update_researcher_midname(self.researcher.id, 'Sam')
+        assert self.researcher.middle_name == 'Sam'
+
+    def test06_updated_researcher_toDict(self):
+        researcher_dict = self.researcher.toDict()
+        self.assertDictEqual(researcher_dict, {
+            'id': 1,
+            'email': 'test@mail.com',
+            'first_name': 'Robbert',
+            'middle_name': 'Sam',
+            'last_name': 'Burger',
+            'institution': 'UWI',
+            'faculty': 'FST',
+            'department': 'DCIT',
+            'image_url': '',
+            'title': 'Dr.',
+            'position': 'Lecturer',
+            'start_year': '2015',
+            'qualifications': 'B.Sc. Computer Science (UWI)',
+            'certifications': '',
+            'skills': 'Data Mining',
+            'website_url': 'google.com',
+            'introduction': 'My name is Bob.'
+        })
+
+
+class 
