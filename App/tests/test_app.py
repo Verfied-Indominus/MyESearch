@@ -1,17 +1,15 @@
-import os, tempfile, pytest, logging, unittest
-from werkzeug.security import check_password_hash, generate_password_hash
+import os, tempfile, logging, unittest
+import pytest
 
 from App.main import create_app
 from App.database import create_db
-from App.models import User
-from App.controllers import (
-    create_user,
-    get_all_users_json,
-    authenticate,
-    get_user,
-    get_user_by_username,
-    update_user
-)
+from App.models import Researcher, Student, Topic, Library, Publication, Notification
+from App.controllers.library import *
+from App.controllers.researcher import *
+from App.controllers.publication import *
+from App.controllers.student import *
+from App.controllers.topic import *
+from App.controllers.notification import *
 
 from wsgi import app
 
@@ -21,7 +19,11 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
-class UserUnitTests(unittest.TestCase):
+class StudentUnitTests(unittest.TestCase):
+
+    def test01_new_student(self):
+        student = Student()
+        assert student.email == None
 
     def test_new_user(self):
         user = User("bob", "bobpass")

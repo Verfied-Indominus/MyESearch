@@ -1,5 +1,4 @@
 from App.models import User
-from .subject import Subject
 from App.database import db
 from flask_login import UserMixin
 
