@@ -13,3 +13,7 @@ def health_check():
 @index_views.route('/login', methods=['GET'])
 def login_page():
     return render_template('login.html')
+
+@index_views.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template('signup.html')
