@@ -7,7 +7,6 @@ def create_pub(data): #let data be a dictionary
             title= data["title"],
             abstract= data["abstract"],
             free_access= data["free_access"],
-            library_id= data["library_id"]
         )
         db.session.add(new_pub)
         db.session.commit()
@@ -15,8 +14,18 @@ def create_pub(data): #let data be a dictionary
     except:
         return False
 
-def update_pub(data):
-    pass # need to find out if this can actually be changed
+def update_pub(data,id): #let data be a dictionary
+    try:
+        query = publication.query.filter_by(id=id).first()
+        query.title = data["title"]
+        query.abstract = data["abstract"]
+        query.free_access = data["free_access"]
+        db.session.commit()
+        return True
+    except:
+        return False
+
+    
 
 def get_pub(name):
     query = publicaton.query.filter_by(title=name).first()
