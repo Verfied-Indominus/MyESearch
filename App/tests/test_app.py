@@ -1,4 +1,4 @@
-import os, tempfile, logging, unittest, pytest
+import os, tempfile, logging, unittest, pytest, datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
@@ -87,6 +87,22 @@ class LibraryUnitTests(unittest.TestCase):
             'records': []
         })
 
+class NotificationUnitTests(unittest.TestCase):
+    def test01_new_notification(self):
+        notif = Notification('New notification', 'This is a test notification.')
+        assert isinstance(notif, Notification) and notif is not None
+    
+    def test02_notification_toDict(self):
+        notif = Notification('New notification', 'This is a test notification.')
+        notif_dict = notif.toDict()
+        self.assertDictEqual(notif_dict, {
+            'id': None,
+            'title': 'New notification',
+            'message': 'This is a test notification.',
+            'timestamp': None,
+            'last_updated': None,
+            'notification_records': []
+        })
 
 '''
     Integration Tests
