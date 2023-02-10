@@ -16,28 +16,20 @@ class Researcher(UserMixin, User):
     pub_records = db.relationship("PubRecord", backref="researcher", lazy=True, cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self):
-        pass
+    # def __init__(self):
+    #     pass
 
-    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, title, 
-    #               position, start_year, qualifications, certifications, skills, website_url, introduction):
-    #     super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department) #need to populate arguments
-        # self.title = title
-        # self.position = position
-        # self.start_year = start_year
-        # self.qualifications = qualifications
-        # self.certifications = certifications
-        # self.skills = skills
-        # self.website_url = website_url
-        # self.introduction = introduction
-
-    # def __init__(self, title, position, start_year, qualifications, skills):
-    #     super().__init__() #need to populate arguments
-    #     self.title = title
-    #     self.position = position
-    #     self.start_year = start_year
-    #     self.qualifications = qualifications
-    #     self.skills = skills
+    def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
+                  position, start_year, qualifications, certifications, skills, website_url, introduction):
+        super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url)
+        self.title = title
+        self.position = position
+        self.start_year = start_year
+        self.qualifications = qualifications
+        self.certifications = certifications
+        self.skills = skills
+        self.website_url = website_url
+        self.introduction = introduction
 
     def toDict(self):
         return super().toDict() | {
@@ -45,5 +37,8 @@ class Researcher(UserMixin, User):
             'position': self.position,
             'start_year': self.start_year,
             'qualifications': self.qualifications,
-            'skills': self.skills
+            'certifications': self.certifications,
+            'skills': self.skills,
+            'website_url': self.website_url,
+            'introduction': self.introduction
         }
