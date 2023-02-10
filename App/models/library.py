@@ -8,3 +8,10 @@ class Library(db.Model):
 
     def __init__(self, user_id):
         self.user_id = user_id
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'records': self.records
+        }

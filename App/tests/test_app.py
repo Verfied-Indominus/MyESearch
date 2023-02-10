@@ -72,6 +72,21 @@ class ResearcherUnitTests(unittest.TestCase):
         self.assertNotEqual(self.researcher.password, 'password')
 
 
+class LibraryUnitTests(unittest.TestCase):
+
+    def test01_new_library(self):
+        library = Library(1)
+        assert isinstance(library, Library) and library is not None
+
+    def test02_library_toDict(self):
+        library = Library(1)
+        library_dict = library.toDict()
+        self.assertDictEqual(library_dict, {
+            'id': None,
+            'user_id': 1,
+            'records': []
+        })
+
 
 '''
     Integration Tests
