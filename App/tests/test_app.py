@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import create_db, drop_db
-from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
+from App.models import Researcher, Student, Topic, Library, Publication, Notification
 from App.controllers.library import *
 from App.controllers.researcher import *
 # from App.controllers.publication import *
@@ -40,7 +40,7 @@ class ResearcherUnitTests(unittest.TestCase):
         skills = 'Data Mining'
         website_url = ''
         introduction = 'My name is Bob.'
-        cls.researcher = Researcher(
+        cls.researcher = create_researcher(
             email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
             position, start_year, qualifications, certifications, skills, website_url, introduction)
     
@@ -90,11 +90,11 @@ class LibraryUnitTests(unittest.TestCase):
 
 class NotificationUnitTests(unittest.TestCase):
     def test01_new_notification(self):
-        notif = Notification('New notification', 'This is a test notification.')
+        notif = create_notification('New notification', 'This is a test notification.')
         assert isinstance(notif, Notification) and notif is not None
     
     def test02_notification_toDict(self):
-        notif = Notification('New notification', 'This is a test notification.')
+        notif = create_notification('New notification', 'This is a test notification.')
         notif_dict = notif.toDict()
         self.assertDictEqual(notif_dict, {
             'id': None,
@@ -203,4 +203,16 @@ class ResearcherIntegrationTests(unittest.TestCase):
         })
 
 
-class 
+class NotificationIntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.notif = create_notification('New notification', 'This is a test notification.')
+
+    def test01_new_int_notification(self):
+        assert isinstance(self.notif, Notification) and self.notif is not None
+    
+    def test02_int_notification_toDict(self):
+        notif_dict = self.notif.toDict()
+        self.assertDictEqual(notif_dict, {
+            
+        })
