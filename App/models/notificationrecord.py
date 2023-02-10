@@ -5,7 +5,9 @@ class NotificationRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey("user.id"), nullable=False)
     notification_id = db.Column(db.Integer, ForeignKey("notification.id"), nullable=False)
+    read = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, user_id, notification_id):
         self.user_id = user_id
         self.notification_id = notification_id
+        self.read = False

@@ -12,23 +12,24 @@ class User(db.Model):
     institution = db.Column(db.String(120), nullable=False)
     faculty = db.Column(db.String(120), nullable=False)
     department = db.Column(db.String(120), nullable=False)
+    library = db.relationship("Library", backref="user", lazy=True)
     researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy=True, cascade="all, delete-orphan")
     topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy=True, cascade="all, delete-orphan")
     notification_records = db.relationship("NotificationRecord", backref="user", lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self):
-        pass
+    # def __init__(self):
+    #     pass
 
-    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
-    #     self.email = email
-    #     self.set_password(password)
-    #     self.first_name = first_name
-    #     self.middle_name = middle_name
-    #     self.last_name = last_name
-    #     self.institution = institution
-    #     self.faculty = faculty
-    #     self.department = department
-    #     self.image_url = image_url
+    def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
+        self.email = email
+        self.set_password(password)
+        self.first_name = first_name
+        self.middle_name = middle_name
+        self.last_name = last_name
+        self.institution = institution
+        self.faculty = faculty
+        self.department = department
+        self.image_url = image_url
 
     def set_password(self, password):
         """Create hashed password."""

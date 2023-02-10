@@ -129,15 +129,35 @@ Test Commands
 
 test = AppGroup('test', help='Testing commands') 
 
-@test.command("user", help="Run User tests")
+@test.command("researcher", help="Run Researcher tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
     if type == "unit":
-        sys.exit(pytest.main(["-k", "UserUnitTests"]))
+        sys.exit(pytest.main(["-k", "ResearcherUnitTests"]))
     elif type == "int":
-        sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
+        sys.exit(pytest.main(["-k", "ResearcherIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+@test.command("library", help="Run Library tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "LibraryUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "LibraryIntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
     
+
+@test.command("notification", help="Run Notification tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "NotificationUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "NotificationIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
 
 app.cli.add_command(test)
