@@ -6,7 +6,7 @@ from App.database import create_db
 from App.models import Researcher, Student, Topic, Library, Publication, Notification
 from App.controllers.library import *
 from App.controllers.researcher import *
-# from App.controllers.publication import *
+from App.controllers.publication import *
 # from App.controllers.student import *
 from App.controllers.topic import *
 from App.controllers.notification import *
@@ -111,10 +111,11 @@ class PublicationUnitTests(unittest.TestCase):
         self.data = {
             "id" : None,
             'title': "Test PUB",
-            'abstract':"this apparently is an abstract." ,
+            'abstract':"this apparently is an abstract.",
+            'pub_type':"lol",
             'free_access':True
         }
-        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"])
+        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"])
 
     def test01_is_publication(self):
         self.assertTrue(isinstance(self.new_pub,Publication))
@@ -181,8 +182,32 @@ def empty_db():
 
 class PublicationIntegrationTests(unittest.TestCase):
 
-    def setup(self):
-        pass
+    def setUp(self):
+        self.data = {
+            'id':0,
+            'title': "Test PUB",
+            'abstract':"this apparently is an abstract.",
+            'pub_type':"article",
+            'free_access':True
+        }
+
+    def test01_create_pub(self):
+        self.assertTrue(create_pub(self.data))
+
+    def test02_get_pub(self):
+        self.assertEquals(get_pub(self.data["title"]).title, self.data["title"])
+
+    def test03_update(self):
+        pub = get_pub(self.data['title'])
+        self.assertTrue(update_pub(self.data,pub.id))
+
+    def test04_delete_pub(self):
+        pub = get_pub(self.data["title"])
+        self.assertTrue(delete_pub(pub.id))
+
+
+
+
 
 
 # def test_authenticate():

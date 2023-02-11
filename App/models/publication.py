@@ -10,10 +10,11 @@ class Publication(db.Model):
     pub_records = db.relationship("PubRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self, title, abstract, free_access):
+    def __init__(self, title, abstract, free_access,pub_type):
         self.title = title
         self.abstract = abstract
         self.free_access = free_access
+        self.pub_type = pub_type
 
 
     def toDict(self):
@@ -21,5 +22,6 @@ class Publication(db.Model):
             'id': self.id,
             'title': self.title,
             'abstract': self.abstract,
+            'pub_type':self.pub_type,
             'free_access': self.free_access,
         }
