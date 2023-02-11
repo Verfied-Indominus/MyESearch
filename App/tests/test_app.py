@@ -4,7 +4,7 @@ from datetime import datetime
 
 from App.main import create_app
 from App.database import create_db, drop_db
-from App.models import Researcher, Student, Topic, Library, Publication, Notification
+from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
 from App.controllers.library import *
 from App.controllers.researcher import *
 # from App.controllers.publication import *
@@ -236,4 +236,47 @@ class NotificationIntegrationTests(unittest.TestCase):
             'timestamp': before, 
             'last_updated': now,
             'notification_records': []
+        })
+
+class LibraryIntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        email = 'test@mail.com'
+        password = 'password'
+        first_name = 'Bob'
+        middle_name = ''
+        last_name = 'Burger'
+        institution = 'UWI'
+        faculty = 'FST'
+        department = 'DCIT'
+        image_url = ''
+        title = 'Dr.'
+        position = 'Lecturer'
+        start_year = '2015'
+        qualifications = 'B.Sc. Computer Science (UWI)'
+        certifications = ''
+        skills = 'Data Mining'
+        website_url = ''
+        introduction = 'My name is Bob.'
+        cls.researcher = create_researcher(
+            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
+            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        cls.library = create_library(cls.researcher.id)
+        
+    def test01_new_library_creation(self):
+        assert isinstance(self.library, Library) and self.library is not None
+
+    def test02_library_has_user_id_stored(self):
+        assert self.library.user_id == self.researcher.id
+
+    def test03_library_linked_to_user(self):
+        user = self.library.user
+        assert isinstance(user, Researcher)
+
+    def test04_library_toDict(self):
+        library_dict = self.library.toDict()
+        self.assertDictEqual(library_dict, {
+            'id': 1,
+            'user_id': 1,
+            'records': []
         })
