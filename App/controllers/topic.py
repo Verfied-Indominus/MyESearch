@@ -18,8 +18,20 @@ def get_all_topics():
     return [topic.toDict() for topic in Topic.query.all()]
 
 def set_topic_parent(name, id):
-    topic = get_topic(name)
-    topic.set_parent_id(id)
-    db.session.add(topic)
-    db.session.commit()
-    return topic
+    try:
+        topic = get_topic(name)
+        topic.set_parent_id(id)
+        db.session.add(topic)
+        db.session.commit()
+        return topic
+    except:
+        return None
+
+def delete_topic(name):
+    try:
+        topic = get_topic(name)
+        db.session.delete(topic)
+        db.session.commit()
+        return True
+    except:
+        return False

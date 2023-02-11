@@ -7,9 +7,9 @@ from App.database import create_db, drop_db
 from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
 from App.controllers.library import *
 from App.controllers.researcher import *
-# from App.controllers.publication import *
+from App.controllers.publication import *
 # from App.controllers.student import *
-# from App.controllers.topic import *
+from App.controllers.topic import *
 from App.controllers.notification import *
 
 from wsgi import app
@@ -105,6 +105,68 @@ class NotificationUnitTests(unittest.TestCase):
             'last_updated': None,
             'notification_records': []
         })
+
+
+class PublicationUnitTests(unittest.TestCase):
+
+    def setUp(self):
+        self.data = {
+            "id" : None,
+            'title': "Test PUB",
+            'abstract':"this apparently is an abstract.",
+            'pub_type':"lol",
+            'free_access':True
+        }
+        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"])
+
+    def test01_is_publication(self):
+        self.assertTrue(isinstance(self.new_pub,Publication))
+
+    def test02_correct_publication(self):
+        self.assertDictEqual(self.data, self.new_pub.toDict())
+
+class TopicUnitTests(unittest.TestCase):
+
+    def setUp(self):
+        self.data =  {
+            'id': None,
+            'name': "Test",
+            'subtopics': [],
+            'parent_topic_id': 1
+        }
+        self.new_topic = Topic(self.data["name"])
+        self.new_topic.set_parent_id(1)
+
+    def test01_is_topic(self):
+        self.assertTrue(isinstance(self.new_topic,Topic))
+
+    def test02_is_correct(self):
+        self.assertDictEqual(self.new_topic.toDict(), self.data)
+
+class StudentUnitTests(unittest.TestCase):
+    def setUp(self):
+        self.password = "bobpass"
+        self.data={
+            'id': None,
+            'email': "bob@mail.com",
+            'first_name': "bob",
+            'middle_name': "bob",
+            'last_name': "burger",
+            'institution': "UWI",
+            'faculty': "HFE",
+            'department': "Gender Studies",
+            'image_url': "None"
+        }
+        self.new_student = Student(self.data["email"], self.password, self.data["first_name"], self.data["middle_name"],self.data["last_name"], self.data["institution"], self.data["faculty"], self.data["department"], self.data["image_url"])
+    
+    def test01_is_student(self):
+        self.assertTrue(isinstance(self.new_student, Student))
+
+    def test02_password_check(self):
+        self.assertFalse(self.new_student.password,self.password)
+
+    def test03_correct_data(self):
+        self.assertDictEqual(self.data, self.new_student.toDict())
 
 '''
     Integration Tests
@@ -280,3 +342,28 @@ class LibraryIntegrationTests(unittest.TestCase):
             'user_id': 1,
             'records': []
         })
+        
+class PublicationIntegrationTests(unittest.TestCase):
+
+    def setUp(self):
+        self.data = {
+            'id':0,
+            'title': "Test PUB",
+            'abstract':"this apparently is an abstract.",
+            'pub_type':"article",
+            'free_access':True
+        }
+
+    def test01_create_pub(self):
+        self.assertTrue(create_pub(self.data))
+
+    def test02_get_pub(self):
+        self.assertEquals(get_pub(self.data["title"]).title, self.data["title"])
+
+    def test03_update(self):
+        pub = get_pub(self.data['title'])
+        self.assertTrue(update_pub(self.data,pub.id))
+
+    def test04_delete_pub(self):
+        pub = get_pub(self.data["title"])
+        self.assertTrue(delete_pub(pub.id))

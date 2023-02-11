@@ -21,6 +21,6 @@ class Publication(db.Model):
             'id': self.id,
             'title': self.title,
             'abstract': self.abstract,
+            'pub_type':self.pub_type,
             'free_access': self.free_access,
-            'pubt_type': self.pub_type
         }
