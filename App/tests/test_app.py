@@ -1,5 +1,6 @@
-import os, tempfile, logging, unittest, pytest, datetime
+import os, tempfile, logging, unittest, pytest
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from App.main import create_app
 from App.database import create_db, drop_db
@@ -214,5 +215,25 @@ class NotificationIntegrationTests(unittest.TestCase):
     def test02_int_notification_toDict(self):
         notif_dict = self.notif.toDict()
         self.assertDictEqual(notif_dict, {
-            
+            'id': 1,
+            'title': 'New notification',
+            'message': 'This is a test notification.',
+            'timestamp': datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'), 
+            'last_updated': datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'),
+            'notification_records': []
+        })
+    
+    def test03_int_notification_update(self):
+        before = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+        update_notification_title(self.notif.id, 'New Test Notification')
+        update_notification_message(self.notif.id, 'This is a new message')
+        now = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+        notif_dict = self.notif.toDict()
+        self.assertDictEqual(notif_dict, {
+            'id': 1,
+            'title': 'New Test Notification',
+            'message': 'This is a new message',
+            'timestamp': before, 
+            'last_updated': now,
+            'notification_records': []
         })
