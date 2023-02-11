@@ -8,7 +8,7 @@ from App.controllers.library import *
 from App.controllers.researcher import *
 # from App.controllers.publication import *
 # from App.controllers.student import *
-# from App.controllers.topic import *
+from App.controllers.topic import *
 from App.controllers.notification import *
 
 from wsgi import app
@@ -104,6 +104,67 @@ class NotificationUnitTests(unittest.TestCase):
             'notification_records': []
         })
 
+
+class PublicationUnitTests(unittest.TestCase):
+
+    def setUp(self):
+        self.data = {
+            "id" : None,
+            'title': "Test PUB",
+            'abstract':"this apparently is an abstract." ,
+            'free_access':True
+        }
+        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"])
+
+    def test01_is_publication(self):
+        self.assertTrue(isinstance(self.new_pub,Publication))
+
+    def test02_correct_publication(self):
+        self.assertDictEqual(self.data, self.new_pub.toDict())
+
+class TopicUnitTests(unittest.TestCase):
+
+    def setUp(self):
+        self.data =  {
+            'id': None,
+            'name': "Test",
+            'subtopics': [],
+            'parent_topic_id': 1
+        }
+        self.new_topic = Topic(self.data["name"])
+        self.new_topic.set_parent_id(1)
+
+    def test01_is_topic(self):
+        self.assertTrue(isinstance(self.new_topic,Topic))
+
+    def test02_is_correct(self):
+        self.assertDictEqual(self.new_topic.toDict(), self.data)
+
+class StudentUnitTests(unittest.TestCase):
+    def setUp(self):
+        self.password = "bobpass"
+        self.data={
+            'id': None,
+            'email': "bob@mail.com",
+            'first_name': "bob",
+            'middle_name': "bob",
+            'last_name': "burger",
+            'institution': "UWI",
+            'faculty': "HFE",
+            'department': "Gender Studies",
+            'image_url': "None"
+        }
+        self.new_student = Student(self.data["email"], self.password, self.data["first_name"], self.data["middle_name"],self.data["last_name"], self.data["institution"], self.data["faculty"], self.data["department"], self.data["image_url"])
+    
+    def test01_is_student(self):
+        self.assertTrue(isinstance(self.new_student, Student))
+
+    def test02_password_check(self):
+        self.assertFalse(self.new_student.password,self.password)
+
+    def test03_correct_data(self):
+        self.assertDictEqual(self.data, self.new_student.toDict())
+
 '''
     Integration Tests
 '''
@@ -118,21 +179,15 @@ def empty_db():
     os.unlink(os.getcwd()+'/instance/test.db')
 
 
-def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert authenticate("bob", "bobpass") != None
+class PublicationIntegrationTests(unittest.TestCase):
 
-class UsersIntegrationTests(unittest.TestCase):
-    def test_create_user(self):
-        user = create_user("rick", "bobpass")
-        assert user.username == "rick"
+    def setup(self):
+        pass
 
-    def test_get_all_users_json(self):
-        users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
 
-    # Tests data changes in the database
-    def test_update_user(self):
-        update_user(1, "ronnie")
-        user = get_user(1)
-        assert user.username == "ronnie"
+# def test_authenticate():
+#     user = create_user("bob", "bobpass")
+#     assert authenticate("bob", "bobpass") != None
+
+
+

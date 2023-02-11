@@ -15,8 +15,6 @@ class Publication(db.Model):
         self.abstract = abstract
         self.free_access = free_access
 
-    def addToLibrary(library_id):
-        self.library_id = library_id
 
     def toDict(self):
         return {
@@ -24,5 +22,4 @@ class Publication(db.Model):
             'title': self.title,
             'abstract': self.abstract,
             'free_access': self.free_access,
-            'library_id': self.library_id
         }
