@@ -6,7 +6,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(60), nullable=False)
     message = db.Column(db.String(120), nullable=False)
-    timestamp = db.Column(TIMESTAMP, nullable=False, server_default=func.now())
+    timestamp = db.Column(db.DateTime, nullable=False, server_default=func.now())
     last_updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     notification_records = db.relationship("NotificationRecord", backref="notification", lazy=True, cascade="all, delete-orphan")
 

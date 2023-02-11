@@ -16,8 +16,9 @@ class Researcher(UserMixin, User):
     pub_records = db.relationship("PubRecord", backref="researcher", lazy=True, cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy=True, cascade="all, delete-orphan")
 
-    # def __init__(self):
-    #     pass
+    __mapper_args__ = {
+        'polymorphic_identity':'researcher'
+    }
 
     def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
                   position, start_year, qualifications, certifications, skills, website_url, introduction):

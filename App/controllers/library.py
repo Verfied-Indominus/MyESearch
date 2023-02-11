@@ -4,6 +4,8 @@ from sqlalchemy import delete
 
 def create_library(user_id):
     library = Library(user_id)
+    db.session.add(library)
+    db.session.commit()
     return library
 
 def get_library(id):
