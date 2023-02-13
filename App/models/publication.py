@@ -7,14 +7,16 @@ class Publication(db.Model):
     abstract = db.Column(db.String(500), nullable=False)
     free_access = db.Column(db.Boolean, nullable=False)
     pub_type = db.Column(db.String(30), nullable=False)
+    publication_date = db.Column(db.DateTime, nullable=False)
     pub_records = db.relationship("PubRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self, title, abstract, free_access, pub_type):
+    def __init__(self, title, abstract, free_access, pub_type, publication_date):
         self.title = title
         self.abstract = abstract
         self.free_access = free_access
         self.pub_type = pub_type
+        self.publication_date = publication_date
 
     def toDict(self):
         return {
@@ -23,4 +25,5 @@ class Publication(db.Model):
             'abstract': self.abstract,
             'pub_type':self.pub_type,
             'free_access': self.free_access,
+            'publicatiion_date': self.publication_date
         }
