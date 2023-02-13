@@ -8,7 +8,7 @@ from App.models import Researcher, Student, Topic, Library, Publication, Notific
 from App.controllers.library import *
 from App.controllers.researcher import *
 from App.controllers.publication import *
-# from App.controllers.student import *
+from App.controllers.student import *
 from App.controllers.topic import *
 from App.controllers.notification import *
 
@@ -51,7 +51,7 @@ class ResearcherUnitTests(unittest.TestCase):
     def test02_researcher_toDict(self):
         researcher_dict = self.researcher.toDict()
         self.assertDictEqual(researcher_dict, {
-            'id': None,
+            'id': 1,
             'email': 'test@mail.com',
             'first_name': 'Bob',
             'middle_name': '',
@@ -98,7 +98,7 @@ class NotificationUnitTests(unittest.TestCase):
         notif = create_notification('New notification', 'This is a test notification.')
         notif_dict = notif.toDict()
         self.assertDictEqual(notif_dict, {
-            'id': None,
+            'id': 2,
             'title': 'New notification',
             'message': 'This is a test notification.',
             'timestamp': None,
@@ -367,3 +367,67 @@ class PublicationIntegrationTests(unittest.TestCase):
     def test04_delete_pub(self):
         pub = get_pub(self.data["title"])
         self.assertTrue(delete_pub(pub.id))
+ 
+class TopicIntegrationTests(unittest.TestCase):
+    def setUp(self):
+        self.new_topic = create_topic("Test000")
+
+    def test01_topic_create(self):
+        self.assertIsNotNone(self.new_topic)
+
+    def test02_get_topic(self):
+        self.assertEquals(self.new_topic.name, get_topic(self.new_topic.name).toDict()["name"])
+
+    def test03_set_parent(self):
+        self.assertEquals(5, set_topic_parent(self.new_topic.name, 5))
+
+    def test04_delete_topic(self):
+        self.assertTrue(delete_topic(self.new_topic.name))
+
+class StudentIntegrationTests(unittest.TestCase):
+    def setUp(self):
+        self.data={
+            'email': "bob@mail.com",
+            'first_name': "bob",
+            'middle_name': "bob",
+            'last_name': "burger",image.png
+            'institution': "UWI",
+            'faculty': "HFE",
+            'department': "Gender Studies",
+            'image_url': "None"
+        }
+        self.new_student = create_student(self.data)
+
+    def test01_create_student(self):
+        self.assertTrue(self.new_student)
+
+    def test02_query_student(self):
+        name = {
+            "first_name":"bob",
+            "last_name":"burger"
+        }
+        self.assertIsNotNone(query_student(name))
+
+    def test03_update_student(self):
+        name = {
+            "first_name":"bob",
+            "last_name":"burger"
+        }
+        id = query_student(name).id
+        self.assertTrue(update_student(id,self.data))
+
+    def test04_query_by_id(self):
+        name = {
+            "first_name":"bob",
+            "last_name":"burger"
+        }
+        id = query_student(name).id
+        self.assertIsNone(query_by_id(id))
+
+    def test05_delete_student(self):
+        name = {
+            "first_name":"bob",
+            "last_name":"burger"
+        }
+        id = query_student(name).id
+        self.assertTrue(delete_student(id))

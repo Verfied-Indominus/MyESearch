@@ -7,8 +7,8 @@ class Student(UserMixin, User):
         'polymorphic_identity':'student'
     }
     
-    def __init__(self):
+    def __init__(self,email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
         super(Student, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url)
 
     def toDict(self):
-        return super.toDict()
+        return super(Student,self).toDict()

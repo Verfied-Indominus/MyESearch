@@ -39,9 +39,10 @@ def delete_student(id):
         query = Student.filter_by(id=id).first()
         db.session.delete(query)
         db.session.commit()
+        return True
     except:
         return False
-    return True
+   
 
 def update_student(id,data): #let data be a dictionary of thr information
     Student = query_by_id(id)
