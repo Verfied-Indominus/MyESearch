@@ -1,0 +1,39 @@
+.primary-background{
+    background-color: #E27D60;
+}
+
+.secondary-background{
+    background-color: #85DCB8;
+}
+
+.default-background{
+    background-color: #E8A87C;
+}
+
+.alternate-background{
+    background-color: #C38D9E;
+}
+
+.secondary-alt-background{
+    background-color: #41B3A3;
+}
+
+.primary-text{
+    color: #E27D60;
+}
+
+.secondary-text{
+    color: #85DCB8;
+}
+
+.default-text{
+    color: #E8A87C;
+}
+
+.alternate-text{
+    color: #C38D9E;
+}
+
+.secondary-alt-text{
+    color: #41B3A3;
+}
