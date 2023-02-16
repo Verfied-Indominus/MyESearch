@@ -15,4 +15,5 @@ PyPDF2
 scholarly
 openai
 pyrebase
-WTForms
+Flask-WTF==1.1.1
+WTForms==3.0.1
