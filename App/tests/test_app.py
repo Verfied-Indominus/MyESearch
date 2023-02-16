@@ -390,7 +390,7 @@ class StudentIntegrationTests(unittest.TestCase):
             'email': "bob@mail.com",
             'first_name': "bob",
             'middle_name': "bob",
-            'last_name': "burger",image.png
+            'last_name': "burger",
             'institution': "UWI",
             'faculty': "HFE",
             'department': "Gender Studies",

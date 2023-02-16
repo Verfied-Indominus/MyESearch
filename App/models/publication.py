@@ -8,7 +8,7 @@ class Publication(db.Model):
     free_access = db.Column(db.Boolean, nullable=False)
     pub_type = db.Column(db.String(30), nullable=False)
     publication_date = db.Column(db.DateTime, nullable=False)
-    tags = db.ralationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
+    tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
 
