@@ -21,4 +21,10 @@ class ResearcherSignUpForm(FlaskForm):
     position = SelectField("Position", choices=['Tutor', 'Part-Time Lecturer', 'Full-Time Lecturer', 'Instructor', 'Teaching Assistant', 
                                                 'Research Assistant', 'Associate Professor', 'Professor', 'Head of Department'],
                             validators=[validators.DataRequired("Please select a position")])
-    start_date = DateField("Year of Commencement of Employment at UWI", format='%y')
+    start_date = SelectField("Year of Commencement of Employment at UWI", validators=[validators.DataRequired("Please select a year")])
+    qualifications = TextAreaField("Qualifications", validators=[validators.DataRequired("Please enter your qualifications")])
+    certifications = TextAreaField("Certifications")
+    interests = SelectField("Research Interests", validators=[validators.DataRequired("Please enter your interest(s)")])
+    skills = TextAreaField("Skills", validators=[validators.DataRequired("Please enter your skills")])
+    website = StringField("Website URL")
+    introduction = TextAreaField("Introduction")
