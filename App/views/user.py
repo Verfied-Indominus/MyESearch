@@ -48,12 +48,5 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
 @user_views.route('/signup', methods=['POST'])
 def signup_post():
-    selected = request.form.getlist("test")
-    if selected:
-        print('YES')
-        print(selected)
-    else:
-        print('NO')
-    for toggle in selected:
-        print(toggle)
+
     return 'Done'

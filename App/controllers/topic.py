@@ -17,6 +17,9 @@ def get_topic(name):
 def get_all_topics():
     return [topic.toDict() for topic in Topic.query.all()]
 
+def get_topics(limiter):
+    return [topic.toDict() for topic in Topic.query.limit(limiter)]
+
 def set_topic_parent(name, id):
     try:
         topic = get_topic(name)

@@ -12,7 +12,7 @@ class BaseSignUpForm(FlaskForm):
     password = PasswordField("Password", validators=[validators.DataRequired("Please enter a password"), validators.Length(min=8, message="Password is too short")])
     confirm = PasswordField(validators=[validators.EqualTo('password', 'Incorrect password entered')])
     image = FileField("Image(Headshot)")
-    institution = SelectField("Institution", choices=['The University of The West Indies'], validators=[validators.DataRequired("Please select an institution")])
+    institution = SelectField("Institution", validators=[validators.DataRequired("Please select an institution")])
     faculty = SelectField("Faculty", validators=[validators.DataRequired("Please select a faculty")])
     department = SelectField("Department", validators=[validators.DataRequired("Please select a department")])
 

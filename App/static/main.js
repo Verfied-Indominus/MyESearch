@@ -8,7 +8,7 @@ let researcher_form = document.getElementById("researcher_signup");
 // });
 
 
-async function trial(){
+async function getInterests(){
     let x = 0;
     let researcher_form = document.getElementById("researcher_signup");
     let selected = document.getElementsByClassName('selected');
@@ -17,13 +17,12 @@ async function trial(){
         selected_items[x] = i.innerHTML;
         x += 1;
     };
-    alert(selected_items);
-    selected = await getResearchInterests(selected_items);
+    selected = await addResearchInterests(selected_items);
     researcher_form.preventDefault;
 };
 
 
 
-async function getResearchInterests(selected){
+async function addResearchInterests(selected){
     return await fetch(`/interests/${JSON.stringify({'selected': selected})}`);
 };
