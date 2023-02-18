@@ -25,7 +25,7 @@ class User(db.Model):
     }
 
     def __init__(self):
-        pass
+        return self
 
     # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
     #     self.email = email

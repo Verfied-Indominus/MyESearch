@@ -113,14 +113,16 @@ class PublicationUnitTests(unittest.TestCase):
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
             'pub_type':"lol",
-            'free_access':True
+            'free_access':True,
+            'publication_date': datetime(2020, 2, 24)
         }
-        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"])
+        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"], self.data["publication_date"])
 
     def test01_is_publication(self):
         self.assertTrue(isinstance(self.new_pub,Publication))
 
     def test02_correct_publication(self):
+        print(self.new_pub.toDict())
         self.assertDictEqual(self.data, self.new_pub.toDict())
 
 class TopicUnitTests(unittest.TestCase):
@@ -183,7 +185,7 @@ class StudentUnitTests(unittest.TestCase):
 
 # This fixture creates an empty database for the test and deletes it after the test
 # scope="class" would execute the fixture once and resued for all methods in the class
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True, scope="module")
 def empty_db():
     app.config.update({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
     create_db(app)
@@ -287,6 +289,9 @@ class ResearcherIntegrationTests(unittest.TestCase):
             'introduction': 'My name is Bob.'
         })
 
+    def test07_delete_researcher(self):
+        self.assertTrue(delete_researcher(self.researcher.id))
+
 
 class NotificationIntegrationTests(unittest.TestCase):
     @classmethod
@@ -346,6 +351,7 @@ class LibraryIntegrationTests(unittest.TestCase):
         cls.library = create_library(cls.researcher.id)
         
     def test01_new_library_creation(self):
+        print(self.library.toDict())
         assert isinstance(self.library, Library) and self.library is not None
 
     def test02_library_has_user_id_stored(self):
@@ -367,11 +373,12 @@ class PublicationIntegrationTests(unittest.TestCase):
 
     def setUp(self):
         self.data = {
-            'id':0,
+            'id': 0,
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
             'pub_type':"article",
-            'free_access':True
+            'free_access':True,
+            'pub_date': datetime(2020, 2, 24)
         }
 
     def test01_create_pub(self):
@@ -389,8 +396,9 @@ class PublicationIntegrationTests(unittest.TestCase):
         self.assertTrue(delete_pub(pub.id))
  
 class TopicIntegrationTests(unittest.TestCase):
-    def setUp(self):
-        self.new_topic = create_topic("Test000")
+    @classmethod
+    def setUpClass(cls):
+        cls.new_topic = create_topic("Test000")
 
     def test01_topic_create(self):
         self.assertIsNotNone(self.new_topic)
@@ -399,7 +407,7 @@ class TopicIntegrationTests(unittest.TestCase):
         self.assertEquals(self.new_topic.name, get_topic(self.new_topic.name).toDict()["name"])
 
     def test03_set_parent(self):
-        self.assertEquals(5, set_topic_parent(self.new_topic.name, 5))
+        self.assertEquals(5, set_topic_parent(self.new_topic.name, 5).parent_topic_id)
 
     def test04_delete_topic(self):
         self.assertTrue(delete_topic(self.new_topic.name))
@@ -420,7 +428,7 @@ class StudentIntegrationTests(unittest.TestCase):
         }
         builder = (
             StudentBuilder()
-                .email("bob@mail.com")
+                .email("bobby@mail.com")
                 .password("bobpass")
                 .first_name("Bob")
                 .last_name("Burger")
