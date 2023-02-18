@@ -82,6 +82,7 @@ def build_user(user):
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
+        print('WRONG')
         return None
     return user
     

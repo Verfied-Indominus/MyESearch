@@ -5,6 +5,7 @@ from datetime import datetime
 from App.main import create_app
 from App.database import create_db, drop_db
 from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
+from App.models.builder import *
 from App.controllers.library import *
 from App.controllers.researcher import *
 from App.controllers.publication import *
@@ -149,21 +150,32 @@ class StudentUnitTests(unittest.TestCase):
         self.data={
             'id': None,
             'email': "bob@mail.com",
-            'first_name': "bob",
-            'middle_name': "bob",
-            'last_name': "burger",
+            'first_name': "Bob",
+            'middle_name': "Robbert",
+            'last_name': "Burger",
             'institution': "UWI",
             'faculty': "HFE",
             'department': "Gender Studies",
-            'image_url': "None"
+            'image_url': None
         }
-        self.new_student = Student(self.data["email"], self.password, self.data["first_name"], self.data["middle_name"],self.data["last_name"], self.data["institution"], self.data["faculty"], self.data["department"], self.data["image_url"])
-    
+        builder = (
+            StudentBuilder()
+                .email("bob@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .middle_name("Robbert")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+        )
+        self.new_student = builder.student
+
     def test01_is_student(self):
         self.assertTrue(isinstance(self.new_student, Student))
 
     def test02_password_check(self):
-        self.assertFalse(self.new_student.password,self.password)
+        self.assertFalse(self.new_student.password==self.password)
 
     def test03_correct_data(self):
         self.assertDictEqual(self.data, self.new_student.toDict())

@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, jsonify, request, send_from_direct
 from.index import index_views
 
 from App.controllers import (
-    create_researcher, 
     get_all_users,
     get_all_users_json,
 )

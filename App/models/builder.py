@@ -44,7 +44,8 @@ class StudentBuilder():
         return self
 
     def build(self):
-        return build_user(self.student)
+        self.student = build_user(self.student)
+        return self
 
 
 class ResearcherBuilder():
@@ -121,4 +122,5 @@ class ResearcherBuilder():
         return self
 
     def build(self):
-        return build_user(self.researcher)
+        self.researcher = build_user(self.researcher)
+        return self
