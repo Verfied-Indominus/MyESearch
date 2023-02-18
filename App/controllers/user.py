@@ -17,11 +17,72 @@ def get_all_users_json():
     users = [user.toDict() for user in users]
     return users
 
-def update_user(id, username):
-    user = get_user(id)
-    if user:
-        user.username = username
-        db.session.add(user)
-        return db.session.commit()
-    return None
+
+# User Builder controllers
+
+def new_student():
+    return Student()
+
+def user_first_name(user, first_name):
+    user.first_name = first_name
+    return user
+
+def user_middle_name(user, middle_name):
+    user.middle_name = middle_name
+    return user
+
+def user_last_name(user, last_name):
+    user.last_name = last_name
+    return user
+
+def user_email(user, email):
+    user.email = email
+    return user
+
+def user_password(user, password):
+    user.password = password
+    return user 
+
+def user_image_url(user, image_url):
+    user.image_url = image_url
+    return user
+
+def user_affiliation(user, institution, faculty, department):
+    user.institution = institution
+    user.faculty = faculty
+    user.department = department
+    return user
+
+def user_title(user, title):
+    user.title = title
+    return user
+
+def user_position(user, position):
+    user.position = position
+    return user
+
+def user_start_year(user, year):
+    user.start_year = year
+    return user
+
+def user_qualifications(user, qualifications):
+    user.qualifications = qualifications
+    return user
+
+def user_certifications(user, certifications):
+    user.certifications = certifications
+    return user
+
+
+
+def build_student(user):
+    try:
+        student = Student(user.email, user.password, user.first_name, user.middle_name, user.last_name, user.institution, 
+                    user.faculty, user.department, user.image_url)
+        db.session.add(student)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return None
+    return student
     
