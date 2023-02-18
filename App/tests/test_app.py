@@ -25,26 +25,23 @@ LOGGER = logging.getLogger(__name__)
 class ResearcherUnitTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+        )
+        cls.researcher = builder.researcher
     
     def test01_new_researcher(self):
         assert isinstance(self.researcher, Researcher) and self.researcher is not None
@@ -52,27 +49,27 @@ class ResearcherUnitTests(unittest.TestCase):
     def test02_researcher_toDict(self):
         researcher_dict = self.researcher.toDict()
         self.assertDictEqual(researcher_dict, {
-            'id': 1,
-            'email': 'test@mail.com',
+            'id': None,
+            'email': 'bob@mail.com',
             'first_name': 'Bob',
-            'middle_name': '',
+            'middle_name': None,
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
-            'website_url': '',
+            'website_url': None,
             'introduction': 'My name is Bob.'
         })
 
     def test03_researcher_password(self):
-        self.assertNotEqual(self.researcher.password, 'password')
+        self.assertNotEqual(self.researcher.password, 'bobpass')
 
 
 class LibraryUnitTests(unittest.TestCase):
