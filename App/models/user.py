@@ -19,10 +19,13 @@ class User(db.Model):
     notification_records = db.relationship("NotificationRecord", backref="user", lazy="dynamic", cascade="all, delete-orphan")
 
     __mapper_args__ = {
-        'polymorphic_identity':'user',
+        'polymorphic_identity':'User',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
+
+    def __init__(self):
+        pass
 
     # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
     #     self.email = email

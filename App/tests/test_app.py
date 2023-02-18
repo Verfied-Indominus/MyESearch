@@ -89,14 +89,14 @@ class LibraryUnitTests(unittest.TestCase):
 
 class NotificationUnitTests(unittest.TestCase):
     def test01_new_notification(self):
-        notif = create_notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.')
         assert isinstance(notif, Notification) and notif is not None
     
     def test02_notification_toDict(self):
-        notif = create_notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.')
         notif_dict = notif.toDict()
         self.assertDictEqual(notif_dict, {
-            'id': 2,
+            'id': None,
             'title': 'New notification',
             'message': 'This is a test notification.',
             'timestamp': None,
@@ -394,49 +394,65 @@ class TopicIntegrationTests(unittest.TestCase):
         self.assertTrue(delete_topic(self.new_topic.name))
 
 class StudentIntegrationTests(unittest.TestCase):
-    def setUp(self):
-        self.data={
+    @classmethod
+    def setUpClass(cls):
+        cls.data={
+            'id': 1,
             'email': "bob@mail.com",
-            'first_name': "bob",
-            'middle_name': "bob",
-            'last_name': "burger",
+            'first_name': "Bob",
+            'middle_name': None,
+            'last_name': "Burger",
             'institution': "UWI",
             'faculty': "HFE",
             'department': "Gender Studies",
-            'image_url': "None"
+            'image_url': None
         }
-        self.new_student = create_student(self.data)
+        builder = (
+            StudentBuilder()
+                .email("bob@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+                .build()
+        )
+        cls.new_student = builder.student
 
     def test01_create_student(self):
-        self.assertTrue(self.new_student)
+        self.assertIsNotNone(self.new_student)
 
     def test02_query_student(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Bob",
+            "last_name":"Burger"
         }
         self.assertIsNotNone(query_student(name))
 
     def test03_update_student(self):
-        name = {
-            "first_name":"bob",
-            "last_name":"burger"
-        }
-        id = query_student(name).id
-        self.assertTrue(update_student(id,self.data))
+        builder = (
+            StudentBuilder()
+                .existing_student(self.new_student)
+                .first_name("Ronald")
+                .last_name("McDonald")
+                .build()
+        )
+        self.assertNotEqual((self.new_student.first_name, self.new_student.last_name), 
+                            (self.data['first_name'], self.data['last_name']))
 
     def test04_query_by_id(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Ronald",
+            "last_name":"McDonald"
         }
         id = query_student(name).id
-        self.assertIsNone(query_by_id(id))
+        self.assertIsNotNone(query_by_id(id))
 
     def test05_delete_student(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Ronald",
+            "last_name":"McDonald"
         }
         id = query_student(name).id
         self.assertTrue(delete_student(id))

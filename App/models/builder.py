@@ -7,6 +7,10 @@ class StudentBuilder():
     def __init__(self):
         self.student = Student()
 
+    def existing_student(self, student):
+        self.student = student
+        return self
+
     def email(self, email):
         self.student.email = email
         return self
@@ -52,6 +56,10 @@ class ResearcherBuilder():
 
     def __init__(self):
         self.researcher = Researcher()
+
+    def existing_researcher(self, researcher):
+        self.researcher = researcher
+        return self
 
     def email(self, email):
         self.researcher.email = email
