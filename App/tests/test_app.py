@@ -193,26 +193,24 @@ def empty_db():
 class ResearcherIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("password")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+                .build()
+        )
+        cls.researcher = builder.researcher
     
     def test01_new_researcher_created(self):
         assert isinstance(self.researcher, Researcher) and self.researcher.id == 1
@@ -222,53 +220,68 @@ class ResearcherIntegrationTests(unittest.TestCase):
         self.assertIsInstance(researcher_dict, dict)
         self.assertDictEqual(researcher_dict, {
             'id': 1,
-            'email': 'test@mail.com',
+            'email': 'bob@mail.com',
             'first_name': 'Bob',
-            'middle_name': '',
+            'middle_name': None,
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
-            'website_url': '',
+            'website_url': None,
             'introduction': 'My name is Bob.'
         })
 
     def test03_update_researcher_name(self):
-        update_researcher_fname(self.researcher.id, 'Robbert')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .first_name("Robbert")
+                .build()
+        )
         assert self.researcher.first_name == 'Robbert'
 
     def test04_add_researcher_website(self):
-        update_researcher_website_url(self.researcher.id, 'google.com')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .website_url("google.com")
+                .build()
+        )
         assert self.researcher.website_url == 'google.com'
 
     def test05_update_researcher_middle_name(self):
-        update_researcher_midname(self.researcher.id, 'Sam')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .middle_name("Sam")
+                .build()
+        )
         assert self.researcher.middle_name == 'Sam'
 
     def test06_updated_researcher_toDict(self):
         researcher_dict = self.researcher.toDict()
         self.assertDictEqual(researcher_dict, {
             'id': 1,
-            'email': 'test@mail.com',
+            'email': 'bob@mail.com',
             'first_name': 'Robbert',
             'middle_name': 'Sam',
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
             'website_url': 'google.com',
             'introduction': 'My name is Bob.'
@@ -312,26 +325,24 @@ class NotificationIntegrationTests(unittest.TestCase):
 class LibraryIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("password")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+                .build()
+        )
+        cls.researcher = builder.researcher
         cls.library = create_library(cls.researcher.id)
         
     def test01_new_library_creation(self):
