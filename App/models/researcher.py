@@ -20,17 +20,20 @@ class Researcher(UserMixin, User):
         'polymorphic_identity':'researcher'
     }
 
-    def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-                  position, start_year, qualifications, certifications, skills, website_url, introduction):
-        super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url)
-        self.title = title
-        self.position = position
-        self.start_year = start_year
-        self.qualifications = qualifications
-        self.certifications = certifications
-        self.skills = skills
-        self.website_url = website_url
-        self.introduction = introduction
+    def __init__(self):
+        return self
+
+    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
+    #               position, start_year, qualifications, certifications, skills, website_url, introduction):
+    #     super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url)
+    #     self.title = title
+    #     self.position = position
+    #     self.start_year = start_year
+    #     self.qualifications = qualifications
+    #     self.certifications = certifications
+    #     self.skills = skills
+    #     self.website_url = website_url
+    #     self.introduction = introduction
 
     def toDict(self):
         return super().toDict() | {

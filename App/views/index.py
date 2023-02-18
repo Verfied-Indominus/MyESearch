@@ -3,6 +3,8 @@ from App.models.forms import *
 from App.controllers.topic import get_topics
 import json
 
+from App.models.builder import *
+
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 dates = [i for i in range(1970, 2024)]
@@ -86,7 +88,7 @@ def login_page():
 @index_views.route('/signup', methods=['GET'])
 def signup_page():
     interests = get_topics(15)
-    
+
     baseForm = BaseSignUpForm()
     reForm = ResearcherSignUpForm()
     baseForm.institution.choices = institutions
