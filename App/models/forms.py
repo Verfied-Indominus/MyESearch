@@ -5,9 +5,9 @@ from wtforms import StringField, IntegerField, TextAreaField, SubmitField, Radio
 from wtforms.fields import DateField
 
 class BaseSignUpForm(FlaskForm):
-    first_name = StringField("First Name ", validators=[validators.DataRequired("Please enter your first name")])
-    middle_name = StringField("Middle Name ")
-    last_name = StringField("Last Name ", validators=[validators.DataRequired("Please enter your last name")])
+    first_name = StringField("First Name", validators=[validators.DataRequired("Please enter your first name")])
+    middle_name = StringField("Middle Name(s)")
+    last_name = StringField("Last Name", validators=[validators.DataRequired("Please enter your last name")])
     email = StringField("Email", validators=[validators.DataRequired("Please enter your email address")])
     password = PasswordField("Password", validators=[validators.DataRequired("Please enter a password"), validators.Length(min=8, message="Password is too short")])
     confirm = PasswordField(validators=[validators.EqualTo('password', 'Incorrect password entered')])

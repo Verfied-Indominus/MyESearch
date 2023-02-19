@@ -19,62 +19,78 @@ faculties = [
         'Social Sciences',
         'Sport'
 ]
-departments = [
-    'Chemical Engineering',
-    'Civil & Environmental Engineering',
-    'Mechanical & Manufacturing Engineering',
-    'Geomatics Engineering & Land Management',
-    'Engineering Institute',
-    'Electrical & Computer Engineering',
-    'Agricultural Economics and Extension',
-    'Food Production',
-    'Geography',
-    'Business Development Unit',
-    'Publications and Communications Unit',
-    'University Farms',
-    'School of Education',
-    'Centre for Language Learning',
-    'Creative and Festival Arts',
-    'History',
-    'Literary, Cultural and Communication Studies',
-    'Modern Languages and Linguistics',
-    'Faculty of Law',
-    'Schools of Medicine',
-    'Schools of Optometry',
-    'Schools of Dentistry',
-    'Schools of Nursing',
-    'Schools of Pharmacy',
-    'Schools of Veterinary Medicine',
-    'Chemistry',
-    'Physics',
-    'Life Sciences',
-    'Mathematics & Statistics',
-    'Computing & Information Technology',
-    'Behavioural Sciences',
-    'Economics',
-    'Management Studies',
-    'Political Science',
-    'St. Augustine Academy of Sport',
-    'Mechanical and Manufacturing Enterprise Research',
-    'The Archaeology Centre',
-    'The Centre for Language Learning',
-    "The Family Development and Children's Research Centre (FDCRC)",
-    'The Film Programme',
-    'Caribbean Centre for Health Systems Research and Development',
-    'Centre for Medical Sciences Education',
-    'Cocoa Research Centre',
-    'Seismic Research Unit',
-    'The National Herbarium',
-    'Arthur Lok Jack Graduate School for Business',
-    'Caribbean Centre for Money and Finance',
-    'Centre for Criminology and Criminal Justice',
-    'Institute for Gender and Development Studies',
-    'Institute of International Relations',
-    'Entrepreneurship Unit',
-    'Health Economics Unit',
-    'Sir Arthur Lewis Institute of Social & Economic Studies',
-    'Sustainable Economic Development Unit'
-]
+departments = {
+    'Engineering': [
+        'Chemical Engineering',
+        'Civil & Environmental Engineering',
+        'Mechanical & Manufacturing Engineering',
+        'Geomatics Engineering & Land Management',
+        'Engineering Institute',
+        'Electrical & Computer Engineering',
+        'Mechanical and Manufacturing Enterprise Research',
+    ],
+    'Food & Agriculture': [
+        'Agricultural Economics and Extension',
+        'Food Production',
+        'Publications and Communications Unit',
+        'University Farms',
+        'Geography'
+    ],
+    'Humanities & Education': [
+        'School of Education',
+        'Centre for Language Learning',
+        'Creative and Festival Arts',
+        'History',
+        'Literary, Cultural and Communication Studies',
+        'Modern Languages and Linguistics',
+        'The Archaeology Centre',
+        'The Centre for Language Learning',
+        "The Family Development and Children's Research Centre (FDCRC)",
+        'The Film Programme'
+    ],
+    'Law': [
+        'Faculty of Law'
+    ],
+    'Medical Sciences': [
+        'Schools of Medicine',
+        'Schools of Optometry',
+        'Schools of Dentistry',
+        'Schools of Nursing',
+        'Schools of Pharmacy',
+        'Schools of Veterinary Medicine', 
+        'Caribbean Centre for Health Systems Research and Development',
+        'Centre for Medical Sciences Education',
+    ],
+    'Science & Technology': [
+        'Chemistry',
+        'Physics',
+        'Life Sciences',
+        'Mathematics & Statistics',
+        'Computing & Information Technology',
+        'Cocoa Research Centre',
+        'Seismic Research Unit',
+        'The National Herbarium'
+    ],
+    'Social Sciences': [
+        'Behavioural Sciences',
+        'Economics',
+        'Management Studies',
+        'Political Science',
+        'Arthur Lok Jack Graduate School for Business',
+        'Caribbean Centre for Money and Finance',
+        'Centre for Criminology and Criminal Justice',
+        'Institute for Gender and Development Studies',
+        'Institute of International Relations',
+        'Entrepreneurship Unit',
+        'Health Economics Unit',
+        'Sir Arthur Lewis Institute of Social & Economic Studies',
+        'Sustainable Economic Development Unit',
+        'Business Development Unit',
+    ],
+    'Sport': [
+        'St. Augustine Academy of Sport'
+    ],
+}
 
 
 @index_views.route('/', methods=['GET'])
@@ -94,6 +110,7 @@ def signup_page():
     baseForm.institution.choices = institutions
     baseForm.faculty.choices = faculties
     baseForm.department.choices = departments
+    
     reForm.start_date.choices = dates
     reForm.interests.choices = interests 
     return render_template('signup.html', baseForm=baseForm, reForm=reForm)

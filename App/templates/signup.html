@@ -10,9 +10,40 @@
             <div>
                 <h1 class="uk-text-large uk-text-center">Student Sign Up</h1>
 
-                <form id="researcher_signup" action="/signup" method="post" onsubmit="getInterests();">
+                <form id="researcher_signup" class="uk-form-stacked" action="/signup" method="post" onsubmit="getInterests();">
+                    {{ reForm.title.label(class="uk-form-label") }}
+                    <div class="uk-flex">
+                        {% for title in reForm.title %}
+                        <div class="uk-width-1-5">
+                            {{ title(class="uk-radio") }}
+                            {{ title.label }}
+                        </div>
+                        {% endfor %}
+                    </div>
 
+                    {{ baseForm.first_name.label(class="uk-form-label") }}
+                    {{ baseForm.first_name(class="uk-input") }}
+
+                    {{ baseForm.middle_name.label(class="uk-form-label") }}
+                    {{ baseForm.middle_name(class="uk-input") }}
+
+                    {{ baseForm.last_name.label(class="uk-form-label") }}
+                    {{ baseForm.last_name(class="uk-input") }}
+
+                    {{ baseForm.email.label(class="uk-form-label") }}
+                    {{ baseForm.email(class="uk-input") }}
+
+                    {{ baseForm.password.label(class="uk-form-label") }}
+                    {{ baseForm.password(class="uk-input") }}
+
+                    {{ baseForm.institution.label(class="uk-form-label") }}
+                    {{ baseForm.institution(class="uk-select") }}
                     
+                    {{ baseForm.faculty.label(class="uk-form-label") }}
+                    {{ baseForm.faculty(class="uk-select") }}
+
+                    {{ baseForm.department.label(class="uk-form-label") }}
+                    {{ baseForm.department(class="uk-select") }}
 
 
 
