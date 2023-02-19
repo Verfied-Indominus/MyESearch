@@ -1,5 +1,5 @@
 from App.models import TopicSubRecord
-from . import user, topic
+from . import user, topic,notification,publication
 from App.database import db
 
 def create_sub(tid,uid):
@@ -38,6 +38,18 @@ def delete_sub(tid,uid):
         sub  = TopicSubRecord.query.filter_by(user_id = uid,topic_id=tid).first()
         db.session.delete(sub)
         db.session.commit()
+        return True
+    except:
+        return False
+    
+def topic_notification(tid,pid):
+    try:
+        top = topic.get_topic_id(tid)
+        pub = publication.get_pub_byid(pid)
+        subs = TopicSubRecord.query.filter_by(topic_id=tid).all()
+        title = f"New publication under {top.name}"
+        message = f"New publication addded: {pub.title}"
+        notification.notify_subscribers(subs,title,message)
         return True
     except:
         return False
