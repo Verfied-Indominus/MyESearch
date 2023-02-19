@@ -1,6 +1,7 @@
+from sqlalchemy.sql import func
 from App.database import db
 from sqlalchemy import ForeignKey, TIMESTAMP
-from sqlalchemy.sql import func
+
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)

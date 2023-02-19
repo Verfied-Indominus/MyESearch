@@ -1,5 +1,6 @@
 from App.models import Publication
 from App.database import db
+from datetime import date
 
 def create_pub(data): #let data be a dictionary
     try:
@@ -7,7 +8,8 @@ def create_pub(data): #let data be a dictionary
             title= data["title"],
             abstract= data["abstract"],
             free_access= data["free_access"],
-            pub_type=data["pub_type"]
+            pub_type=data["pub_type"],
+            publication_date= date.today()
         )
         db.session.add(new_pub)
         db.session.commit()
@@ -40,9 +42,6 @@ def get_pub_byid(id):
     if not query:
         return None
     return query
-
-
-
 
 def delete_pub(id):
     try:
