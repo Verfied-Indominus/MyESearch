@@ -5,11 +5,11 @@
 {{ super() }}
 
 {% block content %}
-<div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover uk-background-center-center" data-src="/static/images/SignupBG2.jpg" uk-img tabindex="-1"> 
+<div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover uk-background-center-center" data-src="/static/images/loginBG.jpg" uk-img tabindex="-1"> 
     <div class="uk-card uk-card-default uk-position-relative uk-text-small uk-box-shadow-xlarge uk-grid-collapse uk-height-large uk-width-2-3@l uk-width-4-5@m uk-child-width-1-2@s" uk-height-viewport="offset-top: true; offset-bottom: 10" uk-grid>
         <div style="cursor: pointer;" class="left" uk-toggle="target: .right; animation: uk-animation-slide-left-medium, uk-animation-slide-left-medium;">
             <div class="uk-height-1-1 uk-width-1-1 uk-background-cover uk-background-center-center uk-inline uk-transition-toggle" data-src="/static/images/Student.jpeg" uk-img tabindex="0">
-                <div class="uk-text-center uk-margin-small-top uk-text-large uk-light">Student Signup</div>
+                <div class="uk-text-center uk-padding-small uk-text-large uk-background-default uk-box-shadow-small">Student Signup</div>
                 <div class="uk-transition-fade uk-position-bottom uk-overlay uk-overlay-default">
                     <p class="uk-text-lead uk-margin-remove">Signup as a Student</p>
                     <p>Join the UWi Research Platform to gain access to numerous academic publications made by UWI Researchers and more.</p>
@@ -18,6 +18,10 @@
         </div>   
         <div class="uk-height-1-1 uk-position-absolute uk-position-left left" hidden>
             <form id="researcher_signup" class="uk-form-stacked uk-container uk-background-default uk-height-1-1 uk-overflow-auto" action="/signup" method="post" onsubmit="getInterests();">
+                <div class="uk-flex uk-flex-center uk-margin">
+                    <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
+                </div>
+                
                 {{ reForm.csrf_token }}
                 {{ baseForm.csrf_token }}
                 
@@ -174,14 +178,14 @@
                 </div>
 
                 <div class="uk-margin uk-margin-small-bottom uk-flex uk-flex-center">
-                    <input class="uk-button uk-button-default" type="submit" value="Submit">
+                    <input class="uk-button uk-button-secondary" type="submit" value="Submit">
                 </div>
             </form> 
         </div>
 
         <div style="cursor: pointer;" class="uk-position-right right" uk-toggle="target: .left; animation: uk-animation-slide-right-medium, uk-animation-slide-right-medium;">
             <div class="uk-height-1-1 uk-width-1-1 uk-background-cover uk-background-center-center uk-inline uk-transition-toggle" data-src="/static/images/Researcher.jpeg" uk-img tabindex="0">
-                <div class="uk-text-center uk-margin-small-top uk-text-large uk-light">Researcher Signup</div>
+                <div class="uk-text-center uk-padding-small uk-background-default uk-text-large uk-box-shadow-small">Researcher Signup</div>
                 <div class="uk-transition-fade uk-position-bottom uk-overlay uk-overlay-default">
                     <p class="uk-text-lead uk-margin-remove">Signup as a Researcher</p>
                     <p>Post your academic publications and assign levels of access to make them accessible by peers, students and more.</p>
@@ -190,6 +194,10 @@
         </div>
         <div class="uk-height-1-1 uk-position-absolute uk-position-right right" hidden>
             <form id="student_form" class="uk-container uk-height-1-1 uk-form-stacked uk-background-default uk-overflow-auto" action="/signup" method="post">
+                <div class="uk-flex uk-flex-center uk-margin">
+                    <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
+                </div>
+                
                 {{ baseForm.csrf_token }}
 
                 <div class="uk-text-lead uk-text-center uk-margin-small-top">Student Registration</div>
@@ -197,7 +205,10 @@
                 <legend class="uk-legend uk-text-small uk-text-light uk-text-italic"><span class="required">*</span> indicates a required field</legend>
 
                 <div class="uk-margin">
-                    {{ baseForm.first_name.label(class="uk-form-label") }}
+                    <div class="uk-flex">
+                        <span class="required">*</span>
+                        {{ baseForm.first_name.label(class="uk-form-label") }}
+                    </div>
                     {{ baseForm.first_name(class="uk-input") }}
                 </div>
                 
@@ -207,7 +218,10 @@
                 </div>
 
                 <div class="uk-margin">
-                    {{ baseForm.last_name.label(class="uk-form-label") }}
+                    <div class="uk-flex">
+                        <span class="required">*</span>
+                        {{ baseForm.last_name.label(class="uk-form-label") }}
+                    </div>
                     {{ baseForm.last_name(class="uk-input") }}
                 </div>
 
@@ -266,12 +280,12 @@
                 </div>
 
                 <div class="uk-margin uk-margin-small-bottom uk-flex uk-flex-center">
-                    <input class="uk-button uk-button-default" type="submit" value="Submit">
+                    <input class="uk-button uk-button-secondary" type="submit" value="Submit">
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="uk-text-center uk-text-capitalize uk-text-emphasis uk-position-absolute uk-position-bottom uk-margin-medium-bottom">Already have an account? <a href="/login" class="uk-button-text uk-text-decoration-none">Login Here</a></div>
+    <span class="uk-light"><div class="uk-text-center uk-text-capitalize uk-text-emphasis uk-position-absolute uk-position-bottom uk-margin-medium-bottom uk-light">Already have an account? <a href="/login" class="uk-button-text uk-text-decoration-none uk-light">Login Here</a></div></span>
 </div>
 {% endblock%}

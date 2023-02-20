@@ -63,8 +63,23 @@ def signup_page():
     reForm.start_date.choices = dates
 
     if request.method == 'POST':
-        if reForm.validate_on_submit():
-            return 'Validated'
+        form = request.form
+
+        if 'title' in form:
+            builder = ResearcherBuilder()
+        else:
+            builder = StudentBuilder()
+
+        builder.email(form['email']).password(form['password'])
+        builder.first_name(form['first_name']).last_name(form['last_name'])
+        builder.institution(form['institution']).faculty(form['faculty']).department(form['department'])
+
+        if form['middle_name']:
+            builder.middle_name(form['middle'])
+        
+        
+
+        return 'Done'
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
