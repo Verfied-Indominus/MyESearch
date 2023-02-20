@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
-
+from App.models.forms import *
 from.index import index_views
 
 from App.controllers import (
@@ -42,10 +42,3 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 # @user_views.route('/static/users', methods=['GET'])
 # def static_user_page():
 #   return send_from_directory('static', 'static-user.html')
-
-
-
-@user_views.route('/signup', methods=['POST'])
-def signup_post():
-
-    return 'Done'

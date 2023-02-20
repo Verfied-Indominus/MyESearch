@@ -5,57 +5,171 @@
 {{ super() }}
 
 {% block content %}
-<div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover" data-src="/static/images/loginBG.jpg" uk-img tabindex="-1">
-        <div class="uk-card uk-card-default uk-text-small uk-box-shadow-xlarge uk-grid-collapse uk-width-3-5@l uk-width-4-5@m uk-child-width-1-2@s" uk-height-viewport="offset-top: true; offset-bottom: 15" uk-grid>
-            <div>
-                <h1 class="uk-text-large uk-text-center">Student Sign Up</h1>
+<div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover" data-src="/static/images/SignupBG2.jpg" uk-img tabindex="-1">
+        <div class="uk-card uk-card-default uk-text-small uk-box-shadow-xlarge uk-grid-collapse uk-height-large uk-width-2-3@l uk-width-4-5@m uk-child-width-1-2@s" uk-height-viewport="offset-top: true; offset-bottom: 10" uk-grid>
+            <div class="uk-height-1-1">
 
-                <form id="researcher_signup" class="uk-form-stacked" action="/signup" method="post" onsubmit="getInterests();">
-                    {{ reForm.title.label(class="uk-form-label") }}
-                    <div class="uk-flex">
-                        {% for title in reForm.title %}
-                        <div class="uk-width-1-5">
-                            {{ title(class="uk-radio") }}
-                            {{ title.label }}
+
+                <form id="researcher_signup" class="uk-form-stacked uk-height-1-1 uk-container uk-overflow-auto" action="/signup" method="post" onsubmit="getInterests();">
+                    {{ reForm.csrf_token }}
+                    {{ baseForm.csrf_token }}
+                    
+                    <span class="uk-text-lead">Register As A Researcher</span>
+                    <hr class="uk-divider-icon">
+                    <legend class="uk-legend uk-text-small uk-text-light uk-text-italic"><span class="required">*</span> indicates a required field</legend>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ reForm.title.label(class="uk-form-label") }}
                         </div>
+                        
+                        <div class="uk-flex">
+                            {% for title in reForm.title %}
+                            <div class="uk-width-1-5">
+                                {{ title(class="uk-radio") }}
+                                {{ title.label }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.first_name.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.first_name(class="uk-input") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        {{ baseForm.middle_name.label(class="uk-form-label") }}
+                        {{ baseForm.middle_name(class="uk-input") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.last_name.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.last_name(class="uk-input") }}
+                    </div>
+                    
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.email.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.email(class="uk-input") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.password.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.password(class="uk-input") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <label for="image" class="uk-form-label">Image(Headshot)</label> 
+                        <div class="js-upload uk-placeholder uk-text-center uk-width-expand uk-margin-remove-top">
+                            <span uk-icon="icon: cloud-upload"></span>
+                            <span class="uk-text-middle">Upload images by dropping them here or</span>
+                            <div uk-form-custom>
+                                <input type="file" name="image">
+                                <span class="uk-link">selecting one</span>
+                            </div>
+                            <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+                            <p id="img-name"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.institution.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.institution(class="uk-select") }}
+                    </div>
+                    
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.faculty.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.faculty(class="uk-select", id="faculty_select") }}   
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ baseForm.department.label(class="uk-form-label") }}
+                        </div>
+                        {{ baseForm.department(class="uk-select", id="department_select") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ reForm.position.label(class="uk-form-label") }}
+                        </div>
+                        {{ reForm.position(class="uk-select") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ reForm.start_date.label(class="uk-form-label") }}
+                        </div>
+                        {{ reForm.start_date(class="uk-select") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ reForm.qualifications.label(class="uk-form-label") }}
+                        </div>
+                        {{ reForm.qualifications(class="uk-textarea") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        {{ reForm.certifications.label }}
+                        {{ reForm.certifications(class="uk-textarea") }}
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            <label for="" class="uk-form-label">Research Interests</label>
+                        </div>
+                        {% for int in interests %}
+                            <div class="uk-margin-small-bottom uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-secondary uk-light; animation: uk-animation-fade">{{ int }}</div>
                         {% endfor %}
                     </div>
 
-                    {{ baseForm.first_name.label(class="uk-form-label") }}
-                    {{ baseForm.first_name(class="uk-input") }}
+                    <div class="uk-margin">
+                        <div class="uk-flex">
+                            <span class="required">*</span>
+                            {{ reForm.skills.label(class="uk-form-label") }}
+                        </div>
+                        {{ reForm.skills(class="uk-textarea") }}
+                    </div>
 
-                    {{ baseForm.middle_name.label(class="uk-form-label") }}
-                    {{ baseForm.middle_name(class="uk-input") }}
+                    <div class="uk-margin">
+                        {{ reForm.website.label }}
+                        {{ reForm.website(class="uk-input") }}
+                    </div>
 
-                    {{ baseForm.last_name.label(class="uk-form-label") }}
-                    {{ baseForm.last_name(class="uk-input") }}
+                    <div class="uk-margin">
+                        {{ reForm.introduction.label }}
+                        {{ reForm.introduction(class="uk-textarea") }}
+                    </div>
 
-                    {{ baseForm.email.label(class="uk-form-label") }}
-                    {{ baseForm.email(class="uk-input") }}
-
-                    {{ baseForm.password.label(class="uk-form-label") }}
-                    {{ baseForm.password(class="uk-input") }}
-
-                    {{ baseForm.institution.label(class="uk-form-label") }}
-                    {{ baseForm.institution(class="uk-select") }}
-                    
-                    {{ baseForm.faculty.label(class="uk-form-label") }}
-                    {{ baseForm.faculty(class="uk-select") }}
-
-                    {{ baseForm.department.label(class="uk-form-label") }}
-                    {{ baseForm.department(class="uk-select") }}
-
-
-
-
-                    <div class="uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-primary uk-light; animation: uk-animation-fade">Test1</div>
-                    <div class="uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-primary uk-light; animation: uk-animation-fade">Test2</div>
-                    <div class="uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-primary uk-light; animation: uk-animation-fade">Test3</div>
-                    
+                    <input type="submit" value="Submit">
                 </form>
                 
                     
-                </div>
             </div>
 
             <div>

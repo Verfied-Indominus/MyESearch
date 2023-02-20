@@ -7,8 +7,9 @@ from App.models.builder import *
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
-dates = [i for i in range(1970, 2024)]
+dates = list(reversed([i for i in range(1970, 2024)]))
 institutions = ['The University of The West Indies']
+
 faculties = [
         'Engineering',
         'Food & Agriculture',
@@ -19,78 +20,16 @@ faculties = [
         'Social Sciences',
         'Sport'
 ]
-departments = {
-    'Engineering': [
+
+departments = [
         'Chemical Engineering',
         'Civil & Environmental Engineering',
         'Mechanical & Manufacturing Engineering',
         'Geomatics Engineering & Land Management',
         'Engineering Institute',
         'Electrical & Computer Engineering',
-        'Mechanical and Manufacturing Enterprise Research',
-    ],
-    'Food & Agriculture': [
-        'Agricultural Economics and Extension',
-        'Food Production',
-        'Publications and Communications Unit',
-        'University Farms',
-        'Geography'
-    ],
-    'Humanities & Education': [
-        'School of Education',
-        'Centre for Language Learning',
-        'Creative and Festival Arts',
-        'History',
-        'Literary, Cultural and Communication Studies',
-        'Modern Languages and Linguistics',
-        'The Archaeology Centre',
-        'The Centre for Language Learning',
-        "The Family Development and Children's Research Centre (FDCRC)",
-        'The Film Programme'
-    ],
-    'Law': [
-        'Faculty of Law'
-    ],
-    'Medical Sciences': [
-        'Schools of Medicine',
-        'Schools of Optometry',
-        'Schools of Dentistry',
-        'Schools of Nursing',
-        'Schools of Pharmacy',
-        'Schools of Veterinary Medicine', 
-        'Caribbean Centre for Health Systems Research and Development',
-        'Centre for Medical Sciences Education',
-    ],
-    'Science & Technology': [
-        'Chemistry',
-        'Physics',
-        'Life Sciences',
-        'Mathematics & Statistics',
-        'Computing & Information Technology',
-        'Cocoa Research Centre',
-        'Seismic Research Unit',
-        'The National Herbarium'
-    ],
-    'Social Sciences': [
-        'Behavioural Sciences',
-        'Economics',
-        'Management Studies',
-        'Political Science',
-        'Arthur Lok Jack Graduate School for Business',
-        'Caribbean Centre for Money and Finance',
-        'Centre for Criminology and Criminal Justice',
-        'Institute for Gender and Development Studies',
-        'Institute of International Relations',
-        'Entrepreneurship Unit',
-        'Health Economics Unit',
-        'Sir Arthur Lewis Institute of Social & Economic Studies',
-        'Sustainable Economic Development Unit',
-        'Business Development Unit',
-    ],
-    'Sport': [
-        'St. Augustine Academy of Sport'
-    ],
-}
+        'Mechanical and Manufacturing Enterprise Research'
+    ]
 
 
 @index_views.route('/', methods=['GET'])
@@ -101,9 +40,19 @@ def index_page():
 def login_page():
     return render_template('login.html')
 
-@index_views.route('/signup', methods=['GET'])
+@index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
-    interests = get_topics(15)
+    # interests = get_topics(15)
+    interests = [
+        'Engineering',
+        'Food & Agriculture',
+        'Humanities & Education',
+        'Law',
+        'Medical Sciences',
+        'Social Sciences',
+        'Science & Technology',
+        'Sport'
+    ]
 
     baseForm = BaseSignUpForm()
     reForm = ResearcherSignUpForm()
@@ -112,11 +61,20 @@ def signup_page():
     baseForm.department.choices = departments
     
     reForm.start_date.choices = dates
-    reForm.interests.choices = interests 
-    return render_template('signup.html', baseForm=baseForm, reForm=reForm)
+
+    if request.method == 'POST':
+        if reForm.validate_on_submit():
+            return 'Validated'
+    return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
     selected = json.loads(selected)
     print(selected)
     return 'Interests Checked'
+
+@index_views.route('/upload', methods=['POST'])
+def upload():
+    img = request.files['files[]'].filename
+    print(img)
+    return img
