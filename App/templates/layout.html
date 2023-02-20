@@ -12,13 +12,132 @@
 
   </head>
   <body>
-    <!-- <div class="uk-navbar-container">
-      <div class="uk-container uk-container-expand uk-background-primary uk-light">
-        <nav class="uk-navbar">
-          <div class="uk-navbar-left uk-heading-small">MyeSearch</div>
-        </nav>
+    {% block nav %}
+
+    <!-- <nav class="uk-navbar-container uk-margin uk-width-1-1" uk-navbar>
+      <div class="uk-navbar-left">
+  
+        <a class="uk-navbar-item uk-logo" href="#" aria-label="Back to Home">Logo</a>
+    </div>
+
+    <div class="uk-width-auto uk-navbar-item uk-navbar-right">
+      <form action="javascript:void(0)">
+          <button class="uk-button uk-button-default" uk-icon="icon: settings"> </button>
+      </form>
+   </div>
+
+
+    <div class="uk-width-auto uk-navbar-item uk-navbar-right">
+    <div class="uk-margin">
+      <form class="uk-search uk-search-default">
+          <a href="" class="uk-search-icon-flip" uk-search-icon></a>
+          <input class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
+      </form>
+  </div>
+
+  </nav> -->
+
+
+
+
+  <nav class="uk-navbar-container uk-margin" uk-navbar>
+    <div class="uk-navbar-left">
+
+        <a class="uk-navbar-item uk-logo" href="#" aria-label="Back to Home">Logo</a>
+
+        <ul class="uk-navbar-nav">
+            <li>
+                <a href="#">
+                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: home"></span>
+                    Home
+                </a>
+            </li>
+        </ul>
+       
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: question"></span>
+              Questions
+            </a>
+          </li>
+        </ul>
       </div>
-    </div> -->
+
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: social"></span>
+              Share
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="uk-width-auto uk-navbar-item uk-navbar-right">
+        <div class="uk-margin">
+          <form class="uk-search uk-search-default">
+              <a href="" class="uk-search-icon-flip" uk-search-icon></a>
+              <input class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
+          </form>
+      </div>
+
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
+              Notification
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: mail"></span>
+              Mail
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bookmark"></span>
+              Library
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
+              Profile
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+    </div>
+</nav>
+
+
+
+    {% endblock %}
     
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -33,6 +152,7 @@
       </nav>
       {% endif %}
     {% endwith %}
+
 
     <div id="content">{% block content %}{% endblock %}</div>
     <script src="/static/main.js"></script>
