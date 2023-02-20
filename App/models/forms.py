@@ -1,8 +1,6 @@
 from flask_wtf import FlaskForm  
-from flask_wtf.file import FileField
-from wtforms.validators import EqualTo, DataRequired, Length
-from wtforms import StringField, IntegerField, TextAreaField, SubmitField, RadioField, SelectField, PasswordField
-from wtforms.fields import DateField
+from wtforms.validators import DataRequired, Length
+from wtforms import StringField, TextAreaField, RadioField, SelectField, PasswordField
 
 class BaseSignUpForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired(message="Please enter your first name")])

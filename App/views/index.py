@@ -45,11 +45,11 @@ def signup_page():
     # interests = get_topics(15)
     interests = [
         'Engineering',
+        'Social Sciences',
         'Food & Agriculture',
         'Humanities & Education',
         'Law',
         'Medical Sciences',
-        'Social Sciences',
         'Science & Technology',
         'Sport'
     ]
