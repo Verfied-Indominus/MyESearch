@@ -1,18 +1,17 @@
 import pyrebase
-import os
 
 config = {
   "apiKey": "AIzaSyAkDqi_KOPXF_jmaed8MxL7kerY9jY0ZgM",
   "authDomain": "my-e-search.firebaseapp.com",
-#   "databaseURL": "https://databaseName.firebaseio.com",
+  "databaseURL": "https://my-e-search-default-rtdb.firebaseio.com",
   "storageBucket": "my-e-search.appspot.com"
 }
 
-
+ 
 # const firebaseConfig = {
 #   apiKey: "AIzaSyAkDqi_KOPXF_jmaed8MxL7kerY9jY0ZgM",
 #   authDomain: "my-e-search.firebaseapp.com",
-#   projectId: "my-e-search",
+#   projectId: "my-e-search", 
 #   storageBucket: "my-e-search.appspot.com",
 #   messagingSenderId: "401005454141",
 #   appId: "1:401005454141:web:0b738fcc77657467d05b54",
@@ -24,11 +23,12 @@ firebase = pyrebase.initialize_app(config)
 
 #STORAGE
 
-storage - firebase.storage()
+storage = firebase.storage()
 
 #as admin
-def uploadFile(file_name):
-    return storage.child(f"App/documents/{file_name}").put(f"{file_name}")
+def uploadFile(id, file_name):
+    storage.child(f"images/{id}").put(f"App/uploads/{file_name}")
+    return storage.child(f"images/{id}").get_url()
 # storage.child("images/example.jpg").put("example.jpg")
 
 #as user

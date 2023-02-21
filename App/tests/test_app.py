@@ -5,6 +5,7 @@ from datetime import datetime
 from App.main import create_app
 from App.database import create_db, drop_db
 from App.models import Researcher, Student, Topic, Library, Publication, Notification, User
+from App.models.builder import *
 from App.controllers.library import *
 from App.controllers.researcher import *
 from App.controllers.publication import *
@@ -24,26 +25,23 @@ LOGGER = logging.getLogger(__name__)
 class ResearcherUnitTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+        )
+        cls.researcher = builder.researcher
     
     def test01_new_researcher(self):
         assert isinstance(self.researcher, Researcher) and self.researcher is not None
@@ -51,27 +49,27 @@ class ResearcherUnitTests(unittest.TestCase):
     def test02_researcher_toDict(self):
         researcher_dict = self.researcher.toDict()
         self.assertDictEqual(researcher_dict, {
-            'id': 1,
-            'email': 'test@mail.com',
+            'id': None,
+            'email': 'bob@mail.com',
             'first_name': 'Bob',
-            'middle_name': '',
+            'middle_name': None,
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
-            'website_url': '',
+            'website_url': None,
             'introduction': 'My name is Bob.'
         })
 
     def test03_researcher_password(self):
-        self.assertNotEqual(self.researcher.password, 'password')
+        self.assertNotEqual(self.researcher.password, 'bobpass')
 
 
 class LibraryUnitTests(unittest.TestCase):
@@ -91,14 +89,14 @@ class LibraryUnitTests(unittest.TestCase):
 
 class NotificationUnitTests(unittest.TestCase):
     def test01_new_notification(self):
-        notif = create_notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.')
         assert isinstance(notif, Notification) and notif is not None
     
     def test02_notification_toDict(self):
-        notif = create_notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.')
         notif_dict = notif.toDict()
         self.assertDictEqual(notif_dict, {
-            'id': 2,
+            'id': None,
             'title': 'New notification',
             'message': 'This is a test notification.',
             'timestamp': None,
@@ -115,14 +113,16 @@ class PublicationUnitTests(unittest.TestCase):
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
             'pub_type':"lol",
-            'free_access':True
+            'free_access':True,
+            'publication_date': datetime(2020, 2, 24)
         }
-        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"])
+        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"], self.data["publication_date"])
 
     def test01_is_publication(self):
         self.assertTrue(isinstance(self.new_pub,Publication))
 
     def test02_correct_publication(self):
+        print(self.new_pub.toDict())
         self.assertDictEqual(self.data, self.new_pub.toDict())
 
 class TopicUnitTests(unittest.TestCase):
@@ -149,21 +149,32 @@ class StudentUnitTests(unittest.TestCase):
         self.data={
             'id': None,
             'email': "bob@mail.com",
-            'first_name': "bob",
-            'middle_name': "bob",
-            'last_name': "burger",
+            'first_name': "Bob",
+            'middle_name': "Robbert",
+            'last_name': "Burger",
             'institution': "UWI",
             'faculty': "HFE",
             'department': "Gender Studies",
-            'image_url': "None"
+            'image_url': None
         }
-        self.new_student = Student(self.data["email"], self.password, self.data["first_name"], self.data["middle_name"],self.data["last_name"], self.data["institution"], self.data["faculty"], self.data["department"], self.data["image_url"])
-    
+        builder = (
+            StudentBuilder()
+                .email("bob@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .middle_name("Robbert")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+        )
+        self.new_student = builder.student
+
     def test01_is_student(self):
         self.assertTrue(isinstance(self.new_student, Student))
 
     def test02_password_check(self):
-        self.assertFalse(self.new_student.password,self.password)
+        self.assertFalse(self.new_student.password==self.password)
 
     def test03_correct_data(self):
         self.assertDictEqual(self.data, self.new_student.toDict())
@@ -174,7 +185,7 @@ class StudentUnitTests(unittest.TestCase):
 
 # This fixture creates an empty database for the test and deletes it after the test
 # scope="class" would execute the fixture once and resued for all methods in the class
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True, scope="module")
 def empty_db():
     app.config.update({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
     create_db(app)
@@ -184,26 +195,24 @@ def empty_db():
 class ResearcherIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("password")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+                .build()
+        )
+        cls.researcher = builder.researcher
     
     def test01_new_researcher_created(self):
         assert isinstance(self.researcher, Researcher) and self.researcher.id == 1
@@ -213,57 +222,75 @@ class ResearcherIntegrationTests(unittest.TestCase):
         self.assertIsInstance(researcher_dict, dict)
         self.assertDictEqual(researcher_dict, {
             'id': 1,
-            'email': 'test@mail.com',
+            'email': 'bob@mail.com',
             'first_name': 'Bob',
-            'middle_name': '',
+            'middle_name': None,
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
-            'website_url': '',
+            'website_url': None,
             'introduction': 'My name is Bob.'
         })
 
     def test03_update_researcher_name(self):
-        update_researcher_fname(self.researcher.id, 'Robbert')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .first_name("Robbert")
+                .build()
+        )
         assert self.researcher.first_name == 'Robbert'
 
     def test04_add_researcher_website(self):
-        update_researcher_website_url(self.researcher.id, 'google.com')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .website_url("google.com")
+                .build()
+        )
         assert self.researcher.website_url == 'google.com'
 
     def test05_update_researcher_middle_name(self):
-        update_researcher_midname(self.researcher.id, 'Sam')
+        builder = (
+            ResearcherBuilder()
+                .existing_researcher(self.researcher)
+                .middle_name("Sam")
+                .build()
+        )
         assert self.researcher.middle_name == 'Sam'
 
     def test06_updated_researcher_toDict(self):
         researcher_dict = self.researcher.toDict()
         self.assertDictEqual(researcher_dict, {
             'id': 1,
-            'email': 'test@mail.com',
+            'email': 'bob@mail.com',
             'first_name': 'Robbert',
             'middle_name': 'Sam',
             'last_name': 'Burger',
             'institution': 'UWI',
             'faculty': 'FST',
             'department': 'DCIT',
-            'image_url': '',
+            'image_url': None,
             'title': 'Dr.',
             'position': 'Lecturer',
             'start_year': '2015',
             'qualifications': 'B.Sc. Computer Science (UWI)',
-            'certifications': '',
+            'certifications': None,
             'skills': 'Data Mining',
             'website_url': 'google.com',
             'introduction': 'My name is Bob.'
         })
+
+    def test07_delete_researcher(self):
+        self.assertTrue(delete_researcher(self.researcher.id))
 
 
 class NotificationIntegrationTests(unittest.TestCase):
@@ -303,29 +330,28 @@ class NotificationIntegrationTests(unittest.TestCase):
 class LibraryIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        email = 'test@mail.com'
-        password = 'password'
-        first_name = 'Bob'
-        middle_name = ''
-        last_name = 'Burger'
-        institution = 'UWI'
-        faculty = 'FST'
-        department = 'DCIT'
-        image_url = ''
-        title = 'Dr.'
-        position = 'Lecturer'
-        start_year = '2015'
-        qualifications = 'B.Sc. Computer Science (UWI)'
-        certifications = ''
-        skills = 'Data Mining'
-        website_url = ''
-        introduction = 'My name is Bob.'
-        cls.researcher = create_researcher(
-            email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-            position, start_year, qualifications, certifications, skills, website_url, introduction)
+        builder = (
+            ResearcherBuilder()
+                .email("bob@mail.com")
+                .password("password")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("FST")
+                .department("DCIT")
+                .title("Dr.")
+                .position("Lecturer")
+                .start_year("2015")
+                .qualifications("B.Sc. Computer Science (UWI)")
+                .skills("Data Mining")
+                .introduction("My name is Bob.")
+                .build()
+        )
+        cls.researcher = builder.researcher
         cls.library = create_library(cls.researcher.id)
         
     def test01_new_library_creation(self):
+        print(self.library.toDict())
         assert isinstance(self.library, Library) and self.library is not None
 
     def test02_library_has_user_id_stored(self):
@@ -347,11 +373,12 @@ class PublicationIntegrationTests(unittest.TestCase):
 
     def setUp(self):
         self.data = {
-            'id':0,
+            'id': 0,
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
             'pub_type':"article",
-            'free_access':True
+            'free_access':True,
+            'pub_date': datetime(2020, 2, 24)
         }
 
     def test01_create_pub(self):
@@ -369,8 +396,9 @@ class PublicationIntegrationTests(unittest.TestCase):
         self.assertTrue(delete_pub(pub.id))
  
 class TopicIntegrationTests(unittest.TestCase):
-    def setUp(self):
-        self.new_topic = create_topic("Test000")
+    @classmethod
+    def setUpClass(cls):
+        cls.new_topic = create_topic("Test000")
 
     def test01_topic_create(self):
         self.assertIsNotNone(self.new_topic)
@@ -379,55 +407,71 @@ class TopicIntegrationTests(unittest.TestCase):
         self.assertEquals(self.new_topic.name, get_topic(self.new_topic.name).toDict()["name"])
 
     def test03_set_parent(self):
-        self.assertEquals(5, set_topic_parent(self.new_topic.name, 5))
+        self.assertEquals(5, set_topic_parent(self.new_topic.name, 5).parent_topic_id)
 
     def test04_delete_topic(self):
         self.assertTrue(delete_topic(self.new_topic.name))
 
 class StudentIntegrationTests(unittest.TestCase):
-    def setUp(self):
-        self.data={
+    @classmethod
+    def setUpClass(cls):
+        cls.data={
+            'id': 1,
             'email': "bob@mail.com",
-            'first_name': "bob",
-            'middle_name': "bob",
-            'last_name': "burger",
+            'first_name': "Bob",
+            'middle_name': None,
+            'last_name': "Burger",
             'institution': "UWI",
             'faculty': "HFE",
             'department': "Gender Studies",
-            'image_url': "None"
+            'image_url': None
         }
-        self.new_student = create_student(self.data)
+        builder = (
+            StudentBuilder()
+                .email("bobby@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+                .build()
+        )
+        cls.new_student = builder.student
 
     def test01_create_student(self):
-        self.assertTrue(self.new_student)
+        self.assertIsNotNone(self.new_student)
 
     def test02_query_student(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Bob",
+            "last_name":"Burger"
         }
         self.assertIsNotNone(query_student(name))
 
     def test03_update_student(self):
-        name = {
-            "first_name":"bob",
-            "last_name":"burger"
-        }
-        id = query_student(name).id
-        self.assertTrue(update_student(id,self.data))
+        builder = (
+            StudentBuilder()
+                .existing_student(self.new_student)
+                .first_name("Ronald")
+                .last_name("McDonald")
+                .build()
+        )
+        self.assertNotEqual((self.new_student.first_name, self.new_student.last_name), 
+                            (self.data['first_name'], self.data['last_name']))
 
     def test04_query_by_id(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Ronald",
+            "last_name":"McDonald"
         }
         id = query_student(name).id
-        self.assertIsNone(query_by_id(id))
+        self.assertIsNotNone(query_by_id(id))
 
     def test05_delete_student(self):
         name = {
-            "first_name":"bob",
-            "last_name":"burger"
+            "first_name":"Ronald",
+            "last_name":"McDonald"
         }
         id = query_student(name).id
         self.assertTrue(delete_student(id))
