@@ -4,4 +4,5 @@ from .topic import *
 from .library import *
 from .notification import *
 from .researcher import *
+from .pyre_base import *
 # from .publication import *

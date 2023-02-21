@@ -17,7 +17,7 @@
             </div>
         </div>   
         <div class="uk-height-1-1 uk-position-absolute uk-position-left left" hidden>
-            <form id="researcher_signup" class="uk-form-stacked uk-container uk-background-default uk-height-1-1 uk-overflow-auto" action="/signup" method="post" onsubmit="getInterests();">
+            <form id="researcher_signup" class="uk-form-stacked uk-container uk-background-default uk-height-1-1 uk-overflow-auto" action="/signup" method="post" onsubmit="getInterests();" enctype = "multipart/form-data">
                 <div class="uk-flex uk-flex-center uk-margin">
                     <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
                 </div>
@@ -84,7 +84,7 @@
 
                 <div class="uk-margin">
                     <label for="image" class="uk-form-label">Image(Headshot)</label> 
-                    <div class="js-upload uk-placeholder uk-text-center uk-width-expand uk-margin-remove-top">
+                    <div id="researcher-upload" class="uk-placeholder uk-text-center uk-width-expand uk-margin-remove-top">
                         <span uk-icon="icon: cloud-upload"></span>
                         <span class="uk-text-middle">Upload images by dropping them here or</span>
                         <div uk-form-custom>
@@ -109,7 +109,7 @@
                         <span class="required">*</span>
                         {{ baseForm.faculty.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.faculty(class="uk-select", id="faculty_select") }}   
+                    {{ baseForm.faculty(class="uk-select", id="re_faculty_select") }}   
                 </div>
 
                 <div class="uk-margin">
@@ -117,7 +117,7 @@
                         <span class="required">*</span>
                         {{ baseForm.department.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.department(class="uk-select", id="department_select") }}
+                    {{ baseForm.department(class="uk-select", id="re_department_select") }}
                 </div>
 
                 <div class="uk-margin">
@@ -193,7 +193,7 @@
             </div>
         </div>
         <div class="uk-height-1-1 uk-position-absolute uk-position-right right" hidden>
-            <form id="student_form" class="uk-container uk-height-1-1 uk-form-stacked uk-background-default uk-overflow-auto" action="/signup" method="post">
+            <form id="student_form" class="uk-container uk-height-1-1 uk-form-stacked uk-background-default uk-overflow-auto" action="/signup" method="post" enctype = "multipart/form-data">
                 <div class="uk-flex uk-flex-center uk-margin">
                     <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
                 </div>
@@ -268,7 +268,7 @@
                         <span class="required">*</span>
                         {{ baseForm.faculty.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.faculty(class="uk-select", id="faculty_select") }}   
+                    {{ baseForm.faculty(class="uk-select", id="stu_faculty_select") }}   
                 </div>
 
                 <div class="uk-margin">
@@ -276,7 +276,7 @@
                         <span class="required">*</span>
                         {{ baseForm.department.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.department(class="uk-select", id="department_select") }}
+                    {{ baseForm.department(class="uk-select", id="stu_department_select") }}
                 </div>
 
                 <div class="uk-margin uk-margin-small-bottom uk-flex uk-flex-center">

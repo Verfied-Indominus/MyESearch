@@ -1,6 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
 from App.models.forms import *
 from App.controllers.topic import get_topics
+from App.controllers.pyre_base import uploadFile
+from werkzeug.utils import secure_filename
+from os import remove
 import json
 
 from App.models.builder import *
@@ -9,6 +12,8 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 dates = list(reversed([i for i in range(1970, 2024)]))
 institutions = ['The University of The West Indies']
+
+image = []
 
 faculties = [
         'Engineering',
@@ -65,8 +70,6 @@ def signup_page():
     if request.method == 'POST':
         form = request.form 
 
-        print(request.files)
-
         if 'title' in form:
             builder = ResearcherBuilder()
         else:
@@ -84,7 +87,14 @@ def signup_page():
         )
 
         if form['middle_name']:
-            builder.middle_name(form['middle'])
+            builder.middle_name(form['middle_name'])
+
+        if image:
+            print(image[0])
+            image_url = uploadFile(image[0])
+            print(image_url)
+            remove(f"App/uploads/{image[0]}")
+            builder.image_url(image_url)
         
         if isinstance(builder, ResearcherBuilder):
             builder = (
@@ -102,7 +112,6 @@ def signup_page():
                 builder.website_url(form['website'])
             if form['introduction']:
                 builder.introduction(form['introduction'])
-        
 
         builder.build()
 
@@ -115,8 +124,9 @@ def parse_interests(selected):
     print(selected)
     return 'Interests Checked'
 
-@index_views.route('/upload', methods=['POST'])
-def upload():
+@index_views.route('/filename', methods=['POST'])
+def filename():
     img = request.files['files[]']
-    print(img)
-    return ('img', img)
+    img.save(f"App/uploads/{img.filename}")
+    image.append(secure_filename(img.filename))
+    return img.filename

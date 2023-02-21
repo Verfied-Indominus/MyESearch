@@ -71,19 +71,34 @@ let departments = {
     ],
 }
 
-let faculty = document.getElementById("faculty_select");
-let department = document.getElementById("department_select");
+let re_faculty = document.getElementById("re_faculty_select");
+let re_department = document.getElementById("re_department_select");
 
-faculty.onchange = function() {
+let stu_faculty = document.getElementById("stu_faculty_select");
+let stu_department = document.getElementById("stu_department_select");
+
+re_faculty.onchange = function() {
     let html = '';
 
-    for (let index in departments[faculty.value]){
+    for (let index in departments[re_faculty.value]){
         html += `
-            <option value="${departments[faculty.value][index]}">${departments[faculty.value][index]}</option>
+            <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
         `;
     }
 
-    department.innerHTML = html;
+    re_department.innerHTML = html;
+}
+
+stu_faculty.onchange = function() {
+    let html = '';
+
+    for (let index in departments[stu_faculty.value]){
+        html += `
+            <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
+        `;
+    }
+
+    stu_department.innerHTML = html;
 }
 
 async function getInterests(){
@@ -113,9 +128,9 @@ let stu_bar = document.getElementById('js-student-progressbar');
 let re_img = document.getElementById('researcher-img-name');
 let stu_img = document.getElementById('student-img-name');
 
-UIkit.upload('.js-upload', {
+UIkit.upload('#researcher-upload', {
 
-    url: '/upload',
+    url: '/filename',
     multiple: false,
 
     beforeSend: function () {
@@ -163,7 +178,62 @@ UIkit.upload('.js-upload', {
             re_bar.setAttribute('hidden', 'hidden');
         }, 1000);
 
-        re_img.innerHTML = `Image Uploaded: ${arguments[0].responseText.filename}`;
+        re_img.innerHTML = `Image Uploaded: ${arguments[0].responseText}`;
+    }
+
+});
+
+UIkit.upload('#student-upload', {
+
+    url: '/filename',
+    multiple: false,
+
+    beforeSend: function () {
+        console.log('beforeSend', arguments);
+    },
+    beforeAll: function () {
+        console.log('beforeAll', arguments);
+    },
+    load: function () {
+        console.log('load', arguments);
+    },
+    error: function () {
+        console.log('error', arguments);
+    },
+    complete: function () {
+        console.log('complete', arguments);
+    },
+
+    loadStart: function (e) {
+        console.log('loadStart', arguments);
+
+        stu_bar.removeAttribute('hidden');
+        stu_bar.max = e.total;
+        stu_bar.value = e.loaded;
+    },
+
+    progress: function (e) {
+        console.log('progress', arguments);
+
+        stu_bar.max = e.total;
+        stu_bar.value = e.loaded;
+    },
+
+    loadEnd: function (e) {
+        console.log('loadEnd', arguments);
+
+        stu_bar.max = e.total;
+        stu_bar.value = e.loaded;
+    },
+
+    completeAll: function () {
+        console.log('completeAll', arguments);
+
+        setTimeout(function () {
+            stu_bar.setAttribute('hidden', 'hidden');
+        }, 1000);
+
+        stu_img.innerHTML = `Image Uploaded: ${arguments[0].responseText}`;
     }
 
 });
