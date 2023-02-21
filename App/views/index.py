@@ -3,7 +3,7 @@ from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import check_password_hash
 from App.controllers.topic import get_topics
 from App.controllers.pyre_base import uploadFile
-from App.controllers.user import get_user_by_email, get_all_users_json
+from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from werkzeug.utils import secure_filename
 from os import remove
 import json
@@ -96,11 +96,6 @@ def signup_page():
 
         if form['middle_name']:
             builder.middle_name(form['middle_name'])
-
-        if image:
-            image_url = uploadFile(image[0])
-            remove(f"App/uploads/{image[0]}")
-            builder.image_url(image_url)
         
         if isinstance(builder, ResearcherBuilder):
             builder = (
@@ -121,6 +116,17 @@ def signup_page():
 
         builder.build()
 
+        if isinstance(builder, StudentBuilder):
+            user = builder.student
+        else:
+            user = builder.researcher
+
+        if image:
+            image_url = uploadFile(user.id, image[0])
+            remove(f"App/uploads/{image[0]}")
+            builder.image_url(image_url)
+            builder.build()
+
         return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
@@ -133,6 +139,6 @@ def parse_interests(selected):
 @index_views.route('/filename', methods=['POST'])
 def filename():
     img = request.files['files[]']
-    img.save(f"App/uploads/{img.filename}")
     image.append(secure_filename(img.filename))
-    return img.filename
+    img.save(f"App/uploads/{image[0]}")
+    return image[0]

@@ -26,9 +26,9 @@ firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
 
 #as admin
-def uploadFile(file_name):
-    storage.child(f"images/{file_name}").put(f"App/uploads/{file_name}")
-    return storage.child(f"images/{file_name}").get_url()
+def uploadFile(id, file_name):
+    storage.child(f"images/{id}").put(f"App/uploads/{file_name}")
+    return storage.child(f"images/{id}").get_url()
 # storage.child("images/example.jpg").put("example.jpg")
 
 #as user
