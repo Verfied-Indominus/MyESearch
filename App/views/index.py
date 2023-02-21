@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
-from App.models.forms import *
+from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.controllers.topic import get_topics
 from App.controllers.pyre_base import uploadFile
 from werkzeug.utils import secure_filename
@@ -115,6 +115,7 @@ def signup_page():
                 builder.introduction(form['introduction'])
 
         builder.build()
+        print('user created')
 
         return 'Done'
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)

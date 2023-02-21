@@ -7,11 +7,11 @@ config = {
   "storageBucket": "my-e-search.appspot.com"
 }
 
-
+ 
 # const firebaseConfig = {
 #   apiKey: "AIzaSyAkDqi_KOPXF_jmaed8MxL7kerY9jY0ZgM",
 #   authDomain: "my-e-search.firebaseapp.com",
-#   projectId: "my-e-search",
+#   projectId: "my-e-search", 
 #   storageBucket: "my-e-search.appspot.com",
 #   messagingSenderId: "401005454141",
 #   appId: "1:401005454141:web:0b738fcc77657467d05b54",
