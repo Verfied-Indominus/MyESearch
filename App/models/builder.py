@@ -1,6 +1,6 @@
+from App.controllers.user import build_user
 from .student import Student
 from .researcher import Researcher
-from App.controllers.user import build_user
 
 class StudentBuilder():
 

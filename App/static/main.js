@@ -108,8 +108,10 @@ async function addResearchInterests(selected){
 
 
 
-let bar = document.getElementById('js-progressbar');
-let img = document.getElementById('img-name');
+let re_bar = document.getElementById('js-researcher-progressbar');
+let stu_bar = document.getElementById('js-student-progressbar');
+let re_img = document.getElementById('researcher-img-name');
+let stu_img = document.getElementById('student-img-name');
 
 UIkit.upload('.js-upload', {
 
@@ -135,33 +137,33 @@ UIkit.upload('.js-upload', {
     loadStart: function (e) {
         console.log('loadStart', arguments);
 
-        bar.removeAttribute('hidden');
-        bar.max = e.total;
-        bar.value = e.loaded;
+        re_bar.removeAttribute('hidden');
+        re_bar.max = e.total;
+        re_bar.value = e.loaded;
     },
 
     progress: function (e) {
         console.log('progress', arguments);
 
-        bar.max = e.total;
-        bar.value = e.loaded;
+        re_bar.max = e.total;
+        re_bar.value = e.loaded;
     },
 
     loadEnd: function (e) {
         console.log('loadEnd', arguments);
 
-        bar.max = e.total;
-        bar.value = e.loaded;
+        re_bar.max = e.total;
+        re_bar.value = e.loaded;
     },
 
     completeAll: function () {
         console.log('completeAll', arguments);
 
         setTimeout(function () {
-            bar.setAttribute('hidden', 'false');
+            re_bar.setAttribute('hidden', 'hidden');
         }, 1000);
 
-        img.innerHTML = `Uploaded ${arguments[0].responseText}`;
+        re_img.innerHTML = `Image Uploaded: ${arguments[0].responseText.filename}`;
     }
 
 });

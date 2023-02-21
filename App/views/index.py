@@ -63,21 +63,48 @@ def signup_page():
     reForm.start_date.choices = dates
 
     if request.method == 'POST':
-        form = request.form
+        form = request.form 
+
+        print(request.files)
 
         if 'title' in form:
             builder = ResearcherBuilder()
         else:
             builder = StudentBuilder()
 
-        builder.email(form['email']).password(form['password'])
-        builder.first_name(form['first_name']).last_name(form['last_name'])
-        builder.institution(form['institution']).faculty(form['faculty']).department(form['department'])
+        builder = (
+            builder
+                .email(form['email'])
+                .password(form['password'])
+                .first_name(form['first_name'])
+                .last_name(form['last_name'])
+                .institution(form['institution'])
+                .faculty(form['faculty'])
+                .department(form['department'])
+        )
 
         if form['middle_name']:
             builder.middle_name(form['middle'])
         
+        if isinstance(builder, ResearcherBuilder):
+            builder = (
+                builder
+                    .title(form['title'])
+                    .position(form['position'])
+                    .start_year(form['start_year'])
+                    .qualifications(form['qualifications'])
+                    .skills(form['skills'])
+            )
+
+            if form['certifications']:
+                builder.certifications(form['certifications'])
+            if form['website']:
+                builder.website_url(form['website'])
+            if form['introduction']:
+                builder.introduction(form['introduction'])
         
+
+        builder.build()
 
         return 'Done'
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
@@ -90,6 +117,6 @@ def parse_interests(selected):
 
 @index_views.route('/upload', methods=['POST'])
 def upload():
-    img = request.files['files[]'].filename
+    img = request.files['files[]']
     print(img)
-    return img
+    return ('img', img)
