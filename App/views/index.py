@@ -1,7 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
+from App.models.user import check_password_hash
 from App.controllers.topic import get_topics
 from App.controllers.pyre_base import uploadFile
+from App.controllers.user import get_user_by_email, get_all_users_json
 from werkzeug.utils import secure_filename
 from os import remove
 import json
@@ -41,8 +43,14 @@ departments = [
 def index_page():
     return render_template('index.html')
 
-@index_views.route('/login', methods=['GET'])
+@index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if request.method == 'POST':
+        form = request.form
+        user = get_user_by_email(form['email'])
+        if user and check_password_hash(user.password, form['password']):
+            return redirect(url_for('.index_page'))
+
     return render_template('login.html')
 
 @index_views.route('/signup', methods=['GET', 'POST'])
@@ -90,10 +98,7 @@ def signup_page():
             builder.middle_name(form['middle_name'])
 
         if image:
-            print(image[0])
-            print('YES')
             image_url = uploadFile(image[0])
-            print(image_url)
             remove(f"App/uploads/{image[0]}")
             builder.image_url(image_url)
         
@@ -115,9 +120,8 @@ def signup_page():
                 builder.introduction(form['introduction'])
 
         builder.build()
-        print('user created')
 
-        return 'Done'
+        return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
