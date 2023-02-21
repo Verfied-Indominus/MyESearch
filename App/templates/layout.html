@@ -16,127 +16,70 @@
     {% block nav %}
 
   <nav class="uk-background-default" uk-navbar>
-    <div class="uk-navbar-left uk-flex uk-flex-middle">
-
+    
+    <div class="">
+      <div class="uk-navbar-item">
         <a class="uk-navbar-item uk-logo uk-width-1-4" href="#" aria-label="Back to Home"><img src="/static/images/MyeSearch Logo.jpg">
         </a>
 
-
-        <!-- <ul class="uk-navbar-nav">
-            <li>
-                <a href="#">
-                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: home"></span>
-                    Home
-                </a>
-            </li>
-        </ul>
-       
-      <div>
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: question"></span>
-              Questions
-            </a>
-          </li>
-        </ul>
+    
+        <div class="uk-width-1-2 uk-navbar-item uk-navbar-right">
+          <div class="uk-margin uk-width-1-1">
+            <form class="uk-search uk-search-default uk-width-1-1">
+                <a href="" class="uk-search-icon-flip" uk-search-icon></a>
+                <input class="uk-search-input" type="search" placeholder="Search for publications , topics, researchers and more" aria-label="Search">
+            </form>
+        </div>
       </div>
-
-      <div>
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: social"></span>
-              Share
-            </a>
-          </li>
-        </ul>
-      </div> -->
-
-
-      <div class="uk-width-auto uk-navbar-item uk-navbar-right">
-        <div class="uk-margin">
-          <form class="uk-search uk-search-default">
-              <a href="" class="uk-search-icon-flip" uk-search-icon></a>
-              <input class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
-          </form>
-      </div>
-
-      <div>
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
-              Notification
-            </a>
-          </li>
-        </ul>
-      </div>
-
-
-      <div>
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: mail"></span>
-              Mail
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bookmark"></span>
-              Library
-            </a>
-          </li>
-        </ul>
-      </div>
-
-
       <!-- <div>
         <ul class="uk-navbar-nav">
           <li>
             <a href="#">
-              <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
-              Profile
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
             </a>
           </li>
         </ul>
       </div> -->
+
     </div>
 
-    <nav class="uk-navbar-container uk-width-1-1 uk-child-width-1-1" uk-navbar>
+    <div class="uk-navbar-container uk-width-1-1 uk-child-width-1-1" uk-navbar>
       <div class="uk-navbar-left">
           <ul class="uk-navbar-nav uk-flex uk-width-1-1 uk-child-width-1-1">
             <div class="uk-flex uk-flex-between uk-child-width-1-5">
-              <button class="uk-button uk-button-default uk-button-large">Home</button>
-              <button class="uk-button uk-button-primary uk-button-large">My Profile</button>
+
+              <div>
+                <button class="uk-button uk-button-secondary uk-button-large uk-width-1-1 ">Home</button>
+                  <ul class="uk-nav uk-navbar-dropdown uk-overflow-auto">
+                    <li class="uk-nav-header">My Library</li>
+                    <li class="uk-nav-header">Notifications</li>
+                  </ul>
+              </div>
+             
+              <button class="uk-button uk-button-secondary uk-button-large">My Profile</button>
               <button class="uk-button uk-button-secondary uk-button-large">All Authors</button>
               <button class="uk-button uk-button-secondary uk-button-large">All Publications</button>
-                <div>
+                
+              <div>
                     <button class= "uk-button uk-button-secondary uk-button-large uk-width-1-1">Browse Topics</button>
-                      <ul class="uk-nav uk-navbar-dropdown uk-overflow-auto">
-                        <li class="uk-nav-header">Biology</li>
-                        <li class="uk-nav-header">Chemistry</li>
-                        <li class="uk-nav-header">Computer Science</li>
-                        <li class="uk-nav-header">Geography</li>
-                        <li class="uk-nav-header">History</li>
-                        <li class="uk-nav-header">Law</li>
-                        <li class="uk-nav-header">Literature</li>
-                        <li class="uk-nav-header">Mathematices</li>
-                        <li class="uk-nav-header">Medicine</li>
-                        <li class="uk-nav-header">Science</li>
-                         <li class="uk-nav-header">Scoial Sciences</li>
-                      </ul>
+                    <ul class="uk-nav uk-navbar-dropdown uk-width-1-5 uk-overflow-auto" uk-dropdown="pos: bottom-right">
+                        <li class="uk-active"><a href="#">Biology</a></li>
+                        <li class="uk-active"><a href="#">Chemistry</a></li>
+                        <li class="uk-active"><a href="#">Computer Science</a></li>
+                        <li class="uk-active"><a href="#">Geography</a></li>
+                        <li class="uk-active"><a href="#">History</a></li>
+                        <li class="uk-active"><a href="#">Law</a></li>
+                        <li class="uk-active"><a href="#">Literature</a></li>
+                        <li class="uk-active"><a href="#">Mathematices</a></li>
+                        <li class="uk-active"><a href="#">Medicine</a></li>
+                        <li class="uk-active"><a href="#">Science</a></li>
+                        <li class="uk-active"><a href="#">Scoial Sciences</a></li>
+                    </ul>
                 </div>  
               </div>    
           </ul>
       </div>
-    </nav>
+    </div>
   </nav>
 
   <div class="uk-cover-container " uk-height-viewport>
