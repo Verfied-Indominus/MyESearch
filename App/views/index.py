@@ -91,6 +91,7 @@ def signup_page():
 
         if image:
             print(image[0])
+            print('YES')
             image_url = uploadFile(image[0])
             print(image_url)
             remove(f"App/uploads/{image[0]}")
