@@ -4,7 +4,7 @@ from flask.cli import with_appcontext, AppGroup
 
 from App.database import create_db, get_migrate, drop_db
 from App.main import create_app
-from App.controllers import ( create_researcher, get_researcher_by_email, get_all_users_json, get_all_users,
+from App.controllers import ( get_researcher_by_email, get_all_users_json, get_all_users,
                                 create_topic, set_topic_parent, get_topic, get_all_topics
 )
 
@@ -157,6 +157,36 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "NotificationUnitTests"]))
     elif type == "int":
         sys.exit(pytest.main(["-k", "NotificationIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+@test.command("student", help="Run Student tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "StudentUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "StudentIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+@test.command("topic", help="Run Topic tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "TopicUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "TopicIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+@test.command("publication", help="Run Publication tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "PublicationUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "PublicationIntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
 

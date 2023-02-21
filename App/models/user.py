@@ -19,21 +19,24 @@ class User(db.Model):
     notification_records = db.relationship("NotificationRecord", backref="user", lazy="dynamic", cascade="all, delete-orphan")
 
     __mapper_args__ = {
-        'polymorphic_identity':'employee',
+        'polymorphic_identity':'User',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
 
-    def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
-        self.email = email
-        self.set_password(password)
-        self.first_name = first_name
-        self.middle_name = middle_name
-        self.last_name = last_name
-        self.institution = institution
-        self.faculty = faculty
-        self.department = department
-        self.image_url = image_url
+    def __init__(self):
+        return self
+
+    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
+    #     self.email = email
+    #     self.set_password(password)
+    #     self.first_name = first_name
+    #     self.middle_name = middle_name
+    #     self.last_name = last_name
+    #     self.institution = institution
+    #     self.faculty = faculty
+    #     self.department = department
+    #     self.image_url = image_url
 
     def set_password(self, password):
         """Create hashed password."""

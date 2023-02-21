@@ -12,3 +12,4 @@ from .researchersubrecord import *
 from .topicsubrecord import *
 from .notification import *
 from .notificationrecord import *
+from .forms import *
