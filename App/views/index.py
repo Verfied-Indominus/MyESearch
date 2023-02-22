@@ -1,9 +1,7 @@
-
-from App.controllers import publication
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import check_password_hash
-from App.controllers.topic import get_topics
+from App.controllers.topic import get_all_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from werkzeug.utils import secure_filename
@@ -44,8 +42,8 @@ departments = [
 
 @index_views.route('/', methods=['GET'])
 def index_page():
-    topics = topic.get_all_topics()
-    publications = publication.get_recent()
+    topics = []
+    publications = []
     return render_template('index.html',topics=topics,publications=publications)
 
 @index_views.route('/publication/<id>',methods=["GET"])
