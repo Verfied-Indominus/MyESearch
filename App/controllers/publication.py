@@ -52,3 +52,9 @@ def delete_pub(id):
         return True
     except:
         return  False
+    
+def get_all_publications_for_user(user):
+    pubs = []
+    for rec in user.pub_records:
+        pubs.append(rec.publication)
+    return pubs

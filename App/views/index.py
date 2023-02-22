@@ -1,9 +1,12 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
+from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for, flash
+from flask_login import current_user
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
-from App.models.user import check_password_hash
+from App.models.user import User, check_password_hash
 from App.controllers.topic import get_all_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
+from App.controllers.publication import get_pub_byid, get_all_publications_for_user
+from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
 import json
@@ -49,20 +52,29 @@ def index_page():
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
     
-    pub = publication.get_pub_byid(id)
+    pub = get_pub_byid(id)
     if not pub:
         return("404")
     return render_template("publication.html",pub=pub.toDict())
     
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
+    remember = False
     if request.method == 'POST':
         form = request.form
         user = get_user_by_email(form['email'])
         if user and check_password_hash(user.password, form['password']):
+            if 'remember' in form:
+                remember = True
+            login_user(user, remember)
             return redirect(url_for('.index_page'))
 
     return render_template('login.html')
+
+@index_views.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect(url_for('.index_page'))
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
@@ -132,11 +144,17 @@ def signup_page():
         else:
             user = builder.researcher
 
+        if not user:
+            flash('There already is an account associated with that email')
+            return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
+
         if image:
             image_url = uploadFile(user.id, image[0])
             remove(f"App/uploads/{image[0]}")
             builder.image_url(image_url)
             builder.build()
+
+        login_user(user, False)
 
         return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
@@ -154,3 +172,20 @@ def filename():
     img.save(f"App/uploads/{image[0]}")
     return image[0]
 
+@index_views.route('/myprofile', methods=['GET'])
+def my_profile():
+    if not isinstance(current_user, User):
+        flash('Not currently logged in')
+        return redirect(url_for('.index_page'))
+    return jsonify({'message': f"name: {current_user.first_name}, id : {current_user.id}"})
+
+@index_views.route('profile/<id>', methods=['GET'])
+def profile(id):
+    re = False
+    pubs = []
+    user = get_user(id)
+    if (isinstance(user, Researcher)):
+        re = True
+        pubs = get_all_publications_for_user(user)
+
+    return 'Unfinished'
