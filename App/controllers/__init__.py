@@ -4,4 +4,9 @@ from .topic import *
 from .library import *
 from .notification import *
 from .researcher import *
-# from .publication import *
+from .pyre_base import *
+from .publication import *
+from .suggestions import *
+from .open_ai import *
+from .pdf import *
+from .student import *

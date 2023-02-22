@@ -40,7 +40,7 @@ def create_app(config={}):
     app.config['SEVER_NAME'] = '0.0.0.0'
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['UPLOADED_PHOTOS_DEST'] = "App/uploads"
-    photos = UploadSet('photos', TEXT + DOCUMENTS + IMAGES)
+    photos = UploadSet('photos', IMAGES)
     configure_uploads(app, photos)
     add_views(app)
     create_db(app)

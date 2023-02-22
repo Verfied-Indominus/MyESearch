@@ -1,0 +1,47 @@
+.primary-background{
+    background-color: #c54e2d;
+}
+
+.secondary-background{
+    background-color: #85DCB8;
+}
+
+.jetblack-background{
+    background-color: #111;
+}
+
+.alternate-background{
+    background-color: #f7a9c2;
+}
+
+.lightred-background{
+    background-color: #f0506e;
+}
+
+.secondary-alt-background{
+    background-color: #41B3A3;
+}
+
+.white-text{
+    color: #ffffff;
+}
+
+.secondary-text{
+    color: #85DCB8;
+}
+
+.default-text{
+    color: #E8A87C;
+}
+
+.alternate-text{
+    color: #C38D9E;
+}
+
+.secondary-alt-text{
+    color: #41B3A3;
+}
+
+.required{
+    color: red;
+}

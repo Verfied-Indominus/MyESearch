@@ -3,32 +3,91 @@
   <head>
   
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.24/dist/css/uikit.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.24/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.24/dist/js/uikit.min.js"></script>
+    <script src="/static/main.js"></script>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}{% endblock %}</title>
 
   </head>
-  <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/users">Users Jinja</a></li>
-                <li><a href="/static/users">Users JS</a></li>
-            </ul>
+  <body class="jetblack-background">
+    
+  {% block nav %}
+
+  <nav class="uk-background-default" uk-navbar>
+    
+    <div class="">
+      <div class="uk-navbar-item">
+        <a class="uk-navbar-item uk-logo uk-width-1-4" href="/" aria-label="Back to Home"><img src="/static/images/MyeSearch Logo.jpg">
+        </a>
+
+    
+        <div class="uk-width-1-2 uk-navbar-item uk-navbar-right">
+          <div class="uk-margin uk-width-1-1">
+            <form class="uk-search uk-search-default uk-width-1-1">
+                <a href="" class="uk-search-icon-flip" uk-search-icon></a>
+                <input class="uk-search-input" type="search" placeholder="Search for publications, researchers, topics and more" aria-label="Search">
+            </form>
         </div>
       </div>
-    </nav>
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="uk-navbar-container uk-width-1-1 uk-child-width-1-1" uk-navbar>
+      <div class="uk-navbar-left">
+          <ul class="uk-navbar-nav uk-flex uk-width-1-1 uk-child-width-1-1">
+            <div class="uk-flex uk-flex-between uk-child-width-1-5">
+              <a href="/" class="uk-button uk-button-secondary uk-button-large">Home</a>             
+              <a href="#" class="uk-button uk-button-secondary uk-button-large">My Profile</a>
+              <a href="#" class="uk-button uk-button-secondary uk-button-large">All Authors</a>
+              <a href="#" class="uk-button uk-button-secondary uk-button-large">All Publications</a>
+                
+              <div>
+                    <a href="#" class= "uk-button uk-button-secondary uk-button-large uk-width-1-1">Browse Topics<span class="uk-icon" uk-icon="icon: triangle-down"></span></a>
+                      
+                    <ul class="uk-nav uk-navbar-dropdown uk-width-1-5 uk-overflow-auto" uk-dropdown="pos: bottom-right;">
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Biology</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Chemistry</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Computer Science</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Geography</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">History</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Law</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Literature</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Mathematices</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Medicine</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Science</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Scoial Sciences</a></li>
+                    </ul>
+                </div>  
+              </div>    
+          </ul>
+      </div>
+    </div>
+  </nav>   
+
+
+  <footer>
+
+  </footer>
+
+
+  
+  {% endblock %}
     
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
+      <nav class="white black-text" style="padding: 10px"> <!--update classes to uikit-->
         <div class="nav-wrapper">
             <ul class="flashes">
             {% for message in messages %}
@@ -40,8 +99,7 @@
       {% endif %}
     {% endwith %}
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <div id="content">{% block content %}{% endblock %}</div>
   </body>
 </html>
