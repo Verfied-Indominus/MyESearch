@@ -14,6 +14,9 @@ def create_topic(name):
 def get_topic(id):
     return Topic.query.filter_by(id=id).first()
 
+def get_topic_id(id):
+    return Topic.query.filter_by(id=id).first()
+
 def get_all_topics():
     return [topic.toDict() for topic in Topic.query.all()]
 
