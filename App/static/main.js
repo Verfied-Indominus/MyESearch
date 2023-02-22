@@ -237,3 +237,15 @@ UIkit.upload('#student-upload', {
     }
 
 });
+
+var util = UIkit.util;
+var el = util.$('#bookbulb');
+
+UIkit.scrollspy(el, { repeat: true });
+  
+util.on(el,'inview', function(){
+    UIkit.notification('Trigger Inview!', 'success');
+});
+util.on(el,'outview', function(){
+    UIkit.notification('Trigger Outview!', 'warning');
+});
