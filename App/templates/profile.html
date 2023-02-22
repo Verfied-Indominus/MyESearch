@@ -1,16 +1,61 @@
 {% extends 'layout.html' %}
-{% block title %}MyeSearch Publication{% endblock %}
-{% block page %}MyeSearch Publication{% endblock %}
+{% block title %}MyeSearch Profile{% endblock %}
+{% block page %}MyeSearch Profile{% endblock %}
 
 {{ super() }}
 
 {% block content %}
 
-<div>
+<div> 
+
+    <div>
+        <img scr=" " alt= ""> researcher or student image goes here
+       
+        <!-- Only for Researchers         -->
+        <button> Follow</button>
+    </div>
 
 
+    <div>
+        <div> Name </div>
+        <div> Email </div>
+        <div> Institution </div>
+        <div> Faculty </div>
+        <div> Departmet </div>
+        <!-- Only for Researchers         -->
+        <div> Current Position </div>
+        <div> Year of Commence of Employment to UWI </div>
+        <div> Personal Website </div>
+    </div>
+
+
+    <div>
+        <div> Introduction Title</div>
+        <div> Paragraph</div>
+    </div>
+
+
+    <div>
+        <div> Academic Qualifications List </div>
+        <div> Other Certifications List </div>
+        <div> Research Interest List </div>
+        <div> Skills/Expertise List </div>
+    </div>
 
     
+    <div>
+        <div> My Publication Title</div>
+        <div> List of publications in a form of a crousel</div>
+    </div>
+
+    <div>
+        <div> Analytics Title</div>
+        <div> Profile Views</div>
+        <div> Subcribers</div>
+        <div> Search Appearance</div>
+    </div>
+
 </div>
+
 
 {% endblock %}
