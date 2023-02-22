@@ -11,8 +11,8 @@ def create_topic(name):
         return None
     return topic
 
-def get_topic(name):
-    return Topic.query.filter_by(name=name).first()
+def get_topic(id):
+    return Topic.query.filter_by(id=id).first()
 
 def get_all_topics():
     return [topic.toDict() for topic in Topic.query.all()]
