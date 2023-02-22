@@ -1,3 +1,5 @@
+
+from App.controllers import publication
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import check_password_hash
@@ -9,6 +11,7 @@ from os import remove
 import json
 
 from App.models.builder import *
+
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
@@ -41,8 +44,18 @@ departments = [
 
 @index_views.route('/', methods=['GET'])
 def index_page():
-    return render_template('index.html')
+    topics = topic.get_all_topics()
+    publications = publication.get_recent()
+    return render_template('index.html',topics=topics,publications=publications)
 
+@index_views.route('/publication/<id>',methods=["GET"])
+def publication_page(id):
+    
+    pub = publication.get_pub_byid(id)
+    if not pub:
+        return("404")
+    return render_template("publication.html",pub=pub.toDict())
+    
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'POST':
@@ -142,3 +155,4 @@ def filename():
     image.append(secure_filename(img.filename))
     img.save(f"App/uploads/{image[0]}")
     return image[0]
+
