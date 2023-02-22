@@ -11,6 +11,8 @@ class Researcher(UserMixin, User):
     skills = db.Column(db.String(300))
     website_url = db.Column(db.String(120))
     introduction = db.Column(db.String(500))
+    views = db.Column(db.Integer)
+    searches = db.Column(db.Integer)
     research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="dynamic", cascade="all, delete-orphan")
@@ -21,6 +23,8 @@ class Researcher(UserMixin, User):
 
     def __init__(self):
         super(Researcher, self).__init__()
+        self.views = 0
+        self.searches = 0
 
     # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
     #               position, start_year, qualifications, certifications, skills, website_url, introduction):

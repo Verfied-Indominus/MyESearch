@@ -187,5 +187,6 @@ def profile(id):
     if (isinstance(user, Researcher)):
         re = True
         pubs = get_all_publications_for_user(user)
-
+        subs = len(user.sub_records)
+    
     return 'Unfinished'
