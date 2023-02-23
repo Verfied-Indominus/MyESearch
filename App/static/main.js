@@ -238,14 +238,16 @@ UIkit.upload('#student-upload', {
 
 });
 
-var util = UIkit.util;
-var el = util.$('#bookbulb');
+let follow = document.getElementById('follow-pub'); //follow button in publication page
+let follow_sub = document.getElementById('follow-sub'); // follow button in researcher profile page
 
-UIkit.scrollspy(el, { repeat: true });
-  
-util.on(el,'inview', function(){
-    UIkit.notification('Trigger Inview!', 'success');
-});
-util.on(el,'outview', function(){
-    UIkit.notification('Trigger Outview!', 'warning');
-});
+async function addToLibrary(user_id, pub_id){
+    let response = await fetch(`/addtolibrary/${user_id}/${pub_id}`);
+    let unfollowhtml = `Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span>`;
+    let followhtml = `Following<span class="uk-margin-small-left" uk-icon="check"></span>`;
+    if (response){
+        follow.innerHTML = followhtml;
+    } else {
+        follow.innerHTML = unfollowhtml;
+    }
+}

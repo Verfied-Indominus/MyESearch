@@ -9,6 +9,7 @@ from App.controllers.publication import get_pub_byid, get_all_publications_for_u
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
+from App.controllers.library import get_library_from_user, add_publication_to_library, remove_publication_from_library
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
@@ -178,6 +179,14 @@ def filename():
     image.append(secure_filename(img.filename))
     img.save(f"App/uploads/{image[0]}")
     return image[0]
+
+@index_views.route('/addtolibrary/<user_id>/<pub_id>', methods=['GET'])
+def add_to_library(user_id, pub_id):
+    library = get_library_from_user(user_id)
+    if add_publication_to_library(library, pub_id):
+        return True
+    remove_publication_from_library(library, pub_id)
+    return False
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
