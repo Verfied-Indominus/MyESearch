@@ -176,15 +176,16 @@ def filename():
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
-    # if not isinstance(current_user, User):
-    #     flash('Not currently logged in')
-    #     return redirect(url_for('.index_page'))
-    return jsonify({'message': f"name: {current_user.first_name}, id : {current_user.id}"})
+    if not isinstance(current_user, User):
+        flash('Not currently logged in')
+        return redirect(url_for('.index_page'))
+    return redirect(url_for('.profile', id=1))
 
 @index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
     pubs = []
+    subs = []
     user = get_user(id)
     if (isinstance(user, Researcher)):
         re = True
@@ -196,5 +197,4 @@ def profile(id):
                 vrec = create_visit_record(current_user.id, user.id)
             if update_visit_record(vrec):
                 user = add_view(user)
-            
-    return 'Unfinished'
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs)
