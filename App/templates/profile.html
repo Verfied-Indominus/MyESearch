@@ -6,13 +6,15 @@
 
 {% block content %}
 
-<div> 
+<div class="uk-background-muted"> 
 
-    <div>
-        <img scr=" " alt= ""> researcher or student image goes here
+    <div class="uk-card uk-card-default uk-padding uk-grid-divider" uk-grid>
+        <div class="uk-width-1-4 uk-background-cover uk-background-center-center" data-src="" uk-img></div>
        
         <!-- Only for Researchers         -->
-        <button> Follow</button>
+        {% if re %}
+            <div class="uk-button uk-background-danger uk-text-capitalize uk-border-rounded">Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span></div>
+        {% endif %}
     </div>
 
 
