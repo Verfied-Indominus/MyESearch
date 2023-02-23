@@ -24,7 +24,7 @@
         </a>
 
     
-        <div class="uk-width-1-2 uk-navbar-item uk-navbar-right">
+        <div class="uk-width-1-2 uk-margin-small-right uk-navbar-item uk-navbar-right">
           <div class="uk-margin uk-width-1-1">
             <form class="uk-search uk-search-default uk-width-1-1">
                 <a href="" class="uk-search-icon-flip" uk-search-icon></a>
@@ -37,6 +37,15 @@
           <li>
             <a href="#">
               <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="#">
+              <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
             </a>
           </li>
         </ul>
@@ -57,17 +66,17 @@
                     <a href="#" class= "uk-button uk-button-secondary uk-button-large uk-width-1-1">Browse Topics<span class="uk-icon" uk-icon="icon: triangle-down"></span></a>
                       
                     <ul class="uk-nav uk-navbar-dropdown uk-width-1-5 uk-overflow-auto" uk-dropdown="pos: bottom-right;">
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Biology</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Chemistry</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Artifical Intelligence</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Biotechnology</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Climate Change</a></li>
                         <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Computer Science</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Geography</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">History</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Law</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Literature</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Mathematices</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Energy</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Material Science</a></li>
                         <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Medicine</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Science</a></li>
-                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Scoial Sciences</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Nueroscience</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Medicine</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Quantum Computing</a></li>
+                        <li class="uk-active uk-box-shadow-hover-small" uk-toggle="cls: uk-background-muted; mode: hover;"><a href="#" class="uk-text-secondary">Robotics</a></li>
                     </ul>
                 </div>  
               </div>    
@@ -97,7 +106,33 @@
 
     <div id="content">{% block content %}{% endblock %}</div>
     {% block footer %}
-    <footer>
+    <footer class="uk-grid-divider uk-background-default" uk-height-viewport="offset-top: true; offset-bottom: 60;" uk-grid>
+      
+      <div class="uk-width-1-3 uk-flex uk-flex-center uk-flex-middle uk-margin-medium-top uk-margin-medium-bottom">
+        <div class="">
+          <div class="uk-width-1-3 uk-margin-auto">
+            <img class="" src="/static/images/UWI Logo.jpeg">
+          </div>
+          <div class="uk-text-center">&#169; MyeSearch 2023. All Rights Reserved</div>
+        </div>
+      </div>
+
+      <div class="uk-width-1-3 uk-flex uk-flex-center uk-margin-medium-top uk-margin-medium-bottom">
+        <ul class="uk-list uk-list-large"><h4>Quick Links</h4>
+          <li><a href="/">Home</a></li>
+          <li><a href="/myprofile">My Profile</a></li>
+          <li><a href="/all/researchers">All Researchers</a></li>
+          <li><a href="/all/publications">All Publications</a></li>
+        </ul>
+      </div>
+
+      <div class="uk-width-1-3 uk-flex uk-flex-center uk-margin-medium-top uk-margin-medium-bottom">
+        <ul class="uk-list uk-list-large"><h4>Project Team</h4>
+          <li>Munesha Beharry</li>
+          <li>Shivan Maharaj</li>
+          <li>Trey Murray</li>
+        </ul>
+      </div>
 
     </footer>
     {% endblock %}
