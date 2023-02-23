@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -10,8 +10,8 @@ from datetime import timedelta
 
 from App.database import create_db
 
+from App.controllers.auth import login_manager
 from App.views import views
-
 
 def add_views(app):
     for view in views:
@@ -33,6 +33,7 @@ def loadConfig(app, config):
 
 def create_app(config={}):
     app = Flask(__name__, static_url_path='/static')
+    login_manager.init_app(app)
     CORS(app)
     loadConfig(app, config)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -46,3 +47,4 @@ def create_app(config={}):
     create_db(app)
     app.app_context().push()
     return app
+

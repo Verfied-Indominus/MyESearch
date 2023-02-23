@@ -12,6 +12,7 @@ from App.controllers.publication import *
 from App.controllers.student import *
 from App.controllers.topic import *
 from App.controllers.notification import *
+from App.controllers.visitrecords import *
 
 from wsgi import app
 
@@ -114,8 +115,12 @@ class PublicationUnitTests(unittest.TestCase):
             'abstract':"this apparently is an abstract.",
             'pub_type':"lol",
             'free_access':True,
-            'publication_date': datetime(2020, 2, 24)
-        }
+            'publication_date': datetime(2020, 2, 24),
+            'reads': 0,
+            'citations': 0,
+            'downloads': 0,
+            'searches': 0
+            }
         self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"], self.data["publication_date"])
 
     def test01_is_publication(self):
@@ -370,15 +375,18 @@ class LibraryIntegrationTests(unittest.TestCase):
         })
         
 class PublicationIntegrationTests(unittest.TestCase):
-
-    def setUp(self):
-        self.data = {
-            'id': 0,
+    @classmethod
+    def setUpClass(cls):
+        cls.data = {
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
             'pub_type':"article",
             'free_access':True,
-            'pub_date': datetime(2020, 2, 24)
+            'publication_date': date(2020, 2, 24),
+            'reads': 0,
+            'citations': 0,
+            'downloads': 0,
+            'searches': 0
         }
 
     def test01_create_pub(self):
@@ -389,7 +397,8 @@ class PublicationIntegrationTests(unittest.TestCase):
 
     def test03_update(self):
         pub = get_pub(self.data['title'])
-        self.assertTrue(update_pub(self.data,pub.id))
+        print(self.data)
+        self.assertTrue(update_pub(self.data, pub.id))
 
     def test04_delete_pub(self):
         pub = get_pub(self.data["title"])
@@ -404,7 +413,7 @@ class TopicIntegrationTests(unittest.TestCase):
         self.assertIsNotNone(self.new_topic)
 
     def test02_get_topic(self):
-        self.assertEquals(self.new_topic.name, get_topic(self.new_topic.name).toDict()["name"])
+        self.assertEquals(self.new_topic.name, get_topic_by_name(self.new_topic.name).toDict()["name"])
 
     def test03_set_parent(self):
         self.assertEquals(5, set_topic_parent(self.new_topic.name, 5).parent_topic_id)
@@ -475,3 +484,39 @@ class StudentIntegrationTests(unittest.TestCase):
         }
         id = query_student(name).id
         self.assertTrue(delete_student(id))
+
+class VisitRecordIntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        builder = (
+            StudentBuilder()
+                .email("robby@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+                .build()
+        )
+        cls.new_student = builder.student
+        builder = (
+            ResearcherBuilder()
+                .email("bobbert@mail.com")
+                .password("bobpass")
+                .first_name("Bob")
+                .last_name("Burger")
+                .institution("UWI")
+                .faculty("HFE")
+                .department("Gender Studies")
+                .build()
+        )
+        cls.new_researcher = builder.researcher
+        cls.vrec = create_visit_record(cls.new_student.id, cls.new_researcher.id)
+
+    def test01_create_visit_record(self):
+        self.assertTrue((isinstance(self.vrec, VisitRecord)) and self.vrec.id is not None)
+
+    def test02_check_last_visited(self):
+        print(self.vrec.last_visited)
+        self.assertFalse(update_visit_record(self.vrec))

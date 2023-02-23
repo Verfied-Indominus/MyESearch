@@ -14,6 +14,9 @@ def create_topic(name):
 def get_topic(id):
     return Topic.query.filter_by(id=id).first()
 
+def get_topic_by_name(name):
+    return Topic.query.filter_by(name=name).first()
+
 def get_topic_id(id):
     return Topic.query.filter_by(id=id).first()
 
@@ -25,7 +28,7 @@ def get_topics(limiter):
 
 def set_topic_parent(name, id):
     try:
-        topic = get_topic(name)
+        topic = get_topic_by_name(name)
         topic.set_parent_id(id)
         db.session.add(topic)
         db.session.commit()
@@ -35,7 +38,7 @@ def set_topic_parent(name, id):
 
 def delete_topic(name):
     try:
-        topic = get_topic(name)
+        topic = get_topic_by_name(name)
         db.session.delete(topic)
         db.session.commit()
         return True

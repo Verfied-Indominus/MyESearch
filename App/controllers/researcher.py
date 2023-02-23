@@ -15,3 +15,14 @@ def delete_researcher(id):
     db.session.commit()
     return True
 
+def add_view(researcher):
+    researcher.views += 1
+    db.session.add(researcher)
+    db.session.commit()
+    return researcher
+
+def add_search(researcher):
+    researcher.searches += 1
+    db.session.add(researcher)
+    db.session.commit()
+    return researcher
