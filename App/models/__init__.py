@@ -13,3 +13,4 @@ from .topicsubrecord import *
 from .notification import *
 from .notificationrecord import *
 from .forms import *
+from .visitrecord import *

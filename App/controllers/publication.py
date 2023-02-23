@@ -9,7 +9,7 @@ def create_pub(data): #let data be a dictionary
             abstract= data["abstract"],
             free_access= data["free_access"],
             pub_type=data["pub_type"],
-            publication_date=data["pub_date"]
+            publication_date=data["publication_date"]
 
         )
         db.session.add(new_pub)

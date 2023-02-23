@@ -26,18 +26,6 @@ class Researcher(UserMixin, User):
         self.views = 0
         self.searches = 0
 
-    # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url, title, 
-    #               position, start_year, qualifications, certifications, skills, website_url, introduction):
-    #     super(Researcher, self).__init__(email, password, first_name, middle_name, last_name, institution, faculty, department, image_url)
-    #     self.title = title
-    #     self.position = position
-    #     self.start_year = start_year
-    #     self.qualifications = qualifications
-    #     self.certifications = certifications
-    #     self.skills = skills
-    #     self.website_url = website_url
-    #     self.introduction = introduction
-
     def toDict(self):
         return super().toDict() | {
             'title': self.title,

@@ -6,6 +6,8 @@ from App.controllers.topic import get_all_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
+from App.controllers.visitrecords import *
+from App.controllers.researcher import add_view
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
@@ -174,12 +176,12 @@ def filename():
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
-    if not isinstance(current_user, User):
-        flash('Not currently logged in')
-        return redirect(url_for('.index_page'))
+    # if not isinstance(current_user, User):
+    #     flash('Not currently logged in')
+    #     return redirect(url_for('.index_page'))
     return jsonify({'message': f"name: {current_user.first_name}, id : {current_user.id}"})
 
-@index_views.route('profile/<id>', methods=['GET'])
+@index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
     pubs = []
@@ -188,5 +190,11 @@ def profile(id):
         re = True
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records)
-    
+        if (isinstance(current_user, User)):
+            vrec = get_visit_record(current_user.id, user.id)
+            if not vrec:
+                vrec = create_visit_record(current_user.id, user.id)
+            if update_visit_record(vrec):
+                user = add_view(user)
+            
     return 'Unfinished'

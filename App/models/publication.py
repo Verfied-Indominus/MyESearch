@@ -6,7 +6,7 @@ class Publication(db.Model):
     abstract = db.Column(db.String(500), nullable=False)
     free_access = db.Column(db.Boolean, nullable=False)
     pub_type = db.Column(db.String(30), nullable=False)
-    publication_date = db.Column(db.DateTime, nullable=False)
+    publication_date = db.Column(db.Date, nullable=False)
     reads = db.Column(db.Integer, nullable=False)
     citations = db.Column(db.Integer, nullable=False)
     downloads = db.Column(db.Integer, nullable=False)
