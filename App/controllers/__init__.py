@@ -10,3 +10,4 @@ from .suggestions import *
 from .open_ai import *
 from .pdf import *
 from .student import *
+from .recents import *

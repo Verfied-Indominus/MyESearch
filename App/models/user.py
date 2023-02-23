@@ -14,7 +14,9 @@ class User(db.Model):
     department = db.Column(db.String(120), nullable=False)
     type = db.Column(db.Integer)
     library = db.relationship("Library", backref="user", lazy="dynamic")
+    recents = db.relationship("Library", backref="user", lazy="dynamic")
     researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
+    visit_records = db.relationship("VisitRecord", foreign_keys="VisitRecord.user_id", backref="user", lazy="dynamic", cascade="all, delete-orphan")
     topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
     notification_records = db.relationship("NotificationRecord", backref="user", lazy="dynamic", cascade="all, delete-orphan")
 
@@ -25,7 +27,7 @@ class User(db.Model):
     }
 
     def __init__(self):
-        return self
+        pass
 
     # def __init__(self, email, password, first_name, middle_name, last_name, institution, faculty, department, image_url):
     #     self.email = email

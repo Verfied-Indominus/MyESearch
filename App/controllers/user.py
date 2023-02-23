@@ -1,5 +1,6 @@
-from App.models import Researcher, User
+from App.models import User
 from App.database import db
+from App.controllers import create_library, create_recents
 from sqlalchemy.exc import IntegrityError
 
 def get_user(id):
@@ -27,6 +28,8 @@ def build_user(user):
     try:
         db.session.add(user)
         db.session.commit()
+        create_library(user.id)
+        create_recents(user.id)
     except IntegrityError:
         db.session.rollback()
         return None

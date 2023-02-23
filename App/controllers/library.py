@@ -1,4 +1,5 @@
 from App.models import Library, LibraryRecord
+from App.controllers.user import get_user
 from App.database import db
 from sqlalchemy import delete
 
@@ -11,6 +12,10 @@ def create_library(user_id):
 def get_library(id):
     library = Library.query.filter_by(id=id).first()
     return library
+
+def get_library_from_user(id):
+    user = get_user(id)
+    return user.library
 
 def add_publication_to_library(library, pub_id):
     for record in library.records:
