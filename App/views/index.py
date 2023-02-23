@@ -8,6 +8,7 @@ from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view
+from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
@@ -48,8 +49,10 @@ departments = [
 @index_views.route('/', methods=['GET'])
 def index_page():
     topics = []
-    publications = []
-    return render_template('index.html',topics=topics,publications=publications)
+    suggestions = []
+    if (isinstance(current_user, User)):
+        suggestions = get_home_suggestions(current_user)
+    return render_template('index.html',topics=topics, suggestions=suggestions)
 
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
@@ -57,7 +60,9 @@ def publication_page(id):
     pub = get_pub_byid(id)
     if not pub:
         return("404")
-    return render_template("publication.html",pub=pub.toDict())
+    
+    suggestions = get_publication_suggestions(pub)
+    return render_template("publication.html", pub=pub, suggestions=suggestions)
     
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
