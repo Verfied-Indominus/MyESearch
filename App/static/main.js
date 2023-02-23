@@ -251,3 +251,10 @@ async function addToLibrary(user_id, pub_id){
         follow.innerHTML = unfollowhtml;
     }
 }
+
+// read more button in publication page's abstract
+let read_more = document.getElementById('read-more');
+
+async function addToRecents(user_id, pub_id){
+    return await fetch(`/addtorecents/${user_id}/${pub_id}`);
+}

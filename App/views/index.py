@@ -10,6 +10,7 @@ from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
 from App.controllers.library import get_library_from_user, add_publication_to_library, remove_publication_from_library
+from App.controllers.recents import get_recents_from_user, add_publication_to_recents, remove_publication_from_recents
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
@@ -186,6 +187,14 @@ def add_to_library(user_id, pub_id):
     if add_publication_to_library(library, pub_id):
         return True
     remove_publication_from_library(library, pub_id)
+    return False
+
+@index_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
+def add_to_recent(user_id, pub_id):
+    recents = get_recents_from_user(user_id)
+    if add_publication_to_recents(recents, pub_id):
+        return True
+    remove_publication_from_recents(recents, pub_id)
     return False
 
 @index_views.route('/myprofile', methods=['GET'])
