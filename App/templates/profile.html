@@ -8,7 +8,7 @@
 
 <div class="uk-background-muted uk-padding"> 
 
-    <div class="uk-card uk-card-default uk-margin-remove uk-container uk-width-expand" uk-grid uk-height-viewport="offset-bottom: 25;">
+    <!-- <div class="uk-card uk-card-default uk-margin-remove uk-width-expand" uk-grid uk-height-viewport="offset-bottom: 25;">
         <div class="uk-width-expand uk-margin-small-top uk-margin-small-bottom uk-padding">
             <div class="uk-height-1-1">
                 <div class="uk-height-1-1 uk-background-cover uk-background-center-center" data-src="/static/images/Student.jpeg" uk-img></div>
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="uk-width-2-3@l uk-width-1-2@m uk-margin-small-top uk-margin-small-bottom uk-padding">
+        <div class="uk-width-1-3@l uk-width-1-2@m uk-margin-small-top uk-margin-small-bottom uk-padding">
             <h2 class="uk-margin">{{user.first_name}} {% if user.middle_name %} {{user.middle_name}} {% endif %} {{user.last_name}}</h2>
             <div class="uk-margin">{% if re %}{{user.position}} at{% else %}Student at {% endif %}{{user.institution}}</div>
             <div class="uk-margin">{{user.email}}</div>
@@ -29,17 +29,55 @@
                 <div class="uk-margin">{{user.website_url}}</div>
             {% endif %}
         </div>
+        {% if re %}
+            <div class="uk-text-center uk-width-1-3@l uk-width-1-2@m uk-margin-small-top uk-margin-small-bottom uk-padding">
+                <h3>Introduction</h3>
+                <div class="uk-width-2-3 uk-margin-auto">This would be the paragraph that is used to describe the researcher whose profile is being presented</div>
+            </div>
+        {% endif %}
     </div>
 
     <div uk-height-viewport="offset-bottom: 96;"></div>
     {% if re %}
-        <div class="uk-card uk-card-default uk-container uk-width-expand" uk-height-viewport="offset-bottom: 25;">
-            div.uk-height-1-1
-            <div> Introduction Title</div>
-            <div> Paragraph</div>
+        <div class="uk-card uk-card-default uk-container uk-width-expand" uk-height-viewport="offset-bottom: 45;">
+            
         </div>
-    {% endif %}
+    {% endif %} -->
 
+    <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
+        <div class="uk-card uk-card-default uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
+            <div class="uk-margin-medium-top uk-margin-medium-bottom">
+                <div class="uk-flex uk-flex-center">
+                    <!-- <img src="{{user.image_url}}" alt="" style="width: 250px; height: 250px;"> -->
+                    <img class="uk-border-circle" src="/static/images/Researcher.jpeg" alt="" style="width: 250px; height: 250px;">
+                </div>
+                <h2> {% if re %} {{user.title}} {% endif %} {{user.first_name}} {% if user.middle_name %} {{ user.middle_name }} {% endif %} {{ user.last_name }}</h2>
+                <div class="uk-text-default">
+                    <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
+                    <div> {{user.faculty}} </div>
+                    <div> {{user.department}} </div>
+                    <div> {{user.email}} </div>
+                    {% if re %}
+                        <div> {{user.start_year}} </div>
+                        <div> {{user.qualifications}} </div>
+                        {% if user.certifications %} <div> {{user.certifications}} </div> {% endif %}
+                        {% if user.website_url %} <div> {{user.website_url}} </div> {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
+            <div class="uk-card uk-card-default uk-margin">
+                {% if re %}
+
+                {% else %}
+                    <div class="uk-padding">
+                        <h3>Subscriptions</h3>
+                    </div>
+                {% endif %}
+            </div>            
+        </div>
+    </div>
 
     <div>
         <div> Academic Qualifications List </div>
