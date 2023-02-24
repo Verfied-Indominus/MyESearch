@@ -26,6 +26,18 @@ def get_all_topics():
 def get_topics(limiter):
     return [topic.toDict() for topic in Topic.query.limit(limiter)]
 
+def get_subscribed_topics(user):
+    topics = []
+    for rec in user.topic_sub_records:
+        topics.append(rec.topic)
+    return topics
+
+def get_research_topics(researcher):
+    topics = []
+    for tag in researcher.research_interests:
+        topics.append(tag.topic)
+    return topics
+
 def set_topic_parent(name, id):
     try:
         topic = get_topic_by_name(name)

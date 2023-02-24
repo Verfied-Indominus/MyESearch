@@ -6,35 +6,39 @@
 
 {% block content %}
 
-<div class="uk-background-muted"> 
+<div class="uk-background-muted uk-padding"> 
 
-    <div class="uk-card uk-card-default uk-padding uk-grid-divider" uk-grid>
-        <div class="uk-width-1-4 uk-background-cover uk-background-center-center" data-src="" uk-img></div>
-       
-        <!-- Only for Researchers         -->
-        {% if re %}
-            <div class="uk-button uk-background-danger uk-text-capitalize uk-border-rounded">Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span></div>
-        {% endif %}
+    <div class="uk-card uk-card-default uk-margin-remove uk-container uk-width-expand" uk-grid uk-height-viewport="offset-bottom: 25;">
+        <div class="uk-width-expand uk-margin-small-top uk-margin-small-bottom uk-padding">
+            <div class="uk-height-1-1">
+                <div class="uk-height-1-1 uk-background-cover uk-background-center-center" data-src="/static/images/Student.jpeg" uk-img></div>
+                {% if re and current_user.id != user.id %}
+                <div class="uk-button uk-background-danger uk-text-capitalize uk-border-rounded">Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="uk-width-2-3@l uk-width-1-2@m uk-margin-small-top uk-margin-small-bottom uk-padding">
+            <h2 class="uk-margin">{{user.first_name}} {% if user.middle_name %} {{user.middle_name}} {% endif %} {{user.last_name}}</h2>
+            <div class="uk-margin">{% if re %}{{user.position}} at{% else %}Student at {% endif %}{{user.institution}}</div>
+            <div class="uk-margin">{{user.email}}</div>
+            <div class="uk-margin">{{user.faculty}}</div>
+            <div class="uk-margin">{{user.department}}</div>
+            {% if re %}
+                <div class="uk-margin">{{user.start_year}}</div>
+                <div class="uk-margin">{{user.website_url}}</div>
+            {% endif %}
+        </div>
     </div>
 
-
-    <div>
-        <div> Name </div>
-        <div> Email </div>
-        <div> Institution </div>
-        <div> Faculty </div>
-        <div> Departmet </div>
-        <!-- Only for Researchers         -->
-        <div> Current Position </div>
-        <div> Year of Commence of Employment to UWI </div>
-        <div> Personal Website </div>
-    </div>
-
-
-    <div>
-        <div> Introduction Title</div>
-        <div> Paragraph</div>
-    </div>
+    <div uk-height-viewport="offset-bottom: 96;"></div>
+    {% if re %}
+        <div class="uk-card uk-card-default uk-container uk-width-expand" uk-height-viewport="offset-bottom: 25;">
+            div.uk-height-1-1
+            <div> Introduction Title</div>
+            <div> Paragraph</div>
+        </div>
+    {% endif %}
 
 
     <div>

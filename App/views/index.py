@@ -1,8 +1,8 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
-from App.controllers.topic import get_all_topics
+from App.controllers.topic import get_all_topics, get_research_topics, get_subscribed_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
@@ -136,7 +136,7 @@ def signup_page():
                 builder
                     .title(form['title'])
                     .position(form['position'])
-                    .start_year(form['start_year'])
+                    .start_year(form['start_date'])
                     .qualifications(form['qualifications'])
                     .skills(form['skills'])
             )
@@ -162,6 +162,8 @@ def signup_page():
             builder.image_url(image_url)
             builder.build()
 
+        if isinstance(current_user, User):
+            logout_user()
         login_user(user, False)
         flash('You successfully created your account')
 
@@ -202,22 +204,28 @@ def my_profile():
     if not isinstance(current_user, User):
         flash('Not currently logged in')
         return redirect(url_for('.index_page'))
-    return redirect(url_for('.profile', id=1))
+    return redirect(url_for('.profile', id=current_user.id))
 
 @index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
     pubs = []
     subs = []
+    interests = []
     user = get_user(id)
+    if not user:
+        flash('User does not exist')
+        return redirect(url_for('.index_page')) 
+    topics = get_subscribed_topics(user)
     if (isinstance(user, Researcher)):
         re = True
         pubs = get_all_publications_for_user(user)
-        subs = len(user.sub_records)
+        subs = len(user.sub_records.all())
+        interests = get_research_topics(user)
         if (isinstance(current_user, User)):
             vrec = get_visit_record(current_user.id, user.id)
             if not vrec:
                 vrec = create_visit_record(current_user.id, user.id)
             if update_visit_record(vrec):
                 user = add_view(user)
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, interests=interests)
