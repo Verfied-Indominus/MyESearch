@@ -105,7 +105,7 @@
                             <h3>Introduction</h3>
                             <div class="uk-width-2-3 uk-margin-auto">This would be the paragraph that is used to describe the researcher whose profile is being presented</div>
                         </div>
-
+                        <hr>
                         <div id="re_info" class="uk-grid uk-grid-small uk-child-width-expand uk-text-center" uk-grid uk-height-match="target: > div > .uk-card; row: false;">
                             <div>
                                 <div class="uk-card uk-card-default uk-padding-small uk-border-rounded">
@@ -148,6 +148,7 @@
                     </div>
                 </div>  
             {% endif %}
+
             <div class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
                     <h3>Subscriptions</h3>
@@ -178,7 +179,32 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>            
+            </div>  
+            
+            {% if re %}
+                <div class="uk-card uk-card-default uk-margin">
+                    <div class="uk-padding">
+                        <h3>Analytics</h3>
+                        <hr>
+                        <div id="analytics" class="uk-grid uk-grid-divider uk-grid-large uk-child-width-expand uk-text-center" uk-grid>
+                            <div class="uk-position-relative">
+                                Profile Views
+                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="user"></span> {{user.views}} </div>
+                            </div>
+                            
+                            <div>
+                                Subscriber Count
+                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="users"></span> {{subs}} </div>
+                            </div>
+                            
+                            <div>
+                                No. of Times Searched
+                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> {{user.searches}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 

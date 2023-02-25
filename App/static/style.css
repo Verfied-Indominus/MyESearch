@@ -58,6 +58,10 @@
     justify-content: end;
 }
 
+#analytics > div > .uk-card{
+    border: 1px solid #1e87f0;
+}
+
 ::-webkit-scrollbar{
     width: 10px;
 }
