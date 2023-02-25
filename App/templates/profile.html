@@ -53,7 +53,7 @@
                         {% if user.website_url %}
                         <div class="uk-margin">
                             <div class="uk-text-bold">Personal Website</div>
-                            <a class="uk-button-text uk-text-decoration-none" href="{{user.website_url}}"> {{user.website_url}} </a>
+                            <a class="uk-button-text uk-text-decoration-none" href="https://{{user.website_url}}"> {{user.website_url}} </a>
                         </div>
                         {% endif %}
                     {% endif %}
@@ -144,33 +144,6 @@
                 </div>
             </div> 
             
-            {% if not re %}
-                <div class="uk-card uk-card-default uk-margin" uk-height-viewport="offset-top: true; offset-bottom: 20;">
-                    <div class="uk-padding">
-                        <ul uk-tab>
-                            <li><a href="">My Library</a></li>
-                            <li><a href="">Recently Read</a></li>
-                        </ul> 
-                        
-                        <ul class="uk-switcher">
-                            <li>
-                                <div class="uk-background-primary">
-                                    <div class="uk-card uk-card-default uk-padding uk-flex">
-                                        <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                        <div class="uk-margin-small-left">
-                                            <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>Another testssfa</li>
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
-            
             {% if re %}
                 <div class="uk-card uk-card-default uk-margin">
                     <div class="uk-padding">
@@ -195,6 +168,85 @@
                     </div>
                 </div>
             {% endif %}
+
+            {% if re %}
+                </div>
+            </div>
+            <div class="uk-padding uk-padding-remove-horizontal uk-padding-remove-bottom">
+                <div>
+            {% endif %}
+                    <div class="uk-width-1-1">
+                        <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
+                            <div class="uk-padding">
+                                <ul uk-tab>
+                                    {% if re %}
+                                    <li><a href=""> {% if current_user.id == user.id %} My {% endif %} Publications</a></li>
+                                    {% endif %}
+                                    <li><a href="">My Library</a></li>
+                                    <li><a href="">Recently Read</a></li>
+                                </ul> 
+                                
+                                <ul class="uk-switcher">
+                                    {% if re %}
+                                    <li class="uk-grid uk-child-width-1-2" uk-grid>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-margin-small-left">
+                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-margin-small-left">
+                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-margin-small-left">
+                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                    <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %}" uk-grid>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-margin-small-left">
+                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-margin-small-left">
+                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>Another testssfa</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
         </div>
     </div>
 </div>
