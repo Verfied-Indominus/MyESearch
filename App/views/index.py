@@ -7,7 +7,7 @@ from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
 from App.controllers.visitrecords import *
-from App.controllers.researcher import add_view
+from App.controllers.researcher import add_view, add_search, get_subscribed_researchers
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
 from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library
 from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents
@@ -213,19 +213,27 @@ def profile(id):
     subs = []
     interests = []
     user = get_user(id)
+
     if not user:
         flash('User does not exist')
         return redirect(url_for('.index_page')) 
+    
     topics = get_subscribed_topics(user)
+    researchers = get_subscribed_researchers(user)
+
     if (isinstance(user, Researcher)):
         re = True
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
-        if (isinstance(current_user, User)):
+
+        if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)
+
             if not vrec:
                 vrec = create_visit_record(current_user.id, user.id)
+
             if update_visit_record(vrec):
                 user = add_view(user)
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, interests=interests)
+
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, researchers=researchers, interests=interests)

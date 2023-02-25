@@ -7,6 +7,12 @@ def get_researcher(id):
 def get_researcher_by_email(email):
     return Researcher.query.filter_by(email=email).first()
 
+def get_subscribed_researchers(user):
+    researchers = []
+    for rec in user.researcher_sub_records:
+        researchers.append(rec.researcher)
+    return researchers
+
 def delete_researcher(id):
     researcher = get_researcher(id)
     if not researcher:
