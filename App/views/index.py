@@ -9,8 +9,8 @@ from App.controllers.publication import get_pub_byid, get_all_publications_for_u
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
-from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library
-from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents
+from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library, get_publications_from_library
+from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents, get_publications_from_recents
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
@@ -227,6 +227,10 @@ def profile(id):
     
     topics = get_subscribed_topics(user)
     researchers = get_subscribed_researchers(user)
+    library = get_publications_from_library(user.library)
+    recents = get_publications_from_recents
+
+    
 
     if (isinstance(user, Researcher)):
         re = True

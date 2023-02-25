@@ -11,6 +11,7 @@ class Publication(db.Model):
     citations = db.Column(db.Integer, nullable=False)
     downloads = db.Column(db.Integer, nullable=False)
     searches = db.Column(db.Integer, nullable=False)
+    cover = db.Column(db.String(120))
     tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")

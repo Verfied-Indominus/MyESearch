@@ -114,13 +114,9 @@ async function getInterests(){
     researcher_form.preventDefault;
 }
 
-
-
 async function addResearchInterests(selected){
     return await fetch(`/interests/${JSON.stringify({'selected': selected})}`);
 }
-
-
 
 
 let re_bar = document.getElementById('js-researcher-progressbar');
