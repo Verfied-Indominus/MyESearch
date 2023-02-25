@@ -52,8 +52,8 @@
                         {% endif %}
                         {% if user.website_url %}
                         <div class="uk-margin">
-                            <span class="uk-text-bold">Personal Website</span>
-                            <div> {{user.website_url}} </div>
+                            <div class="uk-text-bold">Personal Website</div>
+                            <a class="uk-button-text uk-text-decoration-none" href="{{user.website_url}}"> {{user.website_url}} </a>
                         </div>
                         {% endif %}
                     {% endif %}
