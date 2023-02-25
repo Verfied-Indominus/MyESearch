@@ -123,7 +123,7 @@
                         <div>
                             {% if researchers %}
                                 {% for re in researchers %}
-                                    <a href="/profile/{{re.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url({% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %});" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
+                                    <a href="/profile/{{re.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
                                 {% endfor %}
                             {% else %}
                                 <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
@@ -182,67 +182,100 @@
                                     {% if re %}
                                     <li><a href=""> {% if current_user.id == user.id %} My {% endif %} Publications</a></li>
                                     {% endif %}
-                                    <li><a href="">My Library</a></li>
-                                    <li><a href="">Recently Read</a></li>
+                                    {% if current_user.id == user.id %}
+                                        <li><a href="">My Library</a></li>
+                                        <li><a href="">Recently Read</a></li>
+                                    {% endif %}
                                 </ul> 
                                 
                                 <ul class="uk-switcher">
                                     {% if re %}
-                                    <li class="uk-grid uk-child-width-1-2" uk-grid>
-                                        <div>
-                                            <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                <div class="uk-margin-small-left">
-                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
+                                        <li class="uk-grid uk-child-width-1-2 scroll" uk-grid>
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                    <div class="uk-margin-small-left">
+                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
+                                                        <div>
+                                                            {% for n in range(3) %}
+                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{test[n]}} </a>                              
+                                                            {% endfor %}
+                                                            +{{test|length - 3}} More
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div>
-                                            <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                <div class="uk-margin-small-left">
-                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                    <div class="uk-margin-small-left">
+                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
+                                                        <div>
+                                                            {% for n in range(3) %}
+                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
+                                                            {% endfor %}
+                                                            +{{test|length - 3}} More
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div>
-                                            <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                <div class="uk-margin-small-left">
-                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                    <div class="uk-margin-small-left">
+                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
+                                                        <div>
+                                                            {% for n in range(3) %}
+                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
+                                                            {% endfor %}
+                                                            +{{test|length - 3}} More
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
+
+                                        </li>
                                     {% endif %}
-                                    <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %}" uk-grid>
-                                        <div>
-                                            <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                <div class="uk-margin-small-left">
-                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                    {% if current_user.id == user.id %}
+                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll" uk-grid>
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                    <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                    <div class="uk-margin-small-left">
+                                                        <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div>
-                                            <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                <div class="uk-margin-small-left">
-                                                    <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-padding uk-flex">
+                                                    <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                    <div class="uk-margin-small-left">
+                                                        <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>
 
-                                    <li>Another testssfa</li>
+                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll" uk-grid>
+                                            {% if not recents|length %}
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>

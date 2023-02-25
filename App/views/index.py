@@ -14,6 +14,7 @@ from App.controllers.recents import create_recents, get_recents_from_user, add_p
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
+from datetime import datetime
 import json
 
 from App.models.builder import *
@@ -216,19 +217,21 @@ def my_profile():
 @index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
+    test = ['Shivan Maharaj', 'Trey Murray', 'Munesha Beharry', 'Ahmad Ali', 'Randy Jawahir']
+    testdate = datetime.date(datetime.today()).strftime('%b %Y')
     pubs = []
     subs = []
     interests = []
     user = get_user(id)
 
-    if not user:
-        flash('User does not exist')
+    if not user or not isinstance(user, Researcher):
+        flash('User does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
     
     topics = get_subscribed_topics(user)
     researchers = get_subscribed_researchers(user)
     library = get_publications_from_library(user.library)
-    recents = get_publications_from_recents
+    recents = get_publications_from_recents(user.recents)
 
     
 
@@ -247,4 +250,4 @@ def profile(id):
             if update_visit_record(vrec):
                 user = add_view(user)
 
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, researchers=researchers, interests=interests)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, test=test, testdate=testdate, library=library, recents=recents, researchers=researchers, interests=interests)
