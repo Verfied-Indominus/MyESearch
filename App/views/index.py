@@ -7,7 +7,7 @@ from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
 from App.controllers.visitrecords import *
-from App.controllers.researcher import add_view, add_search, get_subscribed_researchers
+from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
 from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library
 from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents
@@ -25,6 +25,7 @@ dates = list(reversed([i for i in range(1970, 2024)]))
 institutions = ['The University of The West Indies']
 
 image = []
+re_interests = []
 
 faculties = [
         'Engineering',
@@ -112,10 +113,8 @@ def signup_page():
 
         if 'title' in form:
             builder = ResearcherBuilder()
-            user = builder.researcher
         else:
             builder = StudentBuilder()
-            user = builder.student
 
         builder = (
             builder
@@ -150,12 +149,20 @@ def signup_page():
 
         builder.build()
 
+        if isinstance(builder, ResearcherBuilder):
+            user = builder.researcher
+        else:
+            user = builder.student
+
         if not user:
             flash('There already is an account associated with that email')
             return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
         create_library(user.id)
         create_recents(user.id)
+
+        add_interests_to_researcher(re_interests, user.id)
+
         if image:
             image_url = uploadFile(user.id, image[0])
             remove(f"App/uploads/{image[0]}")
@@ -173,7 +180,7 @@ def signup_page():
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
     selected = json.loads(selected)
-    print(selected)
+    re_interests = selected['selected']
     return 'Interests Checked'
 
 @index_views.route('/filename', methods=['POST'])

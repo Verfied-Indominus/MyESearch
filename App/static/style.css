@@ -47,8 +47,15 @@
 }
 
 #re_info > div > .uk-card{
-    max-height: 250px; 
+    height: 325px; 
     overflow-y: scroll;
+}
+
+#re_info > div > .uk-card > div{
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 }
 
 ::-webkit-scrollbar{
