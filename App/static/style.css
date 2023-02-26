@@ -704,6 +704,8 @@
   }
   
   #overlay {
+    position: fixed;
+    z-index: 9999;
     min-width: 100vw;
     min-height: 100vh;
     display: flex;
@@ -766,22 +768,6 @@ body{
 
 .white-text{
     color: #ffffff;
-}
-
-.secondary-text{
-    color: #85DCB8;
-}
-
-.default-text{
-    color: #E8A87C;
-}
-
-.alternate-text{
-    color: #C38D9E;
-}
-
-.secondary-alt-text{
-    color: #41B3A3;
 }
 
 .required{

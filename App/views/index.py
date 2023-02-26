@@ -60,16 +60,19 @@ def index_page():
 
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
+    pub = get_pub_byid(id)
     
-    topics = ['Artificial Intelligence in Education', 'Data Mining', 'Distributed Computing']
-    persons = ['Shivan Maharaj', 'Trey Murray', 'Munesha Beharry']
-    # pub = get_pub_byid(id)
     # if not pub:
-    #     return("404")
+    #     flash('Publication does not exist or is inaccessible')
+    #     return redirect(url_for('.index_page')) 
     
-    # suggestions = get_publication_suggestions(pub)
-    # return render_template("publication.html", pub=pub, suggestions=suggestions)
-    return render_template("publication.html", topics=topics, persons=persons)
+    researchers, topics, pubs = get_publication_suggestions(pub)
+
+    topics = [{'name':'Artificial Intelligence in Education'}, {'name':'Data Mining'}, {'name':'Distributed Computing'}]
+    pub = {'pub_records' : [{'researcher' : {'first_name': 'Shivan', 'last_name': 'Maharaj'}}], 'publication_date': datetime.strptime('Feb 2023', '%b %Y'), 'pub_type': 'Research Paper'}
+    print(pub['publication_date']) 
+
+    return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
 
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
