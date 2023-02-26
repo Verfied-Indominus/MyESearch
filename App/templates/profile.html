@@ -64,14 +64,14 @@
             {% if re %}
                 <div class="uk-card uk-card-default uk-margin">
                     <div class="uk-padding">
-                        <div class="uk-text-center uk-margin">
+                        <div class="uk-margin">
                             <h3>Introduction</h3>
-                            <div class="uk-width-2-3 uk-margin-auto">This would be the paragraph that is used to describe the researcher whose profile is being presented</div>
+                            <div class="uk-margin-auto"> {{user.introduction}} </div>
                         </div>
                         <hr>
-                        <div id="re_info" class="uk-grid uk-grid-small uk-child-width-expand uk-text-center" uk-grid uk-height-match="target: > div > .uk-card; row: false;">
+                        <div id="re_info" class="uk-grid uk-grid-small uk-child-width-expand" uk-grid uk-height-match="target: > div > .uk-card; row: false;">
                             <div>
-                                <div class="uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div>Academic Qualifications</div>
                                     <hr>
                                     <div class="uk-display-block"> {{user.qualifications}} </div>
@@ -79,7 +79,7 @@
                             </div>
                             
                             <div>
-                                <div class="uk-card uk-card-default uk-padding-small uk-border-rounded uk-text-bottom">
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded uk-text-bottom">
                                     <div>Other Certifications</div>
                                     <hr>
                                     <div class="uk-display-block"> {% if user.certifications %} {{user.certifications}} {% else %} None listed yet {% endif %} </div>
@@ -87,24 +87,27 @@
                             </div>
                             
                             <div>
-                                <div class="uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div>Research Interests</div>
                                     <hr>
                                     <div class="uk-display-block">
-                                        <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default">Artificial Intelligence in Education</a>
-
                                         {% for int in interests %}
-                                            <a href="/topic/{{int.id}}" class="uk-margin-small-bottom uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill">{{ int }}</a>
+                                            <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int}} </a>
                                         {% endfor %}
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div>Skills/Expertise</div>
                                     <hr>
-                                    <div class="uk-display-block"> {{user.skills}} </div>
+                                    {% set skills = user.skills.split(',') %}
+                                    <div class="uk-display-block">
+                                        {% for skill in skills %}
+                                            <div class="uk-margin-small-bottom"> {{skill}} </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,20 +152,20 @@
                     <div class="uk-padding">
                         <h3>Analytics</h3>
                         <hr>
-                        <div id="analytics" class="uk-grid uk-grid-divider uk-grid-large uk-child-width-expand uk-text-center" uk-grid>
+                        <div class="uk-grid uk-grid-divider uk-grid-large uk-child-width-expand uk-text-center" uk-grid>
                             <div class="uk-position-relative">
                                 Profile Views
-                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="user"></span> {{user.views}} </div>
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="user"></span> {{user.views}} </div>
                             </div>
                             
                             <div>
                                 Subscriber Count
-                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="users"></span> {{subs}} </div>
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="users"></span> {{subs}} </div>
                             </div>
                             
                             <div>
                                 No. of Times Searched
-                                <div class="uk-card uk-card-default uk-padding-small"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> {{user.searches}} </div>
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> {{user.searches}} </div>
                             </div>
                         </div>
                     </div>
@@ -190,86 +193,115 @@
                                 
                                 <ul class="uk-switcher">
                                     {% if re %}
-                                        <li class="uk-grid uk-grid-row-small uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
-                                            <div>
-                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                    <div class="uk-margin-small-left">
-                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
-                                                        <div>
-                                                            {% for n in range(3) %}
-                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{test[n]}} </a>                              
-                                                            {% endfor %}
-                                                            +{{test|length - 3}} More
-                                                        </div>
-                                                    </div>
-                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
-                                                </div>
-                                            </div>
+                                        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not pubs|length %}
 
-                                            <div>
-                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                    <div class="uk-margin-small-left">
-                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
-                                                        <div>
-                                                            {% for n in range(3) %}
-                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
-                                                            {% endfor %}
-                                                            +{{test|length - 3}} More
-                                                        </div>
-                                                    </div>
-                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                    <div class="uk-margin-small-left">
-                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
-                                                        <div>
-                                                            {% for n in range(3) %}
-                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
-                                                            {% endfor %}
-                                                            +{{test|length - 3}} More
-                                                        </div>
-                                                    </div>
-                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
-                                                </div>
-                                            </div>
-
-                                        </li>
-                                    {% endif %}
-                                    {% if current_user.id == user.id %}
-                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
-                                            <div>
-                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                    <div class="uk-margin-small-left">
-                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
-                                                        <div>
-                                                            {% for n in range(3) %}
-                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
-                                                            {% endfor %}
-                                                            +{{test|length - 3}} More
-                                                        </div>
-                                                    </div>
-                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
-                                            {% if not recents|length %}
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
                                                     <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
                                                     Nothing Added Yet
                                                 </div>
+
+                                            {% endif %}
+                                            {% for pub in pubs %}
+                                                <div>
+                                                    <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                        <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                        <div class="uk-margin-small-left">
+                                                            <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                            <div>
+                                                                {% if pub.pub_records.all()|length < 3 %}
+                                                                    {% for n in range(pub.pub_records.all()|length) %}
+                                                                        <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {% for n in range(3) %}
+                                                                        <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                    {% endfor %}
+                                                                    {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </li>
+                                    {% endif %}
+                                    {% if current_user.id == user.id %}
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not library|length %}
+
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+
+                                            {% else %}
+
+                                                {% for pub in pubs %}
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                            <div class="uk-margin-small-left">
+                                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                                <div>
+                                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% for n in range(3) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            {% endif%}
+                                        </li>
+
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not recents|length %}
+
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+
+                                            {% else %}
+
+                                                {% for pub in pubs %}
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                            <div class="uk-margin-small-left">
+                                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                                <div>
+                                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% for n in range(3) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
                                             {% endif %}
                                         </li>
                                     {% endif %}

@@ -217,11 +217,10 @@ def my_profile():
 @index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
-    test = ['Shivan Maharaj', 'Trey Murray', 'Munesha Beharry', 'Ahmad Ali', 'Randy Jawahir']
-    testdate = datetime.date(datetime.today()).strftime('%b %Y')
     pubs = []
     subs = []
-    interests = []
+    interests = ['Artificial Intelligence in Education', 'Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection']
+    
     user = get_user(id)
 
     if not user or not isinstance(user, Researcher):
@@ -239,7 +238,7 @@ def profile(id):
         re = True
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records.all())
-        interests = get_research_topics(user)
+        # interests = get_research_topics(user)
 
         if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)
@@ -250,4 +249,4 @@ def profile(id):
             if update_visit_record(vrec):
                 user = add_view(user)
 
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, test=test, testdate=testdate, library=library, recents=recents, researchers=researchers, interests=interests)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests)
