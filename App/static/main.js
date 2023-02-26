@@ -1,3 +1,12 @@
+let ol = document.getElementById('overlay');
+window.addEventListener('load', function(){
+    ol.style.opacity = '0';
+    this.document.body.style.overflowY = 'auto';
+    this.setTimeout(function(){
+        ol.style.visibility = 'hidden';
+    }, 100);
+});
+
 let departments = {
     'Engineering': [
         'Chemical Engineering',

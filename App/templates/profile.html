@@ -190,7 +190,7 @@
                                 
                                 <ul class="uk-switcher">
                                     {% if re %}
-                                        <li class="uk-grid uk-child-width-1-2 scroll" uk-grid>
+                                        <li class="uk-grid uk-grid-row-small uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
                                             <div>
                                                 <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                     <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
@@ -245,31 +245,28 @@
                                         </li>
                                     {% endif %}
                                     {% if current_user.id == user.id %}
-                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll" uk-grid>
+                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
                                             <div>
-                                                <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                    <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
+                                                <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                    <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
                                                     <div class="uk-margin-small-left">
-                                                        <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
+                                                        <h4 class="uk-margin-remove">Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
+                                                        <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label">Research Paper</span> {{testdate}} </div>
+                                                        <div>
+                                                            {% for n in range(3) %}
+                                                                <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> Akbar Abdullahi</a>                              
+                                                            {% endfor %}
+                                                            +{{test|length - 3}} More
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="uk-card uk-card-default uk-padding uk-flex">
-                                                    <div style="height: 125px; width: 100px;" class="uk-background-cover" data-src="/static/images/comp.jpg" uk-img></div>
-                                                    <div class="uk-margin-small-left">
-                                                        <h4>Metaverse for climbing the ladder toward 'Industry 5.0' and 'Society 5.0'?</h4>
-
-                                                    </div>
+                                                    <a href="#" class="uk-overlay uk-position-cover"></a>
                                                 </div>
                                             </div>
                                         </li>
 
-                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll" uk-grid>
+                                        <li class="uk-grid {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
                                             {% if not recents|length %}
-                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-text-center" uk-height-match>
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
                                                     <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
                                                     Nothing Added Yet
                                                 </div>
