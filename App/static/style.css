@@ -728,26 +728,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Original Overlay Loader */
 
 /* #overlay{
     height: 100vh;
@@ -757,7 +738,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity ease-out 0.15s;
 } */
 
 body{
