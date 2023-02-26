@@ -6,21 +6,22 @@
 
 {% block content %}
 
-<div>
-    <div>
+<!-- <div> -->
+
+    <!-- <div>
         <img src="" alt=""> publication image goes here
         <button> Add to Library </button>
         <button> Citation </button>
         <button> Request Text </button>
         <button> Download </button>
-    </div>
+    </div> -->
 
 
-    <div>
+    <!-- <div>
         <div> title, publication and date goes here </div>
-    </div>
+    </div> -->
 
-
+<!-- 
     <div>
         <div>
             All authors of the publication goes here
@@ -41,12 +42,76 @@
     <button> Citations </button>
     <button> Views </button>
     <button> Searched </button>
+</div> -->
+
+
+<div class="uk-padding">
+    <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
+        <div class="uk-card uk-background-default uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
+            <div class="uk-margin-medium-top uk-margin-medium-bottom">
+                <div class="uk-margin uk-flex uk-flex-center">
+                    <div class=" uk-background-cover" data-src="/static/images/book.jpg" style="width: 280px; height: 350px;" uk-img></div>
+                </div>
+            
+                <div>
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
+                        Add to Library
+                    </div>
+
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Citation
+                    </div>
+    
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Request Text 
+                    </div>
+    
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Download 
+                    </div>
+                </div>           
+            </div>
+        </div>
+
+        <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h3 class="uk-margin-small-bottom uk-text-capitalize">This is the supposed title for this publication although it is not a true title</h3>
+                    <div>Feb 2023</div> 
+                    <hr>
+                    <div class="uk-flex">
+                        {% for top in topics %}
+                            <div style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-width-auto uk-button uk-button-secondary uk-border-pill"> {{top}} </div>
+                        {% endfor %}
+                    </div>                   
+                </div>
+            </div>
+
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h4>Authors</h4>
+                    <hr class="uk-margin-small">
+                    <div class="uk-flex">
+                        {% for p in persons %}
+                            <a href="" style="padding: 6px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{p}} </a>
+                        {% endfor %}
+                    </div>  
+                </div>
+            </div>
+
+            <div class="uk-card uk-card-default uk-margin uk-height-small">
+                <div class="uk-padding">
+                    <h4 class="uk-margin-remove uk-text-capitalize">Abstract</h4>
+                    <hr class="uk-margin-small">        
+                    <div class="uk-background-primary">This go be the abstract</div>          
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<footer>
 
-</footer>
 
 
 {% endblock %}

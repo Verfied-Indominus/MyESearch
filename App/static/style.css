@@ -6,6 +6,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    bottom: 0;
     visibility: visible;
     opacity: 1;
     transition: opacity ease-out 0.15s;
@@ -34,6 +35,10 @@ body{
 
 .lightred-background{
     background-color: #f0506e;
+}
+
+.lightblue-background{
+    background-color: #1e87f0;
 }
 
 .secondary-alt-background{

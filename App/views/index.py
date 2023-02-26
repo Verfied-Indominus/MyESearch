@@ -61,13 +61,16 @@ def index_page():
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
     
-    pub = get_pub_byid(id)
-    if not pub:
-        return("404")
+    topics = ['Artificial Intelligence in Education', 'Data Mining', 'Distributed Computing']
+    persons = ['Shivan Maharaj', 'Trey Murray', 'Munesha Beharry']
+    # pub = get_pub_byid(id)
+    # if not pub:
+    #     return("404")
     
-    suggestions = get_publication_suggestions(pub)
-    return render_template("publication.html", pub=pub, suggestions=suggestions)
-    
+    # suggestions = get_publication_suggestions(pub)
+    # return render_template("publication.html", pub=pub, suggestions=suggestions)
+    return render_template("publication.html", topics=topics, persons=persons)
+
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
     remember = False
