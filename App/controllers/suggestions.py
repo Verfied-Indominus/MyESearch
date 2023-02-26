@@ -23,6 +23,8 @@ from random import shuffle
 
 def get_home_suggestions(user):
     pubs = []
+    re_pubs = []
+    top_pubs = []
     for rec in user.researcher_sub_records:
         re_pubs = get_researcher_pubs(rec.subject.id)
 

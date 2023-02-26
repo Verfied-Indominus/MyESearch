@@ -6,55 +6,311 @@
 
 {% block content %}
 
-<div> 
+<div class="uk-padding">
+    <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
+        <div class="uk-card uk-light uk-background-primary uk-width-1-3 uk-padding-remove uk-flex uk-flex-center" style="color: white">
+            <div class="uk-margin-medium-top uk-margin-medium-bottom">
+                <div class="uk-flex uk-flex-center">
+                    <div class="uk-border-circle uk-background-cover" data-src="{% if user.image_url %} {{user.image_url}} {% else %} /static/images/unknown.png {% endif %}" alt="" style="width: 250px; height: 250px;" uk-img></div>
+                </div>
+                <h2> {% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
+                <div class="uk-text-default">
+                    <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
+                    <h3>About</h3>
+                    <hr>
 
-    <div>
-        <img scr=" " alt= ""> researcher or student image goes here
-       
-        <!-- Only for Researchers         -->
-        <button> Follow</button>
+                    <div class="uk-margin">
+                        <span class="uk-text-bold">Faculty</span>
+                        <div> {{user.faculty}} </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <span class="uk-text-bold">Department</span>
+                        <div> {{user.department}} </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <span class="uk-text-bold">Contact Email</span>
+                        <div> {{user.email}} </div>
+                    </div>
+
+                    {% if re %}
+                        <div class="uk-margin">
+                            <span class="uk-text-bold">Year Started at institution</span>
+                            <div> {{user.start_year}} </div>
+                        </div>
+
+                        <div class="uk-margin">
+                            <span class="uk-text-bold">Academic Qualifications</span>
+                            <div> {{user.qualifications}} </div>
+                        </div>
+                        {% if user.certifications %}
+                        <div class="uk-margin">
+                            <span class="uk-text-bold">Certifications</span>
+                            <div> {{user.certifications}} </div>
+                        </div>
+                        {% endif %}
+                        {% if user.website_url %}
+                        <div class="uk-margin">
+                            <div class="uk-text-bold">Personal Website</div>
+                            <a class="uk-button-text uk-text-decoration-none" href="https://{{user.website_url}}"> {{user.website_url}} </a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
+            {% if re %}
+                <div class="uk-card uk-card-default uk-margin">
+                    <div class="uk-padding">
+                        <div class="uk-margin">
+                            <h3>Introduction</h3>
+                            <div class="uk-margin-auto"> {{user.introduction}} </div>
+                        </div>
+                        <hr>
+                        <div id="re_info" class="uk-grid uk-grid-small uk-child-width-expand" uk-grid uk-height-match="target: > div > .uk-card; row: false;">
+                            <div>
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                    <div>Academic Qualifications</div>
+                                    <hr>
+                                    <div class="uk-display-block"> {{user.qualifications}} </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded uk-text-bottom">
+                                    <div>Other Certifications</div>
+                                    <hr>
+                                    <div class="uk-display-block"> {% if user.certifications %} {{user.certifications}} {% else %} None listed yet {% endif %} </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                    <div>Research Interests</div>
+                                    <hr>
+                                    <div class="uk-display-block">
+                                        {% for int in interests %}
+                                            <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int}} </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
+                                    <div>Skills/Expertise</div>
+                                    <hr>
+                                    {% set skills = user.skills.split(',') %}
+                                    <div class="uk-display-block">
+                                        {% for skill in skills %}
+                                            <div class="uk-margin-small-bottom"> {{skill}} </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            {% endif %}
+
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h3>Subscriptions</h3>
+                    <hr>
+                    {% if not topics and not researchers %}
+                        <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
+                    {% else %}
+                        <div class="uk-margin">Researchers</div>
+                        <div>
+                            {% if researchers %}
+                                {% for re in researchers %}
+                                    <a href="/profile/{{re.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
+                                {% endfor %}
+                            {% else %}
+                                <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="uk-margin">Topics</div>
+                        <div>
+                            {% if topics %}
+                                {% for top in topics %}
+                                    <a href="/topic/{{top.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"> {{top.name}} </a>
+                                {% endfor %}
+                            {% else %}
+                                <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div> 
+            
+            {% if re %}
+                <div class="uk-card uk-card-default uk-margin">
+                    <div class="uk-padding">
+                        <h3>Analytics</h3>
+                        <hr>
+                        <div class="uk-grid uk-grid-divider uk-grid-large uk-child-width-expand uk-text-center" uk-grid>
+                            <div class="uk-position-relative">
+                                Profile Views
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="user"></span> {{user.views}} </div>
+                            </div>
+                            
+                            <div>
+                                Subscriber Count
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="users"></span> {{subs}} </div>
+                            </div>
+                            
+                            <div>
+                                No. of Times Searched
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> {{user.searches}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if re %}
+                </div>
+            </div>
+            <div class="uk-padding uk-padding-remove-horizontal uk-padding-remove-bottom">
+                <div>
+            {% endif %}
+                    <div class="uk-width-1-1">
+                        <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
+                            <div class="uk-padding">
+                                <ul uk-tab>
+                                    {% if re %}
+                                    <li><a href=""> {% if current_user.id == user.id %} My {% endif %} Publications</a></li>
+                                    {% endif %}
+                                    {% if current_user.id == user.id %}
+                                        <li><a href="">My Library</a></li>
+                                        <li><a href="">Recently Read</a></li>
+                                    {% endif %}
+                                </ul> 
+                                
+                                <ul class="uk-switcher">
+                                    {% if re %}
+                                        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not pubs|length %}
+
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+
+                                            {% endif %}
+                                            {% for pub in pubs %}
+                                                <div>
+                                                    <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                        <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                        <div class="uk-margin-small-left">
+                                                            <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                            <div>
+                                                                {% if pub.pub_records.all()|length < 3 %}
+                                                                    {% for n in range(pub.pub_records.all()|length) %}
+                                                                        <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {% for n in range(3) %}
+                                                                        <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                    {% endfor %}
+                                                                    {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </li>
+                                    {% endif %}
+                                    {% if current_user.id == user.id %}
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not library|length %}
+
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+
+                                            {% else %}
+
+                                                {% for pub in pubs %}
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                            <div class="uk-margin-small-left">
+                                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                                <div>
+                                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% for n in range(3) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            {% endif%}
+                                        </li>
+
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                            {% if not recents|length %}
+
+                                                <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
+                                                    <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
+                                                    Nothing Added Yet
+                                                </div>
+
+                                            {% else %}
+
+                                                {% for pub in pubs %}
+                                                    <div>
+                                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                                            <div class="uk-margin-small-left">
+                                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                                <div>
+                                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% for n in range(3) %}
+                                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                                        {% endfor %}
+                                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+        </div>
     </div>
-
-
-    <div>
-        <div> Name </div>
-        <div> Email </div>
-        <div> Institution </div>
-        <div> Faculty </div>
-        <div> Departmet </div>
-        <!-- Only for Researchers         -->
-        <div> Current Position </div>
-        <div> Year of Commence of Employment to UWI </div>
-        <div> Personal Website </div>
-    </div>
-
-
-    <div>
-        <div> Introduction Title</div>
-        <div> Paragraph</div>
-    </div>
-
-
-    <div>
-        <div> Academic Qualifications List </div>
-        <div> Other Certifications List </div>
-        <div> Research Interest List </div>
-        <div> Skills/Expertise List </div>
-    </div>
-
-    
-    <div>
-        <div> My Publication Title</div>
-        <div> List of publications in a form of a crousel</div>
-    </div>
-
-    <div>
-        <div> Analytics Title</div>
-        <div> Profile Views</div>
-        <div> Subcribers</div>
-        <div> Search Appearance</div>
-    </div>
-
 </div>
 
 

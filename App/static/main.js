@@ -1,3 +1,12 @@
+let ol = document.getElementById('overlay');
+window.addEventListener('load', function(){
+    ol.style.opacity = '0';
+    this.document.body.style.overflowY = 'auto';
+    this.setTimeout(function(){
+        ol.style.visibility = 'hidden';
+    }, 200);
+});
+
 let departments = {
     'Engineering': [
         'Chemical Engineering',
@@ -114,13 +123,9 @@ async function getInterests(){
     researcher_form.preventDefault;
 }
 
-
-
 async function addResearchInterests(selected){
     return await fetch(`/interests/${JSON.stringify({'selected': selected})}`);
 }
-
-
 
 
 let re_bar = document.getElementById('js-researcher-progressbar');

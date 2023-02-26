@@ -1,19 +1,20 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
-from App.controllers.topic import get_all_topics
+from App.controllers.topic import get_all_topics, get_research_topics, get_subscribed_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_all_users_json
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
 from App.controllers.visitrecords import *
-from App.controllers.researcher import add_view
+from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
-from App.controllers.library import get_library_from_user, add_publication_to_library, remove_publication_from_library
-from App.controllers.recents import get_recents_from_user, add_publication_to_recents, remove_publication_from_recents
+from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library, get_publications_from_library
+from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents, get_publications_from_recents
 from App.controllers.auth import login_user, logout_user
 from werkzeug.utils import secure_filename
 from os import remove
+from datetime import datetime
 import json
 
 from App.models.builder import *
@@ -25,6 +26,7 @@ dates = list(reversed([i for i in range(1970, 2024)]))
 institutions = ['The University of The West Indies']
 
 image = []
+re_interests = []
 
 faculties = [
         'Engineering',
@@ -134,7 +136,7 @@ def signup_page():
                 builder
                     .title(form['title'])
                     .position(form['position'])
-                    .start_year(form['start_year'])
+                    .start_year(form['start_date'])
                     .qualifications(form['qualifications'])
                     .skills(form['skills'])
             )
@@ -148,14 +150,19 @@ def signup_page():
 
         builder.build()
 
-        if isinstance(builder, StudentBuilder):
-            user = builder.student
-        else:
+        if isinstance(builder, ResearcherBuilder):
             user = builder.researcher
+        else:
+            user = builder.student
 
         if not user:
             flash('There already is an account associated with that email')
             return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
+
+        create_library(user.id)
+        create_recents(user.id)
+
+        add_interests_to_researcher(re_interests, user.id)
 
         if image:
             image_url = uploadFile(user.id, image[0])
@@ -163,7 +170,10 @@ def signup_page():
             builder.image_url(image_url)
             builder.build()
 
+        if isinstance(current_user, User):
+            logout_user()
         login_user(user, False)
+        flash('You successfully created your account')
 
         return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
@@ -171,7 +181,7 @@ def signup_page():
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
     selected = json.loads(selected)
-    print(selected)
+    re_interests = selected['selected']
     return 'Interests Checked'
 
 @index_views.route('/filename', methods=['POST'])
@@ -202,22 +212,41 @@ def my_profile():
     if not isinstance(current_user, User):
         flash('Not currently logged in')
         return redirect(url_for('.index_page'))
-    return redirect(url_for('.profile', id=1))
+    return redirect(url_for('.profile', id=current_user.id))
 
 @index_views.route('/profile/<id>', methods=['GET'])
 def profile(id):
     re = False
     pubs = []
     subs = []
+    interests = ['Artificial Intelligence in Education', 'Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection']
+    
     user = get_user(id)
+
+    if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
+        flash('User does not exist or is inaccessible')
+        return redirect(url_for('.index_page')) 
+    
+    topics = get_subscribed_topics(user)
+    researchers = get_subscribed_researchers(user)
+    library = get_publications_from_library(user.library)
+    recents = get_publications_from_recents(user.recents)
+
+    
+
     if (isinstance(user, Researcher)):
         re = True
         pubs = get_all_publications_for_user(user)
-        subs = len(user.sub_records)
-        if (isinstance(current_user, User)):
+        subs = len(user.sub_records.all())
+        # interests = get_research_topics(user)
+
+        if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)
+
             if not vrec:
                 vrec = create_visit_record(current_user.id, user.id)
+
             if update_visit_record(vrec):
                 user = add_view(user)
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs)
+
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests)

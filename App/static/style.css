@@ -1,3 +1,21 @@
+#overlay{
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+    z-index: 9999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity ease-out 0.15s;
+}
+
+body{
+    position: relative;
+    overflow: hidden;
+}
+
 .primary-background{
     background-color: #c54e2d;
 }
@@ -45,3 +63,69 @@
 .required{
     color: red;
 }
+
+.uk-card-default{
+    color: black !important;
+}
+
+.uk-label{
+    background-color: #6eb0f1 !important;
+}
+
+.scroll{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#re_info > div > .uk-card{
+    height: 325px; 
+    overflow-y: scroll;
+}
+
+#re_info > div > .uk-card > div{
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.border{
+    border: 1px solid #1e87f0;
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #1e87f0;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-color: #2166ab;
+}
+
+/* Hover.css effect */
+.hvr-grow-shadow{
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+    -webkit-transition-property: box-shadow, transform !important;
+    transition-property: box-shadow, transform !important;
+  }
+  .hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
+    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }

@@ -16,7 +16,7 @@ class Researcher(UserMixin, User):
     research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="dynamic", cascade="all, delete-orphan")
-    visit_records = db.relationship("VisitRecord", foreign_keys="VisitRecord.researcher_id", backref="user", lazy="dynamic", cascade="all, delete-orphan")
+    visit_records = db.relationship("VisitRecord", foreign_keys="VisitRecord.researcher_id", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity':'Researcher'

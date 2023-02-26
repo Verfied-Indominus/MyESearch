@@ -17,6 +17,12 @@ def get_library_from_user(id):
     user = get_user(id)
     return user.library
 
+def get_publications_from_library(library):
+    pubs = []
+    for rec in library.first().records:
+        pubs.append(rec.publication)
+    return pubs
+
 def add_publication_to_library(library, pub_id):
     for record in library.records:
         if record.publication_id == pub_id:

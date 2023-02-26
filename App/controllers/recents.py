@@ -18,6 +18,12 @@ def get_recents_from_user(id):
     user = get_user(id)
     return user.recents
 
+def get_publications_from_recents(recents):
+    pubs = []
+    for rec in recents.first().records:
+        pubs.append(rec.publication)
+    return pubs
+
 def add_publication_to_recents(recents, pub_id):
     for record in recents.records:
         if record.publication_id == pub_id:
