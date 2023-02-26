@@ -4,6 +4,7 @@ window.addEventListener('load', function(){
     this.document.body.style.overflowY = 'auto';
     this.setTimeout(function(){
         ol.style.visibility = 'hidden';
+        ol.style.display = 'none';
     }, 200);
 });
 
