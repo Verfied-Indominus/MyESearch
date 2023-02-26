@@ -17,20 +17,8 @@ body{
     overflow: hidden;
 }
 
-.primary-background{
-    background-color: #c54e2d;
-}
-
-.secondary-background{
-    background-color: #85DCB8;
-}
-
 .jetblack-background{
     background-color: #111;
-}
-
-.alternate-background{
-    background-color: #f7a9c2;
 }
 
 .lightred-background{
@@ -41,8 +29,8 @@ body{
     background-color: #1e87f0;
 }
 
-.secondary-alt-background{
-    background-color: #41B3A3;
+.lightcyan-background{
+    background-color: #69ffd6;
 }
 
 .white-text{

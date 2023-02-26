@@ -47,13 +47,13 @@
 
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
-        <div class="uk-card uk-background-default uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
+        <div class="uk-card lightcyan-background uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
             <div class="uk-margin-medium-top uk-margin-medium-bottom">
                 <div class="uk-margin uk-flex uk-flex-center">
-                    <div class=" uk-background-cover" data-src="/static/images/book.jpg" style="width: 280px; height: 350px;" uk-img></div>
+                    <div class=" uk-background-cover uk-box-shadow-large" data-src="/static/images/book.jpg" style="width: 280px; height: 380px;" uk-img></div>
                 </div>
             
-                <div>
+                <div class="uk-margin-medium-top">
                     <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
                         Add to Library
                     </div>
@@ -81,7 +81,7 @@
                     <hr>
                     <div class="uk-flex">
                         {% for top in topics %}
-                            <div style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-width-auto uk-button uk-button-secondary uk-border-pill"> {{top}} </div>
+                            <a href="" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{top}} </a>
                         {% endfor %}
                     </div>                   
                 </div>
@@ -93,21 +93,55 @@
                     <hr class="uk-margin-small">
                     <div class="uk-flex">
                         {% for p in persons %}
-                            <a href="" style="padding: 6px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{p}} </a>
+                            <a href="" style="padding: 0 10px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{p}} </a>
                         {% endfor %}
                     </div>  
                 </div>
             </div>
 
-            <div class="uk-card uk-card-default uk-margin uk-height-small">
+            <div class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
-                    <h4 class="uk-margin-remove uk-text-capitalize">Abstract</h4>
+                    <h4 class="uk-margin-remove">Abstract</h4>
                     <hr class="uk-margin-small">        
-                    <div class="uk-background-primary">This go be the abstract</div>          
+                    <div id="abstract" style="height: 7rem; overflow-y: hidden;" class="uk-inline uk-width-1-1">
+                        Cultural awareness, when applied to Intelligent Learning Environments (ILEs), contours the overall appearance, behaviour, and content used in these systems through the use of culturally-relevant student data and information. In most cases, these adaptations are system-initiated with little to no consideration given to student-initiated control over the extent of cultural-awareness being used. This paper examines some of the issues relevant to these challenges through the development of the ICON (Instructional Cultural cONtextualisation) system. The paper explores computational approaches for modelling the diversity of students within subcultures, and the necessary semantic formalisms for representing and reasoning about cultural backgrounds at an appropriate level of granularity for ILEs. The paper investigates how student-initiated control of dynamic cultural adaptation of educational content can be achieved in ILEs, and examines the effects of cultural variations of language formality and contextualisation on student preferences for different types of educational content. Evaluations revealed preliminary insight into quantifiable thresholds at which student perception for specific types of culturally-contextualised content vary. The findings further support the notion put forth in the paper that student-initiated control of cultural contextualisation should be featured in ILEs aiming to cater for diverse groups of students.
+                        <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><button class="uk-button uk-button-danger" onclick="readMore(this);">Read More</button></div>
+                    </div>          
+                </div>
+            </div>
+
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h4 class="uk-margin-remove">Analytics</h4>
+                    <hr class="uk-margin-small">
+                    <div class="uk-grid uk-grid-divider uk-child-width-expand uk-text-center" uk-grid>
+                        <div class="uk-position-relative">
+                            Downloads
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="download"></span> 500 </div>
+                        </div>
+        
+                        <div class="uk-position-relative">
+                            Citations
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="quote-right"></span> 35 </div>
+                        </div>
+        
+                        <div class="uk-position-relative">
+                            Views
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="eye"></span> 1125 </div>
+                        </div>
+                        
+                        <div>
+                            Searches
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> 73 </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
+
 </div>
 
 

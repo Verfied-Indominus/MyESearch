@@ -263,3 +263,9 @@ let read_more = document.getElementById('read-more');
 async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
+
+function readMore(btn){
+    let abs = document.getElementById('abstract');
+    btn.parentNode.style.display = 'none';
+    abs.style.overflowY = 'auto';
+}
