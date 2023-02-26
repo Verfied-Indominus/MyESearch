@@ -223,7 +223,7 @@ def profile(id):
     
     user = get_user(id)
 
-    if not user or not isinstance(user, Researcher):
+    if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
         flash('User does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
     

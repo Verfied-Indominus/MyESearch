@@ -4,7 +4,7 @@ window.addEventListener('load', function(){
     this.document.body.style.overflowY = 'auto';
     this.setTimeout(function(){
         ol.style.visibility = 'hidden';
-    }, 100);
+    }, 200);
 });
 
 let departments = {
