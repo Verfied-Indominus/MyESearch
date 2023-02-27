@@ -1,6 +1,7 @@
 from App.database import db
 from App.models import Topic
 from sqlalchemy.exc import IntegrityError
+from random import shuffle
 
 def create_topic(name):
     topic = Topic(name)
@@ -32,6 +33,14 @@ def get_topic_id(id):
 
 def get_all_topics():
     return [topic.toDict() for topic in Topic.query.all()]
+
+def get_signup_topics():
+    topics = Topic.query.limit(10).all()
+    temp = Topic.query.offset(10).all()
+    shuffle(temp)
+    topics.extend(temp[:10])
+    shuffle(topics)
+    return topics
 
 def get_topics(limiter):
     return [topic.toDict() for topic in Topic.query.limit(limiter)]

@@ -1,10 +1,10 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import Blueprint, get_flashed_messages, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
-from App.controllers.topic import get_all_topics, get_research_topics, get_subscribed_topics
+from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
 from App.controllers.pyre_base import uploadFile
-from App.controllers.user import get_user, get_user_by_email, get_all_users_json
+from App.controllers.user import get_user, get_user_by_email
 from App.controllers.publication import get_pub_byid, get_all_publications_for_user
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher
@@ -110,18 +110,20 @@ def logout():
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
-    interests = [
-        'Artificial Intelligence',
-        'Biotechnology',
-        'Climate Change',
-        'Computer Science',
-        'Energy',
-        'Materials Science',
-        'Medicine',
-        'Neuroscience',
-        'Quantum Computing',
-        'Robotics'
-    ]
+    # interests = [
+    #     'Artificial Intelligence',
+    #     'Biotechnology',
+    #     'Climate Change',
+    #     'Computer Science',
+    #     'Energy',
+    #     'Materials Science',
+    #     'Medicine',
+    #     'Neuroscience',
+    #     'Quantum Computing',
+    #     'Robotics'
+    # ]
+    
+    interests = get_signup_topics()
 
     baseForm = BaseSignUpForm()
     reForm = ResearcherSignUpForm()
@@ -241,26 +243,23 @@ def profile(id):
     re = False
     pubs = []
     subs = []
-    interests = ['Artificial Intelligence in Education', 'Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection']
-    
+
     user = get_user(id)
 
     if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
         flash('User does not exist or is inaccessible')
-        return redirect(url_for('.index_page')) 
+        return redirect(url_for('.index_page'))
     
     topics = get_subscribed_topics(user)
     researchers = get_subscribed_researchers(user)
     library = get_publications_from_library(user.library)
     recents = get_publications_from_recents(user.recents)
 
-    
-
     if (isinstance(user, Researcher)):
         re = True
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records.all())
-        # interests = get_research_topics(user)
+        interests = get_research_topics(user)
 
         if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)

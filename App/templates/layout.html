@@ -12,7 +12,8 @@
     <title>{% block title %}{% endblock %}</title>
 
   </head>
-  <body class="jetblack-background">
+  
+  <body class="jetblack-background" onload="getMessages({{get_flashed_messages()|safe}});">
   <!-- <div id="overlay"> -->
     <!-- <span class="uk-margin-small-right uk-position-center" uk-spinner="ratio: 3"></span> -->
   <!-- </div> -->
@@ -135,13 +136,12 @@
     </div>
   </nav>   
 
-
-  
   {% endblock %}
     
-    {% with messages = get_flashed_messages() %}
+
+    <!-- {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <nav class="white black-text" style="padding: 10px"> <!--update classes to uikit-->
+      <nav class="white black-text" style="padding: 10px">
         <div class="nav-wrapper">
             <ul class="flashes">
             {% for message in messages %}
@@ -151,7 +151,7 @@
         </div>
       </nav>
       {% endif %}
-    {% endwith %}
+    {% endwith %} -->
 
 
     <div id="content">{% block content %}{% endblock %}</div>
