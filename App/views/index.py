@@ -52,7 +52,18 @@ departments = [
 
 @index_views.route('/', methods=['GET'])
 def index_page():
-    topics = []
+    topics = [
+        'Artificial Intelligence',
+        'Biotechnology',
+        'Climate Change',
+        'Computer Science',
+        'Energy',
+        'Materials Science',
+        'Medicine',
+        'Neuroscience',
+        'Quantum Computing',
+        'Robotics'
+    ]
     suggestions = []
     if (isinstance(current_user, User)):
         suggestions = get_home_suggestions(current_user)
@@ -68,11 +79,15 @@ def publication_page(id):
     
     researchers, topics, pubs = get_publication_suggestions(pub)
 
-    topics = [{'name':'Artificial Intelligence in Education'}, {'name':'Data Mining'}, {'name':'Distributed Computing'}]
-    pub = {'pub_records' : [{'researcher' : {'first_name': 'Shivan', 'last_name': 'Maharaj'}}], 'publication_date': datetime.strptime('Feb 2023', '%b %Y'), 'pub_type': 'Research Paper'}
-    print(pub['publication_date']) 
+    rtopics = [{'name':'Artificial Intelligence in Education'}, {'name':'Data Mining'}, {'name':'Distributed Computing'}]
+    pub = {
+        'pub_records' : [{'researcher' : {'first_name': 'Shivan', 'last_name': 'Maharaj'}}], 
+        'publication_date': datetime.strptime('Feb 2023', '%b %Y'),
+        'pub_type': 'Research Paper' 
+        }
+    print(pub)
 
-    return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
+    return render_template("publication.html", pub=pub, researchers=researchers, rtopics=rtopics, pubs=pubs)
 
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -95,16 +110,17 @@ def logout():
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
-    # interests = get_topics(15)
     interests = [
-        'Engineering',
-        'Social Sciences',
-        'Food & Agriculture',
-        'Humanities & Education',
-        'Law',
-        'Medical Sciences',
-        'Science & Technology',
-        'Sport'
+        'Artificial Intelligence',
+        'Biotechnology',
+        'Climate Change',
+        'Computer Science',
+        'Energy',
+        'Materials Science',
+        'Medicine',
+        'Neuroscience',
+        'Quantum Computing',
+        'Robotics'
     ]
 
     baseForm = BaseSignUpForm()

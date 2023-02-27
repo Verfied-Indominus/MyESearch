@@ -1,11 +1,11 @@
 import click, pytest, sys
 from flask import Flask
-from flask.cli import with_appcontext, AppGroup
+from flask.cli import AppGroup
 
 from App.database import create_db, get_migrate, drop_db
 from App.main import create_app
 from App.controllers import ( get_researcher_by_email, get_all_users_json, get_all_users,
-                                create_topic, set_topic_parent, get_topic, get_all_topics
+                                create_topic, get_topic_by_name, create_topic_with_parent, get_all_topics
 )
 
 from App.models import User, Student, Researcher
@@ -15,11 +15,48 @@ from App.models import User, Student, Researcher
 app = create_app()
 migrate = get_migrate(app)
 
-# This command creates and initializes the database
+
+'''
+Generic Commands
+'''
+
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
     create_db(app)
     print('database intialized')
+
+@app.cli.command("drop", help="Drops all tables in the database")
+def initialize():
+    drop_db()
+    print('database destroyed')
+
+@app.cli.command("topic_init", help="Initializes the preliminary topics")
+def init_topics():
+    topics = {}
+    with open('topics.txt') as f:
+        for line in f.readlines():
+            if line[0] != '\n':
+                top = line.rstrip()
+                temp = top.split(':', 1)
+                topics[temp[0]] = temp[1].strip().split(', ')
+
+    for key in topics:
+        create_topic(key)
+        for index, top in enumerate(topics[key]):
+            if str(top).islower():
+                topics[key][index] = top.title()
+
+    for key in topics:
+        parent = get_topic_by_name(key)
+        for topic in topics[key]:
+            top = create_topic_with_parent(topic, parent.id)
+            print(top)
+
+    f.close()
+
+@app.cli.command("run", help="Run the Application")
+def initialize():
+    print('hello')
 
 '''
 User Commands
@@ -30,27 +67,6 @@ User Commands
 # create a group, it would be the first argument of the comand
 # eg : flask user <command>
 researcher_cli = AppGroup('researcher', help='Researcher object commands') 
-
-# Then define the command and any parameters and annotate it with the group (@)
-@researcher_cli.command("create", help="Creates a researcher")
-@click.argument("email", default="test@mail.com")
-@click.argument("password", default="testpass")
-@click.argument("first_name", default="Bob")
-@click.argument("middle_name", default="Rob")
-@click.argument("last_name", default="Bobbert")
-@click.argument("institution", default="UWI")
-@click.argument("faculty", default="FST")
-@click.argument("department", default="DCIT")
-@click.argument("title", default="Mr.")
-@click.argument("position", default="Tutor")
-@click.argument("start_year", default="2019")
-@click.argument("qualifications", default="B.Sc. Computer Science (UWI)\nM.Sc. Computer Science (UWI)")
-@click.argument("skills", default="Android Development\nData Mining\nAlgorithm Design")
-def create_researcher_command(email, password, first_name, middle_name, last_name, institution, faculty, department, title, position, start_year, qualifications, skills):
-    create_researcher(email, password, first_name, middle_name, last_name, institution, faculty, department, title, position, start_year, qualifications, skills)
-    print(f'{first_name} {last_name} created!')
-
-# this command will be : flask user create bob bobpass
 
 @researcher_cli.command("list", help="Lists users in the database")
 @click.argument("format", default="string")
@@ -82,46 +98,6 @@ def create_user_command():
 
 app.cli.add_command(user_cli)
 
-
-topic_cli = AppGroup('topic', help='Topic object commands') 
-
-@topic_cli.command("create", help="Creates a topic")
-@click.argument("name")
-def create_topic_command(name):
-    topic = create_topic(name)
-    print(f'{topic.name} created')
-
-@topic_cli.command("setParent", help="Updates topic parent")
-@click.argument("name")
-@click.argument("id")
-def set_parent_id_command(name, id):
-    topic = set_topic_parent(name, id)
-    print(topic.parent_topic.name)
-
-@topic_cli.command("list", help="Lists all topics")
-def list_topics():
-    topics = get_all_topics()
-    print(topics)
-
-app.cli.add_command(topic_cli)
-
-'''
-Generic Commands
-'''
-
-@app.cli.command("init")
-def initialize():
-    create_db(app)
-    print('database intialized')
-
-@app.cli.command("drop")
-def initialize():
-    create_db(app)
-    print('database destroyed')
-
-@app.cli.command("run")
-def initialize():
-    print('hello')
 
 '''
 Test Commands

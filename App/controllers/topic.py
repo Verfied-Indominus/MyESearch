@@ -11,6 +11,16 @@ def create_topic(name):
         return None
     return topic
 
+def create_topic_with_parent(name, parent_id):
+    topic = Topic(name)
+    topic.set_parent_id(parent_id)
+    try:
+        db.session.add(topic)
+        db.session.commit()
+    except IntegrityError:
+        return None
+    return topic
+
 def get_topic(id):
     return Topic.query.filter_by(id=id).first()
 

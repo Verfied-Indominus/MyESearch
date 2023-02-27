@@ -804,38 +804,40 @@ body{
 }
 
 ::-webkit-scrollbar{
-    width: 10px;
+  height: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track{
-    background-color: transparent;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb{
-    background-color: #1e87f0;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
+  background-color: #1e87f0;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover{
-    background-color: #2166ab;
+  background-color: #2166ab;
 }
 
 /* Hover.css effect */
 .hvr-grow-shadow{
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-transition-duration: 0.3s !important;
-    transition-duration: 0.3s !important;
-    -webkit-transition-property: box-shadow, transform !important;
-    transition-property: box-shadow, transform !important;
-  }
-  .hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
-    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-  }
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.3s !important;
+  transition-duration: 0.3s !important;
+  -webkit-transition-property: box-shadow, transform !important;
+  transition-property: box-shadow, transform !important;
+}
+
+.hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
