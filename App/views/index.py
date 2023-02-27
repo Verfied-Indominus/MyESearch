@@ -243,6 +243,7 @@ def profile(id):
     re = False
     pubs = []
     subs = []
+    interests = []
 
     user = get_user(id)
 
