@@ -13,7 +13,7 @@ function pageLoad(){
 function getMessages(msg){
     if (msg.length > 0){
         UIkit.notification({
-            message: `<span uk-icon=\'icon: ban\'></span> ${msg}`,
+            message: msg,
             status: 'danger',
             pos: 'top-center',
             timeout: 5000

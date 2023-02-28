@@ -42,12 +42,12 @@
 
                         <div class="uk-margin">
                             <span class="uk-text-bold">Academic Qualifications</span>
-                            <div> {{user.qualifications}} </div>
+                            <div style="white-space: pre-line;"> {{user.qualifications}} </div>
                         </div>
                         {% if user.certifications %}
                         <div class="uk-margin">
                             <span class="uk-text-bold">Certifications</span>
-                            <div> {{user.certifications}} </div>
+                            <div style="white-space: pre-line;"> {{user.certifications}} </div>
                         </div>
                         {% endif %}
                         {% if user.website_url %}
@@ -74,7 +74,7 @@
                                 <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div>Academic Qualifications</div>
                                     <hr>
-                                    <div class="uk-display-block"> {{user.qualifications}} </div>
+                                    <div style="white-space: pre-line;" class="uk-display-block"> {{user.qualifications}} </div>
                                 </div>
                             </div>
                             
@@ -82,7 +82,7 @@
                                 <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded uk-text-bottom">
                                     <div>Other Certifications</div>
                                     <hr>
-                                    <div class="uk-display-block"> {% if user.certifications %} {{user.certifications}} {% else %} None listed yet {% endif %} </div>
+                                    <div style="white-space: pre-line;" class="uk-display-block"> {% if user.certifications %} {{user.certifications}} {% else %} None listed yet {% endif %} </div>
                                 </div>
                             </div>
                             
@@ -92,7 +92,7 @@
                                     <hr>
                                     <div class="uk-display-block">
                                         {% for int in interests %}
-                                            <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int}} </a>
+                                            <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int.name}} </a>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -102,7 +102,6 @@
                                 <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div>Skills/Expertise</div>
                                     <hr>
-                                    {% set skills = user.skills.split(',') %}
                                     <div class="uk-display-block">
                                         {% for skill in skills %}
                                             <div class="uk-margin-small-bottom"> {{skill}} </div>

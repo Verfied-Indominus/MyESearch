@@ -81,7 +81,7 @@ def publication_page(id):
 
     rtopics = [{'name':'Artificial Intelligence in Education'}, {'name':'Data Mining'}, {'name':'Distributed Computing'}]
     pub = {
-        'pub_records' : [{'researcher' : {'first_name': 'Shivan', 'last_name': 'Maharaj'}}], 
+        'pub_records' : [{'researcher' : {'first_name': 'Monica', 'last_name': 'Ortega'}}], 
         'publication_date': datetime.strptime('Feb 2023', '%b %Y'),
         'pub_type': 'Research Paper' 
         }
@@ -186,6 +186,7 @@ def signup_page():
         create_library(user.id)
         create_recents(user.id)
 
+        print(re_interests)
         add_interests_to_researcher(re_interests, user.id)
 
         if image:
@@ -205,7 +206,8 @@ def signup_page():
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
     selected = json.loads(selected)
-    re_interests = selected['selected']
+    re_interests.extend(selected['selected'])
+    print(re_interests)
     return 'Interests Checked'
 
 @index_views.route('/filename', methods=['POST'])
@@ -261,6 +263,8 @@ def profile(id):
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
+        skills = user.skills.split(', ')
+        print(skills)
 
         if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)
@@ -271,4 +275,4 @@ def profile(id):
             if update_visit_record(vrec):
                 user = add_view(user)
 
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
