@@ -18,8 +18,8 @@ class ResearcherSignUpForm(FlaskForm):
                                                 'Research Assistant', 'Associate Professor', 'Professor', 'Head of Department'],
                             validators=[DataRequired("Please select a position")])
     start_date = SelectField("Year of Commencement of Employment at UWI", validators=[DataRequired("Please select a year")])
-    qualifications = TextAreaField("Qualifications", validators=[DataRequired("Please enter your qualifications")])
-    certifications = TextAreaField("Certifications")
-    skills = TextAreaField("Skills", validators=[DataRequired("Please enter your skills")])
+    qualifications = TextAreaField("Qualifications", validators=[DataRequired("Please enter your qualifications")], render_kw={"placeholder":"eg:\nB.Sc. Computer Science (UWI)\nM.Sc. Computer Science (Sask)"})
+    certifications = TextAreaField("Certifications", render_kw={"placeholder":"eg:\nCCNA, CCNP Enterprise\nCompTIA IT Fundamentals (ITF+)"})
+    skills = TextAreaField("Skills", validators=[DataRequired("Please enter your skills")], render_kw={"placeholder":"Personal strong points or proficiencies in field\neg:\nImage Processing, Wireless Networks, Mobile Learning"})
     website = StringField("Website URL")
     introduction = TextAreaField("Personal Introduction")

@@ -1,11 +1,27 @@
 let ol = document.getElementById('overlay');
-window.addEventListener('load', function(){
+let messages;
+
+function pageLoad(){
     ol.style.opacity = '0';
     this.document.body.style.overflowY = 'auto';
     this.setTimeout(function(){
         ol.style.visibility = 'hidden';
+        ol.style.display = 'none';
     }, 200);
-});
+}
+
+function getMessages(msg){
+    if (msg.length > 0){
+        UIkit.notification({
+            message: `<span uk-icon=\'icon: ban\'></span> ${msg}`,
+            status: 'danger',
+            pos: 'top-center',
+            timeout: 5000
+        });
+    }
+}
+
+window.addEventListener('load', pageLoad);
 
 let departments = {
     'Engineering': [
@@ -262,4 +278,10 @@ let read_more = document.getElementById('read-more');
 
 async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
+}
+
+function readMore(btn){
+    let abs = document.getElementById('abstract');
+    btn.parentNode.style.display = 'none';
+    abs.style.overflowY = 'auto';
 }

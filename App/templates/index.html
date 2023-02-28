@@ -8,7 +8,7 @@
 <div class="uk-inline uk-width-1-1" uk-toggle="target: .uk-overlay; mode: hover; animation: uk-animation-slide-left, uk-animation-slide-left">
 
         
-    <div class="uk-cover-container" uk-height-viewport="offset-bottom: true; offset-top: 15">
+    <div class="uk-cover-container" uk-height-viewport="offset-top: true">
         <video src="/static/library 4.webm" autoplay loop muted playsinline uk-cover></video>
     </div>  
     <div class="uk-overlay uk-overlay-primary uk-position-left uk-width-1-5 uk-flex uk-flex-center uk-flex-middle" hidden>
@@ -25,7 +25,7 @@
 <div class="uk-background-default uk-height-viewport uk-padding">
     <div class="uk-card uk-card-default uk-width-1-1 uk-child-width-1-2 uk-margin uk-margin-remove-left uk-height-viewport" uk-grid> 
         <div class="uk-width-expand uk-margin-medium-right uk-height-viewport uk-flex uk-flex-middle">
-            <div data-src="/static/images/team1.jpg" uk-parallax="bgy: -200px" class="uk-width-expand uk-background-cover uk-margin-auto uk-height-large uk-border-circle" uk-img></div>
+            <div data-src="/static/images/team.jpg" uk-parallax="bgy: -180px" class="uk-width-expand uk-background-cover uk-margin-auto uk-height-large uk-border-circle" uk-img="loading: eager;"></div>
         </div>
         <div class="uk-text-center uk-flex uk-flex-center uk-flex-middle uk-height-viewport">
             <div class="uk-margin-medium-right">
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="uk-width-expand uk-margin-medium-right uk-height-viewport uk-flex uk-flex-middle">
-            <div data-src="/static/images/stats.jpg" uk-parallax="bgy: -200px" class="uk-width-expand uk-background-cover uk-margin-auto uk-height-large uk-border-circle" uk-img></div>
+            <div data-src="/static/images/stats.jpg" uk-parallax="bgy: -240px" class="uk-width-expand uk-background-cover uk-margin-auto uk-height-large uk-border-circle" uk-img="loading: eager;"></div>
         </div>
     </div>
 </div>
@@ -73,63 +73,19 @@
             <div class="uk-slider-container-offset uk-visible-toggle uk-light" tabindex="-1">
 
                 <ul class="uk-slider-items uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-match" uk-grid uk-height-match="target: > li > div > div:nth-of-type(2) > .uk-card-title">
-                    <li>
-                        <div class="uk-card uk-card-default uk-height-1-1 hvr-grow-shadow">
-                            <div class="uk-card-media-top uk-height-medium">
-                                <div class="uk-background-cover uk-height-1-1" data-src="/static/images/ai.jpg" uk-img tabindex="1"></div>
+                    {% for top in topics %}
+                        <li>
+                            <div class="uk-card uk-card-default uk-height-1-1 hvr-grow-shadow">
+                                <div class="uk-card-media-top uk-height-medium">
+                                    <div class="uk-background-cover uk-height-1-1" data-src="/static/images/topics/{{top}}.jpeg" uk-img="loading: eager;" tabindex="1"></div>
+                                </div>
+                                <div class="uk-card-body uk-text-center uk-padding-small">
+                                    <h3 class="uk-card-title uk-text-default">{{top}}{{loop.index}}</h3>
+                                    <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
+                                </div>
                             </div>
-                            <div class="uk-card-body uk-text-center uk-padding-small">
-                                <h3 class="uk-card-title uk-text-default">Artifical Intelligence</h3>
-                                <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="uk-card uk-card-default hvr-grow-shadow">
-                            <div class="uk-card-media-top uk-height-medium">
-                                <div class="uk-background-cover uk-height-1-1" data-src="/static/images/biotechnology.jpg" uk-img tabindex="1"></div>
-                            </div>
-                            <div class="uk-card-body uk-text-center uk-padding-small">
-                                <h3 class="uk-card-title uk-text-default">Biotechnology</h3>
-                                <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="uk-card uk-card-default hvr-grow-shadow">
-                            <div class="uk-card-media-top uk-height-medium">
-                                <div class="uk-background-cover uk-height-1-1" data-src="/static/images/climate.jpg" uk-img tabindex="1"></div>
-                            </div>
-                            <div class="uk-card-body uk-text-center uk-padding-small">
-                                <h3 class="uk-card-title uk-text-default">Climate Change</h3>
-                                <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="uk-card uk-card-default hvr-grow-shadow">
-                            <div class="uk-card-media-top uk-height-medium">
-                                <div class="uk-background-cover uk-height-1-1" data-src="/static/images/comp.jpg" uk-img tabindex="1"></div>
-                            </div>
-                            <div class="uk-card-body uk-text-center uk-padding-small">
-                                <h3 class="uk-card-title uk-text-default">Computer Science</h3>
-                                <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="uk-card uk-card-default hvr-grow-shadow">
-                            <div class="uk-card-media-top uk-height-medium">
-                                <div class="uk-background-cover uk-height-1-1" data-src="/static/images/energy.jpg" uk-img tabindex="1"></div>
-                            </div>
-                            <div class="uk-card-body uk-text-center uk-padding-small">
-                                <h3 class="uk-card-title uk-text-default">Energy</h3>
-                                <button class="uk-button uk-button-danger uk-light uk-border-rounded">Follow</button>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+                    {% endfor %}
                 </ul>
 
                 <div class="uk-hidden@m uk-light">

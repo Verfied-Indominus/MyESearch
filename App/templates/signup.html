@@ -8,7 +8,7 @@
 {% block content %}
 <div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover uk-background-center-center" data-src="/static/images/loginBG.jpg" uk-img tabindex="-1"> 
     <div class="uk-card uk-card-default uk-position-relative uk-text-small uk-box-shadow-xlarge uk-grid-collapse uk-height-large uk-width-2-3@l uk-width-4-5@m uk-child-width-1-2@s" uk-height-viewport="offset-top: true; offset-bottom: 10" uk-grid>
-        <div style="cursor: pointer;" class="left" uk-toggle="target: .right; animation: uk-animation-slide-left-medium, uk-animation-slide-left-medium;">
+        <div style="cursor: pointer;" class="leftform" uk-toggle="target: .rightform; animation: uk-animation-slide-left-medium, uk-animation-slide-left-medium;">
             <div class="uk-height-1-1 uk-width-1-1 uk-background-cover uk-background-center-center uk-inline uk-transition-toggle" data-src="/static/images/Student.jpeg" uk-img tabindex="0">
                 <div class="uk-text-center uk-padding-small uk-text-large uk-background-default uk-box-shadow-small">Student Signup</div>
                 <div class="uk-transition-fade uk-position-bottom uk-overlay uk-overlay-default">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>   
-        <div class="uk-height-1-1 uk-position-absolute uk-position-left left" hidden>
+        <div class="uk-height-1-1 uk-position-absolute uk-position-left leftform" hidden>
             <form id="researcher_signup" class="uk-form-stacked uk-container uk-background-default uk-height-1-1 uk-overflow-auto" action="/signup" method="post" onsubmit="getInterests();" enctype = "multipart/form-data">
                 <div class="uk-flex uk-flex-center uk-margin">
                     <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
@@ -72,7 +72,7 @@
                         <span class="required">*</span>
                         {{ baseForm.email.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.email(class="uk-input") }}
+                    {{ baseForm.email(class="uk-input", placeholder="eg: firstname.surname@sta.uwi.edu") }}
                 </div>
 
                 <div class="uk-margin">
@@ -80,7 +80,7 @@
                         <span class="required">*</span>
                         {{ baseForm.password.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.password(class="uk-input") }}
+                    {{ baseForm.password(class="uk-input", placeholder="At least 8 characters") }}
                 </div>
 
                 <div class="uk-margin">
@@ -156,7 +156,7 @@
                         <label for="" class="uk-form-label">Research Interests</label>
                     </div>
                     {% for int in interests %}
-                        <div class="uk-margin-small-bottom uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-secondary uk-light; animation: uk-animation-fade">{{ int }}</div>
+                        <div class="uk-margin-small-bottom uk-button uk-box-shadow-hover-small uk-background-muted uk-border-pill" uk-toggle="cls: selected uk-background-secondary uk-light; animation: uk-animation-fade">{{ int.name }}</div>
                     {% endfor %}
                 </div>
 
@@ -184,7 +184,7 @@
             </form> 
         </div>
 
-        <div style="cursor: pointer;" class="uk-position-right right" uk-toggle="target: .left; animation: uk-animation-slide-right-medium, uk-animation-slide-right-medium;">
+        <div style="cursor: pointer;" class="uk-position-right rightform" uk-toggle="target: .leftform; animation: uk-animation-slide-right-medium, uk-animation-slide-right-medium;">
             <div class="uk-height-1-1 uk-width-1-1 uk-background-cover uk-background-center-center uk-inline uk-transition-toggle" data-src="/static/images/Researcher.jpeg" uk-img tabindex="0">
                 <div class="uk-text-center uk-padding-small uk-background-default uk-text-large uk-box-shadow-small">Researcher Signup</div>
                 <div class="uk-transition-fade uk-position-bottom uk-overlay uk-overlay-default">
@@ -193,7 +193,7 @@
                 </div>
             </div>
         </div>
-        <div class="uk-height-1-1 uk-position-absolute uk-position-right right" hidden>
+        <div class="uk-height-1-1 uk-position-absolute uk-position-right rightform" hidden>
             <form id="student_form" class="uk-container uk-height-1-1 uk-form-stacked uk-background-default uk-overflow-auto" action="/signup" method="post" enctype = "multipart/form-data">
                 <div class="uk-flex uk-flex-center uk-margin">
                     <img class="uk-width-3-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
@@ -231,7 +231,7 @@
                         <span class="required">*</span>
                         {{ baseForm.email.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.email(class="uk-input") }}
+                    {{ baseForm.email(class="uk-input", placeholder="eg: firstname.surname@my.uwi.edu") }}
                 </div>
 
                 <div class="uk-margin">
@@ -239,7 +239,7 @@
                         <span class="required">*</span>
                         {{ baseForm.password.label(class="uk-form-label") }}
                     </div>
-                    {{ baseForm.password(class="uk-input") }}
+                    {{ baseForm.password(class="uk-input", placeholder="At least 8 characters") }}
                 </div>
 
                 <div class="uk-margin">

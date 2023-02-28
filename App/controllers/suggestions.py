@@ -59,16 +59,23 @@ def get_home_suggestions(user):
 
 def get_publication_suggestions(pub):
     pubs = []
-    for rec in pub.pub_records:
-        pubs.extend(get_researcher_pubs(rec.researcher.id))
-    for tag in pub.tags:
-        pubs.extend(get_topic_pubs(tag.topic.id))
-    
-    pubs.extend(get_ranked_pubs())
-    pubs = list(set(pubs))
-    shuffle(pubs)
+    researchers = []
+    topics = []
 
-    return pubs
+    if not pub:
+        return researchers, topics, pubs
+
+    for rec in pub.pub_records:
+        researchers = get_researcher_pubs(rec.researcher.id)
+    for tag in pub.tags:
+        topics = get_topic_pubs(tag.topic.id)
+    
+    pubs = get_ranked_pubs()
+    shuffle(pubs)
+    shuffle(researchers)
+    shuffle(topics)
+
+    return researchers, topics, pubs
 
 def get_researcher_pubs(id):
     re = get_researcher(id)

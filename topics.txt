@@ -1,0 +1,19 @@
+Artificial Intelligence: machine learning, deep learning, natural language processing, computer vision, reinforcement learning, generative models, knowledge representation, planning, decision making
+
+Biotechnology: genetic engineering, bioprinting, stem cells, gene editing, CRISPR, biofuels, biopharmaceuticals, synthetic biology, cell culture, gene therapy
+
+Climate Change: global warming, climate modeling, carbon emissions, renewable energy, sea level rise, climate change adaptation, ocean acidification, atmospheric science, paleoclimatology, environmental science
+
+Computer Science: computer networks, cybersecurity, software engineering, programming languages, distributed systems, database systems, computer architecture, human-computer interaction, algorithms, data mining
+
+Energy: solar energy, wind energy, battery storage, fossil fuels, smart grid, energy efficiency, energy conservation, carbon capture, energy policy, energy storage
+
+Materials Science: nanotechnology, biomaterials, materials characterization, materials synthesis, smart materials, metallurgy, ceramics, polymer science, composite materials
+
+Medicine: cancer research, drug development, personalized medicine, genomics, clinical trials, pharmacology, epidemiology, medical imaging, biostatistics, regenerative medicine
+
+Neuroscience: brain imaging, neuroplasticity, cognitive neuroscience, neurodegeneration, brain-computer interface, neuropharmacology, neuroanatomy, neuroendocrinology, neuroimmunology
+
+Quantum Computing: quantum algorithms, quantum error correction, quantum communication, quantum cryptography, quantum simulation, quantum mechanics, quantum information
+
+Robotics: autonomous robots, swarm robotics, robot learning, human-robot interaction, robot perception, robot control, robot kinematics, robot dynamics, robot vision, robot navigation

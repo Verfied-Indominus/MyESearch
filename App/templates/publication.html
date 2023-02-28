@@ -5,48 +5,213 @@
 {{ super() }}
 
 {% block content %}
+<div class="uk-padding">
+    <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
+        <div class="uk-card lightcyan-background uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
+            <div class="uk-margin-medium-top uk-margin-medium-bottom">
+                <div class="uk-margin uk-flex uk-flex-center">
+                    <div class=" uk-background-cover uk-box-shadow-large" data-src="/static/images/book.jpg" style="width: 280px; height: 380px;" uk-img></div>
+                </div>
+            
+                <div class="uk-margin-medium-top">
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
+                        Add to Library
+                    </div>
 
-<div>
-    <div>
-        <img src="" alt=""> publication image goes here
-        <button> Add to Library </button>
-        <button> Citation </button>
-        <button> Request Text </button>
-        <button> Download </button>
-    </div>
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Citation
+                    </div>
+    
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Request Text 
+                    </div>
+    
+                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                        Download 
+                    </div>
+                </div>           
+            </div>
+        </div>
 
+        <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h3 class="uk-margin-small-bottom uk-text-capitalize">This is the supposed title for this publication although it is not a true title</h3>
+                    <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                    <hr>
+                    <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
+                        {% for top in rtopics %}
+                            <a href="" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{top.name}} </a>
+                        {% endfor %}
+                    </div>                   
+                </div>
+            </div>
 
-    <div>
-        <div> title, publication and date goes here </div>
-    </div>
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h4>Authors</h4>
+                    <hr class="uk-margin-small">
+                    <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
+                        <!-- Need to add all() after pub_records here when pubs are added -->
+                        {% for rec in pub.pub_records %}
+                            <a href="" style="padding: 0 10px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{rec.researcher.first_name}} {{rec.researcher.last_name}} </a>
+                        {% endfor %}
+                    </div>  
+                </div>
+            </div>
 
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h4 class="uk-margin-remove">Abstract</h4>
+                    <hr class="uk-margin-small">        
+                    <div id="abstract" style="height: 7rem; overflow-y: hidden;" class="uk-inline uk-width-1-1">
+                        Cultural awareness, when applied to Intelligent Learning Environments (ILEs), contours the overall appearance, behaviour, and content used in these systems through the use of culturally-relevant student data and information. In most cases, these adaptations are system-initiated with little to no consideration given to student-initiated control over the extent of cultural-awareness being used. This paper examines some of the issues relevant to these challenges through the development of the ICON (Instructional Cultural cONtextualisation) system. The paper explores computational approaches for modelling the diversity of students within subcultures, and the necessary semantic formalisms for representing and reasoning about cultural backgrounds at an appropriate level of granularity for ILEs. The paper investigates how student-initiated control of dynamic cultural adaptation of educational content can be achieved in ILEs, and examines the effects of cultural variations of language formality and contextualisation on student preferences for different types of educational content. Evaluations revealed preliminary insight into quantifiable thresholds at which student perception for specific types of culturally-contextualised content vary. The findings further support the notion put forth in the paper that student-initiated control of cultural contextualisation should be featured in ILEs aiming to cater for diverse groups of students.
+                        <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><button class="uk-button uk-button-danger" onclick="readMore(this);">Read More</button></div>
+                    </div>          
+                </div>
+            </div>
 
-    <div>
-        <div>
-            All authors of the publication goes here
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-padding">
+                    <h4 class="uk-margin-remove">Analytics</h4>
+                    <hr class="uk-margin-small">
+                    <div class="uk-grid uk-grid-divider uk-child-width-expand uk-text-center" uk-grid>
+                        <div class="uk-position-relative">
+                            Downloads
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="download"></span> 500 </div>
+                        </div>
+        
+                        <div class="uk-position-relative">
+                            Citations
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="quote-right"></span> 35 </div>
+                        </div>
+        
+                        <div class="uk-position-relative">
+                            Views
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="eye"></span> 1125 </div>
+                        </div>
+                        
+                        <div>
+                            Searches
+                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> 73 </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div>
-        <div> Abstract goes here </div>
-    </div>
+    <div class="uk-padding uk-padding-remove-horizontal uk-padding-remove-bottom">
+        <div>
+            <div class="uk-width-1-1">
+                <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
+                    <div class="uk-padding">
+                        <h4 class="uk-margin-remove">Suggested Publications</h4>
+                        <hr class="uk-margin-small">
+                        <ul uk-tab>
+                            {% if researchers %} <li><a href=""> More from the authors</a></li> {% endif %}
+                            {% if topics %} <li><a href="">More from the topics</a></li> {% endif %}
+                            <li><a href="">Most popular</a></li>
+                        </ul> 
+                        
+                        <ul class="uk-switcher">
+
+                        {% if researchers %}
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                {% for pub in researchers %}
+                                    <div>
+                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div class="uk-margin-small-left">
+                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <div>
+                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for n in range(3) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+
+                        {% if topics %}
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                {% for pub in topics %}
+                                    <div>
+                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div class="uk-margin-small-left">
+                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <div>
+                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for n in range(3) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                {% for pub in pubs %}
+                                    <div>
+                                        <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div class="uk-margin-small-left">
+                                                <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <div>
+                                                    {% if pub.pub_records.all()|length < 3 %}
+                                                        {% for n in range(pub.pub_records.all()|length) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for n in range(3) %}
+                                                            <a href="#" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].author.image_url %} {{pub.pub_records[n].author.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].author.first_name}}  {{pub.pub_records[n].author.last_name}} </a>                              
+                                                        {% endfor %}
+                                                        {% if pub.pub_records.all()|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <a href="#" class="uk-overlay uk-position-cover"></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
 
 </div>
 
 
-<div>
-    <div> Analytics Tile goes here</div>
 
-    <button> Downloads </button>
-    <button> Citations </button>
-    <button> Views </button>
-    <button> Searched </button>
-</div>
-
-
-<footer>
-
-</footer>
 
 
 {% endblock %}

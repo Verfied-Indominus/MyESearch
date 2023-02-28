@@ -126,7 +126,7 @@
                         <div>
                             {% if researchers %}
                                 {% for re in researchers %}
-                                    <a href="/profile/{{re.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
+                                    <a href="/profile/{{re.id}}" style="padding: 0 10px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
                                 {% endfor %}
                             {% else %}
                                 <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
@@ -137,7 +137,7 @@
                         <div>
                             {% if topics %}
                                 {% for top in topics %}
-                                    <a href="/topic/{{top.id}}" style="padding: 6px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"> {{top.name}} </a>
+                                    <a href="/topic/{{top.id}}" style="padding: 0 10px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"> {{top.name}} </a>
                                 {% endfor %}
                             {% else %}
                                 <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>
@@ -155,7 +155,7 @@
                         <div class="uk-grid uk-grid-divider uk-grid-large uk-child-width-expand uk-text-center" uk-grid>
                             <div class="uk-position-relative">
                                 Profile Views
-                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="user"></span> {{user.views}} </div>
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="eye"></span> {{user.views}} </div>
                             </div>
                             
                             <div>
@@ -164,7 +164,7 @@
                             </div>
                             
                             <div>
-                                No. of Times Searched
+                                Times Searched
                                 <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="search"></span> {{user.searches}} </div>
                             </div>
                         </div>
@@ -175,6 +175,7 @@
             {% if re %}
                 </div>
             </div>
+
             <div class="uk-padding uk-padding-remove-horizontal uk-padding-remove-bottom">
                 <div>
             {% endif %}
@@ -239,7 +240,7 @@
 
                                             {% else %}
 
-                                                {% for pub in pubs %}
+                                                {% for pub in library %}
                                                     <div>
                                                         <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                             <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
@@ -277,7 +278,7 @@
 
                                             {% else %}
 
-                                                {% for pub in pubs %}
+                                                {% for pub in recents %}
                                                     <div>
                                                         <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                             <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
