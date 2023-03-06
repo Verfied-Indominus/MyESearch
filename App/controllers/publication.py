@@ -58,3 +58,6 @@ def get_all_publications_for_user(user):
     for rec in user.pub_records:
         pubs.append(rec.publication)
     return pubs
+
+def get_all_publications():
+    return Publication.query.all()

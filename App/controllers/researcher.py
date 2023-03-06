@@ -3,6 +3,9 @@ from App.models import Researcher
 from App.models import ResearcherTag
 from App.controllers import get_topic_by_name
 
+def get_all_researchers():
+    return Researcher.query.all()
+    
 def add_interests_to_researcher(interests, re_id):
     for int in interests:
         topic = get_topic_by_name(int)

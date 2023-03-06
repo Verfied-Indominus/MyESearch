@@ -5,9 +5,9 @@ from App.models.user import User, check_password_hash
 from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email
-from App.controllers.publication import get_pub_byid, get_all_publications_for_user
+from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications
 from App.controllers.visitrecords import *
-from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher
+from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher, get_all_researchers
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
 from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library, get_publications_from_library
 from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents, get_publications_from_recents
@@ -48,6 +48,24 @@ departments = [
         'Electrical & Computer Engineering',
         'Mechanical and Manufacturing Enterprise Research'
     ]
+
+@index_views.route('/allpublicatons',methods=['GET'])
+def all_publications():
+    pubs = get_all_publications()
+    return render_template("publicatons.html",publications=pubs)
+
+@index_views.route('/allresearchers',methods=['GET'])
+def all_researchers():
+    researchers = get_all_researchers()
+    return render_template("researchers.html",researchers = researchers)
+
+@index_views.route('/search',methods=['POST'])
+def search():
+    results = []
+    terms = request.form
+    # results  = searchFunction(terms)
+    return render_template('results.html',results = results)
+
 
 
 @index_views.route('/', methods=['GET'])
