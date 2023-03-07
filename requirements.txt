@@ -11,7 +11,7 @@ Flask-Migrate==3.1.0
 Werkzeug==2.2.3
 coverage==6.4.4
 PyPDF2
-scholarly
+scholarly==1.7.11
 openai
 pyrebase
 gmail
