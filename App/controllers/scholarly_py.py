@@ -28,21 +28,22 @@ def get_pubs(pub_query, name):
     while True:
         try:
             for pub in pub_query:
-                while True:
-                    try:
-                        if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
-                            if (pub['gsrank'] == '96'):
+                if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
+                    while True:
+                        try:
+                            if (pub['gsrank'] == 96):
                                 fill = scholarly.fill(pub)
                                 pubs.append(fill)
                                 print(fill)
                                 print('\n')
                             else:
                                 print(pub['gsrank'])
-                        break
-                    except Exception:
-                        i += 1
-                        print("Inner", i)
-                        set_new_proxy()
+                        except Exception:
+                            i += 1
+                            print("Inner", i)
+                            set_new_proxy()
+                else:
+                    break
             break
         except Exception:
             i += 1
