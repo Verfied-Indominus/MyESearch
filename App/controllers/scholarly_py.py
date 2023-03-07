@@ -10,6 +10,7 @@ def set_new_proxy():
             break
 
 def get_pub_query(name):
+    set_new_proxy()
     i = 0
     while True:
         try:
@@ -21,16 +22,24 @@ def get_pub_query(name):
             set_new_proxy()
     return pub_query
 
-def get_pubs(pub_query):
+def get_pubs(pub_query, name):
     i = 0
     pubs = []
     while True:
         try:
             for pub in pub_query:
-                if 'P Mohan' in pub['author']:
-                    pubs.append(pub)
-                    print(pub)
-                    print('\n')
+                while True:
+                    try:
+                        if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
+                            fill = scholarly.fill(pub)
+                            pubs.append(fill)
+                            print(fill)
+                            print('\n')
+                        break
+                    except Exception:
+                        i += 1
+                        print("Inner", i)
+                        set_new_proxy()
             break
         except Exception:
             i += 1
@@ -54,8 +63,14 @@ first_author_result = None
 
 # If author query yields no result 
 if not first_author_result:
-    pub_query = get_pub_query('Permanand Mohan')
-    pubs = get_pubs(pub_query)
+    name = 'Permanand Mohan'
+    pub_query = get_pub_query(name)
+    name = name.split(' ')
+    if len(name) == 2:
+        name = "{} {}".format(name[0][0], name[1])
+    elif len(name) == 3:
+        name = "{}{} {}".format(name[0][0], name[1][0], name[2])
+    pubs = get_pubs(pub_query, name)
 
     print(pubs)
 
