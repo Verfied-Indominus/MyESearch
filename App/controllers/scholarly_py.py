@@ -9,6 +9,35 @@ def set_new_proxy():
             scholarly.use_proxy(pg)
             break
 
+def get_pub_query(name):
+    i = 0
+    while True:
+        try:
+            pub_query = scholarly.search_pubs(name)
+            break
+        except Exception:
+            i += 1
+            print("Author", i)
+            set_new_proxy()
+    return pub_query
+
+def get_pubs(pub_query):
+    i = 0
+    pubs = []
+    while True:
+        try:
+            for pub in pub_query:
+                if 'P Mohan' in pub['author']:
+                    pubs.append(pub)
+                    print(pub)
+                    print('\n')
+            break
+        except Exception:
+            i += 1
+            print("Outer", i)
+            set_new_proxy()
+    return pubs
+
 first_author_result = None
 
 # search_query = scholarly.search_author('Permanand Mohan')
@@ -21,39 +50,14 @@ first_author_result = None
 #Returns personal info of author
 #Scholar ID is important for verifications
 # print(first_author_result)
-# If author query yields no result
-i = 0
 
+
+# If author query yields no result 
 if not first_author_result:
-    while True:
-        try:
-            pub_query = scholarly.search_pubs('Permanand Mohan')
-            break
-        except Exception as e:
-            i += 1
-            print("Author", i)
-            set_new_proxy()
+    pub_query = get_pub_query('Permanand Mohan')
+    pubs = get_pubs(pub_query)
 
-filled_pubs = []
-while True:
-    try:
-        for pub in pub_query:
-            while True:
-                try:
-                    fill = scholarly.fill(pub)
-                    filled_pubs.append(fill)
-                    print(fill)
-                    print('\n')
-                    break
-                except Exception as e:
-                    i += 1
-                    print("Pub", i)
-                    set_new_proxy()
-        break
-    except Exception as e:
-        i += 1
-        print("Pub", i)
-        set_new_proxy()
+    print(pubs)
 
 # Pull specifics for the author ["basics","indices","counts","coauthors","publications"]
 # 'basics' = name, affiliation, and interests;
