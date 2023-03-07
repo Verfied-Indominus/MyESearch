@@ -1,5 +1,7 @@
 from flask import Blueprint, get_flashed_messages, redirect, render_template, request, url_for, flash
+from flask import current_app as app
 from flask_login import current_user
+from flask_mail import Mail, Message
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
@@ -16,6 +18,7 @@ from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
 import json
+import gmail
 
 from App.models.builder import *
 
@@ -294,3 +297,23 @@ def profile(id):
                 user = add_view(user)
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
+
+
+# EMAIL : myesearch.noreply@gmail.com
+# PASSWORD: admin@noreply
+# APP_PASSWORD: sibvelfmfcupbche
+
+@index_views.route("/mail", methods=['GET'])
+def mails():
+    mail = gmail.GMail("myesearch.noreply@gmail.com","sibvelfmfcupbche")
+    msg = gmail.Message(
+        subject="Hello Munesha",
+        cc=None,
+        to="muneshabeharry@outlook.com",
+        text="I love you <3",
+        html=None,
+        attachments=None
+        )
+    mail.send(msg)
+    mail.close()
+    return "Email sent :)"

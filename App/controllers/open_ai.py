@@ -1,7 +1,8 @@
 import openai
 #API KEY
-API_KEY="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"
+API_KEY="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"
 #SET API KEY
+
 openai.api_key = API_KEY
 
 #OTHER CONFIG STUFF
@@ -10,7 +11,7 @@ MAX_TOKENS=1000
 MODEL="text-davinci-003"
 
 
-def request(sentence):
+def prompt(sentence):
     response = openai.Completion.create(
     max_tokens=MAX_TOKENS,
     model=MODEL,

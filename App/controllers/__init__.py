@@ -11,3 +11,7 @@ from .open_ai import *
 from .pdf import *
 from .student import *
 from .recents import *
+from .researchersubs import *
+from .topicsub import *
+from .visitrecords import *
+from .scholarly_py import *

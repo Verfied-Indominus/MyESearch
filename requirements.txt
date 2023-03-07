@@ -14,6 +14,9 @@ PyPDF2
 scholarly
 openai
 pyrebase
+gmail
+Pillow
+PyMuPDF
 Flask-WTF==1.1.1
 WTForms==3.0.1
 PyJWT==2.6.0
