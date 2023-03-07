@@ -31,10 +31,13 @@ def get_pubs(pub_query, name):
                 while True:
                     try:
                         if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
-                            fill = scholarly.fill(pub)
-                            pubs.append(fill)
-                            print(fill)
-                            print('\n')
+                            if (pub['gsrank'] == '96'):
+                                fill = scholarly.fill(pub)
+                                pubs.append(fill)
+                                print(fill)
+                                print('\n')
+                            else:
+                                print(pub['gsrank'])
                         break
                     except Exception:
                         i += 1
@@ -61,7 +64,7 @@ first_author_result = None
 # print(first_author_result)
 
 
-# If author query yields no result 
+# If author query yields no result
 if not first_author_result:
     name = 'Permanand Mohan'
     pub_query = get_pub_query(name)

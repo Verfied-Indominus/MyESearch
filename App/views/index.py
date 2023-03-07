@@ -52,15 +52,15 @@ departments = [
         'Mechanical and Manufacturing Enterprise Research'
     ]
 
-@index_views.route('/allpublicatons',methods=['GET'])
+@index_views.route('/all/publications',methods=['GET'])
 def all_publications():
     pubs = get_all_publications()
-    return render_template("publicatons.html",publications=pubs)
+    return render_template("results.html",publications=pubs)
 
-@index_views.route('/allresearchers',methods=['GET'])
+@index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
     researchers = get_all_researchers()
-    return render_template("researchers.html",researchers = researchers)
+    return render_template("results.html",researchers = researchers)
 
 @index_views.route('/search',methods=['POST'])
 def search():
@@ -307,10 +307,10 @@ def profile(id):
 def mails():
     mail = gmail.GMail("myesearch.noreply@gmail.com","sibvelfmfcupbche")
     msg = gmail.Message(
-        subject="Hello Munesha",
+        subject="Hello World",
         cc=None,
-        to="muneshabeharry@outlook.com",
-        text="I love you <3",
+        to="shivanmaharaj.sm@gmail.com",
+        text="This is a test mail",
         html=None,
         attachments=None
         )
