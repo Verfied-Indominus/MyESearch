@@ -46,8 +46,9 @@ def fill_pubs(pubs):
     for pub in pubs:
         while True:
             try:
-                fill = scholarly.fill(pub)
+                fill = pub.fill()
                 filled.append(fill)
+                print(fill['bib']['abstract'])
                 break
             except Exception:
                 i += 1
@@ -78,14 +79,13 @@ first_author_result = None
 
 
 # If author query yields no result
-if not first_author_result:
-    name = 'Permanand Mohan'
-    pub_query = get_pub_query(name)
-    pubs = get_pubs(pub_query, name)
-    print(pubs)
+# if not first_author_result:
+#     name = 'Permanand Mohan'
+#     pub_query = get_pub_query(name)
+#     pubs = get_pubs(pub_query, name)
 
-    filled = fill_pubs(pubs)
-    print(filled)
+#     filled = fill_pubs(pubs)
+#     print(filled)
 
 # Pull specifics for the author ["basics","indices","counts","coauthors","publications"]
 # 'basics' = name, affiliation, and interests;

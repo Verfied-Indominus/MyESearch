@@ -1,5 +1,4 @@
-from flask import Blueprint, get_flashed_messages, redirect, render_template, request, url_for, flash
-from flask import current_app as app
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from flask_mail import Mail, Message
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
@@ -14,6 +13,7 @@ from App.controllers.suggestions import get_home_suggestions, get_publication_su
 from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library, get_publications_from_library
 from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents, get_publications_from_recents
 from App.controllers.auth import login_user, logout_user
+from App.controllers.scholarly_py import *
 from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
@@ -317,3 +317,13 @@ def mails():
     mail.send(msg)
     mail.close()
     return "Email sent :)"
+
+pubs = []
+
+@index_views.route('/test', methods=['GET'])
+def scholarly_test():
+    name = 'Permanand Mohan'
+    # pub_query = get_pub_query(name)
+    # pubs = get_pubs(pub_query, name)
+    print(pubs)
+    return 'TEst'
