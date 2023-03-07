@@ -25,31 +25,43 @@ def get_pub_query(name):
 def get_pubs(pub_query, name):
     i = 0
     pubs = []
+    name = get_shortened_name(name)
     while True:
         try:
             for pub in pub_query:
                 if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
-                    while True:
-                        try:
-                            if (pub['gsrank'] == 96):
-                                fill = scholarly.fill(pub)
-                                pubs.append(fill)
-                                print(fill)
-                                print('\n')
-                            else:
-                                print(pub['gsrank'])
-                        except Exception:
-                            i += 1
-                            print("Inner", i)
-                            set_new_proxy()
+                    pubs.append(pub)
                 else:
                     break
             break
         except Exception:
             i += 1
-            print("Outer", i)
+            print("Pub_List", i)
             set_new_proxy()
     return pubs
+
+def fill_pubs(pubs):
+    i = 0
+    filled = []
+    for pub in pubs:
+        while True:
+            try:
+                fill = scholarly.fill(pub)
+                filled.append(fill)
+                break
+            except Exception:
+                i += 1
+                print("Filled_List", i)
+                set_new_proxy()
+    return filled
+
+def get_shortened_name(name):
+    name = name.split(' ')
+    if len(name) == 2:
+        name = "{} {}".format(name[0][0], name[1])
+    elif len(name) == 3:
+        name = "{}{} {}".format(name[0][0], name[1][0], name[2])
+    return name
 
 first_author_result = None
 
@@ -69,14 +81,11 @@ first_author_result = None
 if not first_author_result:
     name = 'Permanand Mohan'
     pub_query = get_pub_query(name)
-    name = name.split(' ')
-    if len(name) == 2:
-        name = "{} {}".format(name[0][0], name[1])
-    elif len(name) == 3:
-        name = "{}{} {}".format(name[0][0], name[1][0], name[2])
     pubs = get_pubs(pub_query, name)
-
     print(pubs)
+
+    filled = fill_pubs(pubs)
+    print(filled)
 
 # Pull specifics for the author ["basics","indices","counts","coauthors","publications"]
 # 'basics' = name, affiliation, and interests;
