@@ -5,5 +5,6 @@
 {{ super() }}
 
 {% block content %}
-    <div class="uk-button uk-button-danger" onclick="getPubs();">Pubs</div>
+    <div class="uk-button uk-button-danger" onclick="getPubs(); document.getElementById('link').click();">Pubs</div>
+    <a id="link" href="https://link.springer.com/content/pdf/10.1007/s40593-014-0033-9.pdf" download hidden></a>
 {% endblock %}

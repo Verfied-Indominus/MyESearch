@@ -318,13 +318,12 @@ def mails():
     mail.close()
     return "Email sent :)"
 
-pubs = []
-
 @index_views.route('/test', methods=['GET'])
 def scholarly_test():
     name = 'Permanand Mohan'
     print(name)
     pub_query = get_pub_query(name)
-    pubs.extend(get_pubs(pub_query, name))
-    print(pubs)
+    pubs = get_pubs(pub_query, name)
+    filled = fill_pubs(pubs)
+    print(filled)
     return pubs
