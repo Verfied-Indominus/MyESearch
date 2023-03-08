@@ -79,13 +79,14 @@ first_author_result = None
 
 
 # If author query yields no result
-# if not first_author_result:
-#     name = 'Permanand Mohan'
-#     pub_query = get_pub_query(name)
-#     pubs = get_pubs(pub_query, name)
+if not first_author_result:
+    name = 'Permanand Mohan'
+    pub_query = get_pub_query(name)
+    print(next(pub_query)['bib']['abstract'])
+    # pubs = get_pubs(pub_query, name)
 
-#     filled = fill_pubs(pubs)
-#     print(filled)
+    # filled = fill_pubs(pubs)
+    # print(filled)
 
 # Pull specifics for the author ["basics","indices","counts","coauthors","publications"]
 # 'basics' = name, affiliation, and interests;

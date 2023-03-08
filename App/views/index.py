@@ -323,7 +323,8 @@ pubs = []
 @index_views.route('/test', methods=['GET'])
 def scholarly_test():
     name = 'Permanand Mohan'
-    # pub_query = get_pub_query(name)
-    # pubs = get_pubs(pub_query, name)
+    print(name)
+    pub_query = get_pub_query(name)
+    pubs.extend(get_pubs(pub_query, name))
     print(pubs)
-    return 'TEst'
+    return pubs

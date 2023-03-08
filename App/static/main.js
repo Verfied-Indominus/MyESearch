@@ -285,3 +285,8 @@ function readMore(btn){
     btn.parentNode.style.display = 'none';
     abs.style.overflowY = 'auto';
 }
+
+async function getPubs(){
+    let response = await fetch('/test');
+    console.log(response.text);
+}
