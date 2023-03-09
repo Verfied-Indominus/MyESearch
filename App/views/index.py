@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
-from flask_mail import Mail, Message
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
@@ -320,10 +319,97 @@ def mails():
 
 @index_views.route('/test', methods=['GET'])
 def scholarly_test():
-    name = 'Permanand Mohan'
-    print(name)
-    pub_query = get_pub_query(name)
-    pubs = get_pubs(pub_query, name)
-    filled = fill_pubs(pubs)
-    print(filled)
-    return pubs
+    # builder = (
+    #     ResearcherBuilder()
+    #     .first_name('Patrick')
+    #     .last_name('Hosein')
+    #     .email('patrick.hosein@sta.uwi.edu')
+    #     .password('patrickpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .title('Prof.')
+    #     .position('Professor')
+    #     .start_year('2010')
+    #     .qualifications('PhD (MIT)')
+    #     .skills('Wireless Networks')
+    #     .build()
+    # )
+    # print("Patrick Created")
+
+    # builder = (
+    #     ResearcherBuilder()
+    #     .first_name('Phaedra')
+    #     .last_name('Mohammed')
+    #     .email('phaedra.mohammed@sta.uwi.edu')
+    #     .password('phaedrapass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .title('Dr.')
+    #     .position('Full-Time Lecturer')
+    #     .start_year('2017')
+    #     .qualifications('Ph.D. Computer Science (UWI)')
+    #     .certifications('Raspberry Pi Certified Educator')
+    #     .skills('Computational Models of Culture, Intelligent Tutoring Systems, Expert Systems, Knowledge Representation, Ontological Modelling')
+    #     .build()
+    # )
+    # image_url = uploadFile(builder.researcher.id, 'phaedra.jpg')
+    # remove("App/uploads/phaedra.jpg")
+    # builder.image_url(image_url)
+    # builder.build()
+    # print("Phaedra Created")
+
+    # builder = (
+    #     ResearcherBuilder()
+    #     .first_name('Amit')
+    #     .middle_name('Neil')
+    #     .last_name('Ramkissoon')
+    #     .email('amit.ramkissoon@my.uwi.edu')
+    #     .password('amitpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .title('Mr.')
+    #     .position('Teaching Assistant')
+    #     .start_year('2020')
+    #     .qualifications('B.Sc. Computer Science (UWI)\nM.Sc. Computer Science (UWI)\nPh.D. Computer Science (UWI) - in progress')
+    #     .skills('Fake News Detection\nSocial Computing\nInfrastructureless Social Networks')
+    #     .introduction('Amit Neil Ramkissoon is a PhD Computer Science Candidate at the Department of Computing & Information Technology at The University of the West Indies at St Augustine. He did both his Bachelors Degree and Masters Degree at The University of the West Indies at St Augustine. His research interest entails Artificial Intelligence, Computational Social Systems, Data Mining, Distributed Computing, Fake News Detection and Mobile Ad Hoc Networks.')
+    #     .website_url('https://sites.google.com/site/amitneilramkissoon')
+    #     .build()
+    # )
+    # image_url = uploadFile(builder.researcher.id, 'amit.jpg')
+    # remove("App/uploads/amit.jpg")
+    # builder.image_url(image_url)
+    # builder.build()
+    # print("Amit Created")
+
+    # builder = (
+    #     ResearcherBuilder()
+    #     .first_name('Vijayanandh')
+    #     .last_name('Rajamanickam')
+    #     .email('vijayanandh.rajamanickam@sta.uwi.edu')
+    #     .password('vijayanandhpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .title('Dr.')
+    #     .position('Full-Time Lecturer')
+    #     .start_year('2021')
+    #     .qualifications('B.Sc. Mathematics\nM.C.A Computer Applications\nM.Phil Computer Science\nPh.D Computer Science')
+    #     .skills('Image Processing')
+    #     .build()
+    # )
+    # print("Vijayanandh Created")
+    user = get_user(1)
+    pubs = get_pubs(user.first_name, user.last_name)
+    num = len(user.pub_records.all())
+    for i in range(num, len(pubs)):
+        pub = fill_pub(pubs[i])
+        data = {}
+        data['title'] = pub['bib']['title']
+        data['abstract'] = pub[]
+
+    print(pubs)
+    return 'Created'

@@ -9,12 +9,12 @@ def set_new_proxy():
             scholarly.use_proxy(pg, pg)
             break
 
-def get_pub_query(name):
+def get_pub_query(fname, lname):
     set_new_proxy()
     i = 0
     while True:
         try:
-            pub_query = scholarly.search_pubs(name)
+            pub_query = scholarly.search_pubs_custom_url(f'/scholar?as_vis=1&q=author:"{fname}+{lname}"')
             break
         except Exception:
             i += 1
@@ -22,17 +22,36 @@ def get_pub_query(name):
             set_new_proxy()
     return pub_query
 
-def get_pubs(pub_query, name):
+def get_author(fname, lname):
+    while True:
+        try:
+            search_query = scholarly.search_author(f'{fname} {lname}')
+            break
+        except Exception:
+            set_new_proxy()
+
+    try:
+        author = next(search_query)
+        print(author)
+        author = scholarly.fill(author)
+        return author
+    except Exception as exc:
+        print(exc.__class__)
+        return None
+
+def get_pubs(fname, lname):
     i = 0
     pubs = []
-    name = get_shortened_name(name)
+
+    author = get_author(fname, lname)
+    if author:
+        return author['publications']
+    
+    pub_query = get_pub_query(fname, lname)
     while True:
         try:
             for pub in pub_query:
-                if (name in pub['bib']['author']) or (name.upper() in pub['bib']['author']):
-                    pubs.append(pub)
-                else:
-                    break
+                pubs.append(pub)
             break
         except Exception:
             i += 1
@@ -40,20 +59,28 @@ def get_pubs(pub_query, name):
             set_new_proxy()
     return pubs
 
-def fill_pubs(pubs):
+def search_pub(pub):
+    while True:
+        try:
+            pub = scholarly.search_pubs(pub['bib']['title'])
+            break
+        except Exception:
+            set_new_proxy()
+    return next(pub)
+
+
+def fill_pub(pub):
     i = 0
-    filled = []
-    for pub in pubs:
-        while True:
-            try:
-                fill = scholarly.fill(pub)
-                filled.append(fill)
-                break
-            except Exception:
-                i += 1
-                print("Filled_List", i)
-                set_new_proxy()
-    return filled
+    pub = search_pub(pub)
+    while True:
+        try:
+            fill = scholarly.fill(pub)
+            break
+        except Exception:
+            i += 1
+            print("Filled_List", i)
+            set_new_proxy()
+    return fill
 
 def get_shortened_name(name):
     name = name.split(' ')
@@ -63,9 +90,11 @@ def get_shortened_name(name):
         name = "{}{} {}".format(name[0][0], name[1][0], name[2])
     return name
 
-first_author_result = None
 
-# search_query = scholarly.search_author('Permanand Mohan')
+pubs = get_pubs('Permanand', 'Mohan')
+for pub in pubs:
+    print(fill_pub(pub))
+
 # Retrieve the first result from the iterator
 # try:
 #     first_author_result = next(search_query)
@@ -78,12 +107,16 @@ first_author_result = None
 
 
 # If author query yields no result
-# if not first_author_result:
-#     name = 'Permanand Mohan'
-#     pub_query = get_pub_query(name)
-#     pubs = get_pubs(pub_query, name)
 
-#     filled = fill_pubs([pub])
+# pub_query = get_pub_query('Permanand', 'Mohan')
+# print(next(pub_query))
+# pubs = get_pubs(pub_query)
+# filled = []
+# for pub in pubs:
+#     print(pub, '\n')
+#     print(pub['gsrank'])
+#     filled.append(fill_pub(pub))
+# print(filled)
 
 # Pull specifics for the author ["basics","indices","counts","coauthors","publications"]
 # 'basics' = name, affiliation, and interests;
@@ -101,7 +134,7 @@ first_author_result = None
 # first_publication = author['publications'][0]
 # first_publication_filled = scholarly.fill(first_publication)
 # scholarly.pprint(first_publication_filled)
-# print(first_publication_filled)
+# print(first_publication, '\n')
 
 # # Print the titles of the author's publications
 # publication_titles = [pub['bib']['title'] for pub in author['publications']]
