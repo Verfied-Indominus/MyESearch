@@ -59,17 +59,23 @@ def search_pub(pub, fname, lname):
             break
         except Exception:
             set_new_proxy()
-    return next(pub)
+            print('search')
+    return pub
 
 
 def fill_pub(pub, fname, lname):
     pub1 = search_pub(pub, fname, lname)
+    try:
+        pub1 = next(pub1)
+    except Exception:
+        return None
     while True:
         try:
             fill = scholarly.fill(pub1)
             break
         except Exception:
             set_new_proxy()
+            print('fill')
     return fill
 
 def get_shortened_name(name):

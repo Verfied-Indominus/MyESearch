@@ -4,6 +4,7 @@ from datetime import date
 
 def create_pub(data): #let data be a dictionary
     try:
+        print(data)
         new_pub = Publication(
             title= data["title"],
             abstract= data["abstract"],
@@ -15,9 +16,9 @@ def create_pub(data): #let data be a dictionary
         )
         db.session.add(new_pub)
         db.session.commit()
-        return True
+        return new_pub
     except:
-        return False
+        return None
 
 def add_coauthors(publication, coauthors):
     publication.add_coauthors_string(coauthors)
