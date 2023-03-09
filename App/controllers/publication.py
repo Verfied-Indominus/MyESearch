@@ -9,14 +9,21 @@ def create_pub(data): #let data be a dictionary
             abstract= data["abstract"],
             free_access= data["free_access"],
             pub_type=data["pub_type"],
-            publication_date=data["publication_date"]
-
+            publication_date=data["publication_date"],
+            url=data['url'],
+            eprint=data['eprint']
         )
         db.session.add(new_pub)
         db.session.commit()
         return True
     except:
         return False
+
+def add_coauthors(publication, coauthors):
+    publication.add_coauthors_string(coauthors)
+    db.session.add(publication)
+    db.session.commit()
+    return True
 
 def update_pub(data,id): #let data be a dictionary
     try:

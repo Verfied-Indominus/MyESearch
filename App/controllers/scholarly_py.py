@@ -1,4 +1,5 @@
 from scholarly import scholarly, ProxyGenerator
+# from open_ai import prompt
 
 pg = ProxyGenerator()
 
@@ -11,14 +12,11 @@ def set_new_proxy():
 
 def get_pub_query(fname, lname):
     set_new_proxy()
-    i = 0
     while True:
         try:
             pub_query = scholarly.search_pubs_custom_url(f'/scholar?as_vis=1&q=author:"{fname}+{lname}"')
             break
         except Exception:
-            i += 1
-            print("Author", i)
             set_new_proxy()
     return pub_query
 
@@ -32,15 +30,12 @@ def get_author(fname, lname):
 
     try:
         author = next(search_query)
-        print(author)
         author = scholarly.fill(author)
         return author
-    except Exception as exc:
-        print(exc.__class__)
+    except Exception:
         return None
 
 def get_pubs(fname, lname):
-    i = 0
     pubs = []
 
     author = get_author(fname, lname)
@@ -54,31 +49,26 @@ def get_pubs(fname, lname):
                 pubs.append(pub)
             break
         except Exception:
-            i += 1
-            print("Pub_List", i)
             set_new_proxy()
     return pubs
 
-def search_pub(pub):
+def search_pub(pub, fname, lname):
     while True:
         try:
-            pub = scholarly.search_pubs(pub['bib']['title'])
+            pub = scholarly.search_pubs(query='allintitle: "{}" author: "{} {}"'.format(pub['bib']['title'], fname, lname))
             break
         except Exception:
             set_new_proxy()
     return next(pub)
 
 
-def fill_pub(pub):
-    i = 0
-    pub = search_pub(pub)
+def fill_pub(pub, fname, lname):
+    pub1 = search_pub(pub, fname, lname)
     while True:
         try:
-            fill = scholarly.fill(pub)
+            fill = scholarly.fill(pub1)
             break
         except Exception:
-            i += 1
-            print("Filled_List", i)
             set_new_proxy()
     return fill
 
@@ -91,9 +81,30 @@ def get_shortened_name(name):
     return name
 
 
-pubs = get_pubs('Permanand', 'Mohan')
-for pub in pubs:
-    print(fill_pub(pub))
+# pubs = get_pubs('Shareeda', 'Mohammed')
+# for pub in pubs:
+#     print(pub)
+#     print('\n\n')
+#     fill = fill_pub(pub, 'Shareeda', 'Mohammed')
+#     print(fill)
+#     break
+# print('\n\n')
+# authors = fill['bib']['author'].split(' and ')
+# temp = []
+# for author in authors:
+#     temp.append(author.split(', '))
+# authors = temp
+# temp = []
+# for author in authors:
+#     author.reverse()
+#     temp.append(' '.join(author))
+# authors = temp
+# authors.remove('Shareeda Mohammed')
+# authors = ', '.join(authors)
+# print(authors)
+# request = f"Extract the research Keywords from the following as a python list'{fill['bib']['abstract']}'"
+# key_list  = prompt(request)["choices"][0]["text"]
+# print(key_list)
 
 # Retrieve the first result from the iterator
 # try:
