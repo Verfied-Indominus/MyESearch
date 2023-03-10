@@ -282,8 +282,12 @@ def profile(id):
         pubs = get_all_publications_for_user(user)
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
-        skills = user.skills.split(', ')
-        print(skills)
+        if ',' in user.skills:
+            skills = user.skills.split(', ')
+        if '\n' in user.skills:
+            skills = user.skills.split('\n')
+        if ',\n' in user.skills:
+            skills = user.skills.split(',\n')
 
         if (isinstance(current_user, User)) and (current_user.id is not user.id):
             vrec = get_visit_record(current_user.id, user.id)

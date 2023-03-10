@@ -13,50 +13,43 @@
                 <div class="uk-flex uk-flex-center">
                     <div class="uk-border-circle uk-background-cover" data-src="{% if user.image_url %} {{user.image_url}} {% else %} /static/images/unknown.png {% endif %}" alt="" style="width: 250px; height: 250px;" uk-img></div>
                 </div>
-                <h2> {% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
-                <div class="uk-text-default">
-                    <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
-                    <h3>About</h3>
-                    <hr>
+                <div class="uk-padding">
+                    <h2> {% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
+                    <div class="uk-text-default">
+                        <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
+                        <h3>About</h3>
+                        <hr>
 
-                    <div class="uk-margin">
-                        <span class="uk-text-bold">Faculty</span>
-                        <div> {{user.faculty}} </div>
-                    </div>
-
-                    <div class="uk-margin">
-                        <span class="uk-text-bold">Department</span>
-                        <div> {{user.department}} </div>
-                    </div>
-
-                    <div class="uk-margin">
-                        <span class="uk-text-bold">Contact Email</span>
-                        <div> {{user.email}} </div>
-                    </div>
-
-                    {% if re %}
                         <div class="uk-margin">
-                            <span class="uk-text-bold">Year Started at institution</span>
-                            <div> {{user.start_year}} </div>
+                            <span class="uk-text-bold">Faculty</span>
+                            <div> {{user.faculty}} </div>
                         </div>
 
                         <div class="uk-margin">
-                            <span class="uk-text-bold">Academic Qualifications</span>
-                            <div style="white-space: pre-line;"> {{user.qualifications}} </div>
+                            <span class="uk-text-bold">Department</span>
+                            <div> {{user.department}} </div>
                         </div>
-                        {% if user.certifications %}
+
                         <div class="uk-margin">
-                            <span class="uk-text-bold">Certifications</span>
-                            <div style="white-space: pre-line;"> {{user.certifications}} </div>
+                            <span class="uk-text-bold">Contact Email</span>
+                            <div> {{user.email}} </div>
                         </div>
+
+                        {% if re %}
+                            <div class="uk-margin">
+                                <span class="uk-text-bold">Year Started at institution</span>
+                                <div> {{user.start_year}} </div>
+                            </div>
+
+                            {% if user.website_url %}
+                            <div class="uk-margin">
+                                <div class="uk-text-bold">Personal Website</div>
+                                <a class="uk-button-text uk-text-decoration-none" href="https://{{user.website_url}}"> {{user.website_url}} </a>
+                            </div>
+                            {% endif %}
                         {% endif %}
-                        {% if user.website_url %}
-                        <div class="uk-margin">
-                            <div class="uk-text-bold">Personal Website</div>
-                            <a class="uk-button-text uk-text-decoration-none" href="https://{{user.website_url}}"> {{user.website_url}} </a>
-                        </div>
-                        {% endif %}
-                    {% endif %}
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -207,7 +200,7 @@
                                                     <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                         <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
                                                         <div class="uk-margin-small-left">
-                                                            <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                                                            <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
                                                             <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
                                                             <div>
                                                                 {% if pub.pub_records.all()|length < 3 %}

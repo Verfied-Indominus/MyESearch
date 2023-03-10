@@ -20,9 +20,9 @@
             {% for pub in publications %}
                 <div>
                     <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                        <div style="height: 190px;" class="uk-background-cover uk-width-1-5" data-src="{% if not pub.cover %} /static/images/book.jpg {% else %} {{pub.cover}} {% endif %}" uk-img></div>
-                        <div class="uk-margin-small-left uk-width-4-5">
-                            <h4 class="uk-margin-remove"> {{pub.title}} </h4>
+                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
+                        <div class="uk-margin-small-left uk-width-expand">
+                            <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
                             <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
                             <div>
                                 {% if pub.pub_records.all()|length < 3 %}
