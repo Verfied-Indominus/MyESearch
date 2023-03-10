@@ -5,7 +5,7 @@ from App.models.user import User, check_password_hash
 from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email
-from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications, create_pub, add_coauthors
+from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications, create_pub, add_coauthors, delete_pub
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher, get_all_researchers, add_publication_to_researcher
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
@@ -407,16 +407,18 @@ def scholarly_test():
         user = get_user(x)
         pubs = get_pubs(user.first_name, user.last_name)
         num = len(user.pub_records.all())
+
         print(user.first_name, user.last_name)
         print(num, ' added so far')
         print(len(pubs), ' in total')
         for i in range(num, len(pubs)):
-            pub = fill_pub(pubs[i], user.first_name, user.last_name)
+            pub = fill_pub(pubs[i+1], user.first_name, user.last_name)
             if pub:
                 data = {}
                 data['title'] = pub['bib']['title']
                 data['abstract'] = pub['bib']['abstract']
                 data['url'] = pub['pub_url']
+                data['eprint'] = None
                 if 'eprint_url' in pub:
                     if pub['eprint_url'][-3:] == 'pdf':
                         data['free_access'] = True
