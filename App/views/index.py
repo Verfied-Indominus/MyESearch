@@ -5,7 +5,7 @@ from App.models.user import User, check_password_hash
 from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email
-from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications, create_pub, add_coauthors, delete_pub
+from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications, create_pub, add_coauthors, delete_pub, get_pub
 from App.controllers.visitrecords import *
 from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher, get_all_researchers, add_publication_to_researcher
 from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
@@ -93,9 +93,9 @@ def index_page():
 def publication_page(id):
     pub = get_pub_byid(id)
     
-    # if not pub:
-    #     flash('Publication does not exist or is inaccessible')
-    #     return redirect(url_for('.index_page')) 
+    if not pub:
+        flash('Publication does not exist or is inaccessible')
+        return redirect(url_for('.index_page')) 
     
     researchers, topics, pubs = get_publication_suggestions(pub)
 
@@ -105,7 +105,6 @@ def publication_page(id):
         'publication_date': datetime.strptime('Feb 2023', '%b %Y'),
         'pub_type': 'Research Paper' 
         }
-    print(pub)
 
     return render_template("publication.html", pub=pub, researchers=researchers, rtopics=rtopics, pubs=pubs)
 
@@ -403,7 +402,7 @@ def scholarly_test():
     # )
     # print("Vijayanandh Created")
 
-    for x in range(2, 4):
+    for x in range(3, 4):
         user = get_user(x)
         pubs = get_pubs(user.first_name, user.last_name)
         num = len(user.pub_records.all())
@@ -411,48 +410,51 @@ def scholarly_test():
         print(user.first_name, user.last_name)
         print(num, ' added so far')
         print(len(pubs), ' in total')
-        for i in range(num, len(pubs)):
-            pub = fill_pub(pubs[i+1], user.first_name, user.last_name)
-            if pub:
-                data = {}
-                data['title'] = pub['bib']['title']
-                data['abstract'] = pub['bib']['abstract']
-                data['url'] = pub['pub_url']
-                data['eprint'] = None
-                if 'eprint_url' in pub:
-                    if pub['eprint_url'][-3:] == 'pdf':
-                        data['free_access'] = True
+        for i in range(0, len(pubs)):
+            if get_pub(pubs[i]['bib']['title']) is None:
+                pub = fill_pub(pubs[i], user.first_name, user.last_name)
+                if pub:
+                    print(pub, '\n\n')
+                    data = {}
+                    data['title'] = pub['bib']['title']
+                    data['abstract'] = pub['bib']['abstract']
+                    data['eprint'] = ''
+                    if 'pub_url' in pub:
+                        data['url'] = pub['pub_url']
+                    if 'eprint_url' in pub:
+                        if pub['eprint_url'][-3:] == 'pdf':
+                            data['free_access'] = True
+                        else:
+                            data['free_access'] = False
+                        data['eprint'] = pub['eprint_url']
                     else:
-                        data['free_access'] = False
-                    data['eprint'] = pub['eprint_url']
-                else:
-                    if pub['pub_url'][-3:] == 'pdf':
-                        data['free_access'] = True
+                        if 'pub_url' in pub and pub['pub_url'][-3:] == 'pdf':
+                            data['free_access'] = True
+                        else:
+                            data['free_access'] = False
+                    if (pub['bib']['pub_type'] == 'inproceedings') or (pub['bib']['pub_type'] == 'proceedings') or (pub['bib']['pub_type'] == 'conference'):
+                        data['pub_type'] = 'Conference Paper'
                     else:
-                        data['free_access'] = False
-                if (pub['bib']['pub_type'] == 'inproceedings') or (pub['bib']['pub_type'] == 'proceedings') or (pub['bib']['pub_type'] == 'conference'):
-                    data['pub_type'] = 'Conference Paper'
-                else:
-                    data['pub_type'] = pub['bib']['pub_type']
-                data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
-                authors = pub['bib']['author'].split(' and ')
-                temp = []
-                for author in authors:
-                    temp.append(author.split(', '))
-                authors = temp
-                temp = []
-                for author in authors:
-                    author.reverse()
-                    temp.append(' '.join(author))
-                authors = temp
-                if f'{user.first_name} {user.last_name}' in authors:
-                    authors.remove(f'{user.first_name} {user.last_name}')
-                authors = ', '.join(authors)
+                        data['pub_type'] = pub['bib']['pub_type']
+                    data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
+                    authors = pub['bib']['author'].split(' and ')
+                    temp = []
+                    for author in authors:
+                        temp.append(author.split(', '))
+                    authors = temp
+                    temp = []
+                    for author in authors:
+                        author.reverse()
+                        temp.append(' '.join(author))
+                    authors = temp
+                    if f'{user.first_name} {user.last_name}' in authors:
+                        authors.remove(f'{user.first_name} {user.last_name}')
+                    authors = ', '.join(authors)
 
-                publication = create_pub(data)
-                add_coauthors(publication, authors)
-                print(add_publication_to_researcher(user.id, publication.id))
-                print(publication.id)
+                    publication = create_pub(data)
+                    add_coauthors(publication, authors)
+                    print(add_publication_to_researcher(user.id, publication.id))
+                    print(publication.id)
 
     print(get_all_publications())
 

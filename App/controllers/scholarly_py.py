@@ -55,7 +55,7 @@ def get_pubs(fname, lname):
 def search_pub(pub, fname, lname):
     while True:
         try:
-            pub = scholarly.search_pubs(query='allintitle: "{}" author: "{} {}"'.format(pub['bib']['title'], fname, lname))
+            pub = scholarly.search_pubs(query='allintitle: "{}" author: "{} {}"'.format(pub['bib']['title'], fname, lname), citations=False)
             break
         except Exception:
             set_new_proxy()

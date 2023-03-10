@@ -18,6 +18,7 @@ def create_pub(data): #let data be a dictionary
         db.session.commit()
         return new_pub
     except:
+        db.session.rollback()
         return None
 
 def add_coauthors(publication, coauthors):
