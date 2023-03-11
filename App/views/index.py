@@ -406,24 +406,26 @@ def scholarly_test():
     #     create_library(r.id)
     #     create_recents(r.id)
 
-    # publications = get_all_publications()
-    # for p in publications:
-    #     print(p.coauthors)
-    #     coauthors = p.coauthors.split(', ')
-    #     for co in coauthors:
-    #         name  = co.split(' ')
-    #         print(name)
-    #         researcher = get_user_by_name(name[0], name[-1])
-    #         target = []
-    #         if researcher:
-    #             target.append(co)
-    #             add_publication_to_researcher(researcher.id, p.id)
-    #     for t in target:
-    #         print(t)
-    #         coauthors.remove(t)
-    #     coauthors = ', '.join(coauthors)
-    #     print(coauthors)
-    #     add_coauthors(p, coauthors)
+    publications = get_all_publications()
+    for p in publications:
+        print(p.title)
+        print(p.coauthors)
+        coauthors = p.coauthors.split(', ')
+        for re in get_all_researchers():
+            target = []
+            for co in coauthors:
+                if re.first_name in co and re.last_name in co:
+                    print(re.first_name, 'was found and this is co  ', co)
+                    target.append(coauthors.index(co))
+            for t in target:
+                add_publication_to_researcher(re.id, p.id)
+                coauthors.remove(coauthors[t])
+        coauthors = ', '.join(coauthors)
+        add_coauthors(p, coauthors)
+        print('Coauthor List: ', coauthors)
+        print(p.coauthors)
+        print('\n\n')
+
 
     # for pub in get_all_publications():
     #     records = pub.pub_records.all()
@@ -434,15 +436,15 @@ def scholarly_test():
     
     # print('records deleted')
 
-    for x in range(2, 5):
-        user = get_user(x)
-        pubs = get_pubs(user.first_name, user.last_name)
-        print(user.first_name, user.last_name)
-        for i in range(len(pubs)):
-            if not get_pub_containing_title(pubs[i]['bib']['title'].lower()):
-                pub = fill_pub(pubs[i], user.first_name, user.last_name)
-                if pub:
-                    print('Adding authors')
+    # for x in range(2, 5):
+    #     user = get_user(x)
+    #     pubs = get_pubs(user.first_name, user.last_name)
+    #     print(user.first_name, user.last_name)
+    #     for i in range(len(pubs)):
+    #         if not get_pub_containing_title(pubs[i]['bib']['title'].lower()):
+    #             pub = fill_pub(pubs[i], user.first_name, user.last_name)
+    #             if pub:
+    #                 print('Adding authors')
                     # data = {}
                     # data['title'] = pub['bib']['title'].lower()
                     # data['abstract'] = pub['bib']['abstract']
@@ -470,27 +472,28 @@ def scholarly_test():
                     #     data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
                     # else:
                     #     data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
-                    authors = pub['bib']['author'].split(' and ')
-                    temp = []
-                    for author in authors:
-                        temp.append(author.split(', '))
-                    authors = temp
-                    temp = []
-                    for author in authors:
-                        if not (user.first_name in author and user.last_name in author):
-                            author.reverse()
-                            temp.append(' '.join(author))
-                    authors = temp
-                    if f'{user.first_name} {user.last_name}' in authors:
-                        authors.remove(f'{user.first_name} {user.last_name}')
-                    authors = ', '.join(authors)
-                    print(authors)
+                    # authors = pub['bib']['author'].split(' and ')
+                    # temp = []
+                    # for author in authors:
+                    #     temp.append(author.split(', '))
+                    # authors = temp
+                    # temp = []
+                    # for author in authors:
+                    #     if not (user.first_name in author and user.last_name in author):
+                    #         author.reverse()
+                    #         temp.append(' '.join(author))
+                    # authors = temp
+                    # if f'{user.first_name} {user.last_name}' in authors:
+                    #     authors.remove(f'{user.first_name} {user.last_name}')
+                    # authors = ', '.join(authors)
+                    # print(pub['bib']['author'])
+                    # print(authors)
 
-                    publication = get_pub_containing_title(pub['bib']['title'].lower())
-                    if publication:
-                        add_coauthors(publication, authors)
-                        # print(add_publication_to_researcher(user.id, publication.id))
-                        print(publication.id)
+                    # publication = get_pub_containing_title(pub['bib']['title'].lower())
+                    # if publication:
+                    #     add_coauthors(publication, authors)
+                    #     print(add_publication_to_researcher(user.id, publication.id))
+                    #     print(publication.id)
 
     # print(get_all_publications())
 
