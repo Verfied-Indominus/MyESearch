@@ -16,9 +16,10 @@
     {% endif %}
 
     {% if publications %}
-        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
+    <div class="uk-background-muted uk-width-1-1 uk-margin-medium-right">
+        <div class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
             {% for pub in publications %}
-                <div>
+                <div style="padding: 0 30px">
                     <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                         <div class="uk-margin-small-left uk-width-expand">
@@ -33,7 +34,7 @@
                                     {% if pub.coauthors != "" %}
                                         {% set coauthors = pub.coauthors.split(', ') %}
                                     {% endif %}
-                                    
+
                                     {% set limit = 3 - pub.pub_records.all()|length %}
                                     {% if limit < coauthors|length %}
                                         {% for n in range(limit) %}
@@ -57,6 +58,7 @@
                     </div>
                 </div>
             {% endfor %}
-        </li>
+        </div>
+    </div>
     {% endif %}
 {% endblock %}
