@@ -419,7 +419,6 @@ def scholarly_test():
     
     # print('records deleted')
 
-    # for x in range(2, 5):
     user = get_user(1)
     pubs = get_pubs(user.first_name, user.last_name)
     print(user.first_name, user.last_name)
@@ -455,6 +454,9 @@ def scholarly_test():
                     data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
                 else:
                     data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
+                
+                p = create_pub(data)
+                
                 authors = pub['bib']['author'].split(' and ')
                 temp = []
                 for author in authors:
@@ -478,11 +480,9 @@ def scholarly_test():
                 print(pub['bib']['author'])
                 print(authors)
 
-                publication = get_pub_containing_title(pub['bib']['title'].lower())
-                if publication:
-                    add_coauthors(publication, authors)
-                    print(add_publication_to_researcher(user.id, publication.id))
-                    print(publication.id)
+                add_coauthors(p, authors)
+                print(add_publication_to_researcher(user.id, p.id))
+                print(p.id)
 
             # publications = get_all_publications_for_user(user)
             # for p in publications:
