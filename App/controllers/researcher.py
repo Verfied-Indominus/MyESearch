@@ -21,6 +21,12 @@ def add_interests_to_researcher(interests, re_id):
     db.session.commit()
     return True
 
+def delete_researcher_tags(user):
+    for tag in user.research_interests:
+        db.session.delete(tag)
+        db.session.commit()
+    return True
+
 def get_researcher(id):
     return Researcher.query.get(id)
 

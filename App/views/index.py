@@ -2,15 +2,15 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
-from App.controllers.topic import get_research_topics, get_subscribed_topics, get_signup_topics
+from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_user_by_name
-from App.controllers.publication import get_pub_byid, get_all_publications_for_user,get_all_publications, create_pub, add_coauthors, delete_pub, get_pub, get_pub_containing_title
+from App.controllers.publication import *
 from App.controllers.visitrecords import *
-from App.controllers.researcher import add_view, add_search, get_subscribed_researchers, add_interests_to_researcher, get_all_researchers, add_publication_to_researcher
-from App.controllers.suggestions import get_home_suggestions, get_publication_suggestions
-from App.controllers.library import create_library, get_library_from_user, add_publication_to_library, remove_publication_from_library, get_publications_from_library
-from App.controllers.recents import create_recents, get_recents_from_user, add_publication_to_recents, remove_publication_from_recents, get_publications_from_recents
+from App.controllers.researcher import *
+from App.controllers.suggestions import *
+from App.controllers.library import *
+from App.controllers.recents import *
 from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
 from App.controllers.pubrecord import delete_pub_record
@@ -419,70 +419,87 @@ def scholarly_test():
     
     # print('records deleted')
 
-    user = get_user(1)
-    pubs = get_pubs(user.first_name, user.last_name)
-    print(user.first_name, user.last_name)
-    for i in range(len(pubs)):
-        if not get_pub_containing_title(pubs[i]['bib']['title'].lower()):
-            pub = fill_pub(pubs[i], user.first_name, user.last_name)
-            if pub:
-                print('Adding authors')
-                data = {}
-                data['title'] = pub['bib']['title'].lower()
-                data['abstract'] = pub['bib']['abstract']
-                data['eprint'] = ''
-                if 'pub_url' in pub:
-                    data['url'] = pub['pub_url']
-                if 'eprint_url' in pub:
-                    if 'pdf' in pub['eprint_url'][-18:]:
-                        data['free_access'] = True
-                    else:
-                        data['free_access'] = False
-                    data['eprint'] = pub['eprint_url']
-                else:
-                    if 'pub_url' in pub and 'pdf' in pub['pub_url'][-18:]:
-                        data['free_access'] = True
-                    else:
-                        data['free_access'] = False
-                if (pub['bib']['pub_type'] == 'inproceedings') or (pub['bib']['pub_type'] == 'proceedings') or (pub['bib']['pub_type'] == 'conference'):
-                    data['pub_type'] = 'conference paper'
-                else:
-                    data['pub_type'] = pub['bib']['pub_type'].lower()
-                
-                if pub['bib']['pub_year'] == 'NA':
-                    print(pub['bib']['pub_year'])
-                    data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
-                else:
-                    data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
-                
-                p = create_pub(data)
-                
-                authors = pub['bib']['author'].split(' and ')
-                temp = []
-                for author in authors:
-                    temp.append(author.split(', '))
-                authors = temp
-                temp = []
-                for author in authors:
-                    if not (user.first_name in author and user.last_name in author):
-                        author.reverse()
-                        temp.append(' '.join(author))
-                authors = temp
-                for re in get_all_researchers():
-                    target = []
-                    for co in authors:
-                        if re.first_name in co and re.last_name in co:
-                            target.append(authors.index(co))
-                    for t in target:
-                        add_publication_to_researcher(re.id, p.id)
-                        authors.remove(authors[t])
-                authors = ', '.join(authors)
-                print(pub['bib']['author'])
-                print(authors)
+    interests = [
+            ['Artificial Intelligence'],
+            ['Artificial Intelligence in Education', 'Learning Engineering', 'Semantic Web Technologies', 'Natural Language Processing', 'Intelligent Learning Environments'],
+            ['Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection'],
+            ['Image Processing', 'Image Segmenation', 'Image and Video Security']
+        ]
 
-                add_coauthors(p, authors)
-                print(add_publication_to_researcher(user.id, p.id))
-                print(p.id)
+    for n in range(1, 5):
+        user = get_user(n)
+        print(user.first_name)
+        delete_researcher_tags(user)
+        add_interests_to_researcher(interests[n-1], user.id)
+
+        for tag in user.research_interests:
+            print(tag.topic.name)
+        print('\n')
+
+    # user = get_user(1)
+    # pubs = get_pubs(user.first_name, user.last_name)
+    # print(user.first_name, user.last_name)
+    # for i in range(len(pubs)):
+    #     if not get_pub_containing_title(pubs[i]['bib']['title'].lower()):
+    #         pub = fill_pub(pubs[i], user.first_name, user.last_name)
+    #         if pub:
+    #             print('Adding authors')
+    #             data = {}
+    #             data['title'] = pub['bib']['title'].lower()
+    #             data['abstract'] = pub['bib']['abstract']
+    #             data['eprint'] = ''
+    #             if 'pub_url' in pub:
+    #                 data['url'] = pub['pub_url']
+    #             if 'eprint_url' in pub:
+    #                 if 'pdf' in pub['eprint_url'][-18:]:
+    #                     data['free_access'] = True
+    #                 else:
+    #                     data['free_access'] = False
+    #                 data['eprint'] = pub['eprint_url']
+    #             else:
+    #                 if 'pub_url' in pub and 'pdf' in pub['pub_url'][-18:]:
+    #                     data['free_access'] = True
+    #                 else:
+    #                     data['free_access'] = False
+    #             if (pub['bib']['pub_type'] == 'inproceedings') or (pub['bib']['pub_type'] == 'proceedings') or (pub['bib']['pub_type'] == 'conference'):
+    #                 data['pub_type'] = 'conference paper'
+    #             else:
+    #                 data['pub_type'] = pub['bib']['pub_type'].lower()
+                
+    #             if pub['bib']['pub_year'] == 'NA':
+    #                 print(pub['bib']['pub_year'])
+    #                 data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
+    #             else:
+    #                 data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
+                
+    #             p = create_pub(data)
+                
+    #             authors = pub['bib']['author'].split(' and ')
+    #             temp = []
+    #             for author in authors:
+    #                 temp.append(author.split(', '))
+    #             authors = temp
+    #             temp = []
+    #             for author in authors:
+    #                 if not (user.first_name in author and user.last_name in author):
+    #                     author.reverse()
+    #                     temp.append(' '.join(author))
+    #             authors = temp
+    #             for re in get_all_researchers():
+    #                 target = []
+    #                 for co in authors:
+    #                     if re.first_name in co and re.last_name in co:
+    #                         target.append(authors.index(co))
+    #                 for t in target:
+    #                     add_publication_to_researcher(re.id, p.id)
+    #                     authors.remove(authors[t])
+    #             authors = ', '.join(authors)
+    #             print(pub['bib']['author'])
+    #             print(authors)
+
+    #             add_coauthors(p, authors)
+    #             print(add_publication_to_researcher(user.id, p.id))
+    #             print(p.id)
 
             # publications = get_all_publications_for_user(user)
             # for p in publications:

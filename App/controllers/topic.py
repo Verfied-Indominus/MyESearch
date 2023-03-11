@@ -32,6 +32,9 @@ def get_topic_id(id):
     return Topic.query.filter_by(id=id).first()
 
 def get_all_topics():
+    return Topic.query.all()
+
+def get_all_topics_json():
     return [topic.toDict() for topic in Topic.query.all()]
 
 def get_signup_topics():
