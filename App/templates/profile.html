@@ -85,7 +85,7 @@
                                     <hr>
                                     <div class="uk-display-block">
                                         {% for int in interests %}
-                                            <a href="/topic/1" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int.name}} </a>
+                                            <a href="/topic/{{int.id}}" class="uk-button uk-button-text uk-text-capitalize uk-text-default uk-text-left uk-margin-small-bottom"> {{int.name}} </a>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@
                                 
                                 <ul class="uk-switcher">
                                     {% if re %}
-                                        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                             {% if not pubs|length %}
 
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
@@ -222,7 +222,7 @@
                                         </li>
                                     {% endif %}
                                     {% if current_user.id == user.id %}
-                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                             {% if not library|length %}
 
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
@@ -260,7 +260,7 @@
                                             {% endif%}
                                         </li>
 
-                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                             {% if not recents|length %}
 
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>

@@ -7,10 +7,10 @@
 {% block content %}
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
-        <div class="uk-card lightcyan-background uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
+        <div class="uk-card lightred-background uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
             <div class="uk-margin-medium-top uk-margin-medium-bottom">
                 <div class="uk-margin uk-flex uk-flex-center">
-                    <div class=" uk-background-cover uk-box-shadow-large" data-src="/static/images/book.jpg" style="width: 280px; height: 380px;" uk-img></div>
+                    <div class=" uk-background-cover uk-box-shadow-large" data-src="{% if not pub.cover %} /static/images/publications2/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" style="width: 280px; height: 380px;" uk-img></div>
                 </div>
             
                 <div class="uk-margin-medium-top">
@@ -36,11 +36,11 @@
         <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
             <div class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
-                    <h3 class="uk-margin-small-bottom uk-text-capitalize">This is the supposed title for this publication although it is not a true title</h3>
+                    <h3 class="uk-margin-small-bottom uk-text-capitalize"> {{pub.title|title}} </h3>
                     <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
                     <hr>
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
-                        {% for top in rtopics %}
+                        {% for top in topics %}
                             <a href="" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{top.name}} </a>
                         {% endfor %}
                     </div>                   
@@ -52,9 +52,8 @@
                     <h4>Authors</h4>
                     <hr class="uk-margin-small">
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
-                        <!-- Need to add all() after pub_records here when pubs are added -->
-                        {% for rec in pub.pub_records %}
-                            <a href="" style="padding: 0 10px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{rec.researcher.first_name}} {{rec.researcher.last_name}} </a>
+                        {% for rec in pub.pub_records.all() %}
+                            <a href="/profile/{{rec.researcher.id}}" style="padding: 0 10px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('{% if rec.researcher.image_url %} {{rec.researcher.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{rec.researcher.first_name}} {{rec.researcher.last_name}} </a>
                         {% endfor %}
                     </div>  
                 </div>
@@ -65,7 +64,7 @@
                     <h4 class="uk-margin-remove">Abstract</h4>
                     <hr class="uk-margin-small">        
                     <div id="abstract" style="height: 7rem; overflow-y: hidden;" class="uk-inline uk-width-1-1">
-                        Cultural awareness, when applied to Intelligent Learning Environments (ILEs), contours the overall appearance, behaviour, and content used in these systems through the use of culturally-relevant student data and information. In most cases, these adaptations are system-initiated with little to no consideration given to student-initiated control over the extent of cultural-awareness being used. This paper examines some of the issues relevant to these challenges through the development of the ICON (Instructional Cultural cONtextualisation) system. The paper explores computational approaches for modelling the diversity of students within subcultures, and the necessary semantic formalisms for representing and reasoning about cultural backgrounds at an appropriate level of granularity for ILEs. The paper investigates how student-initiated control of dynamic cultural adaptation of educational content can be achieved in ILEs, and examines the effects of cultural variations of language formality and contextualisation on student preferences for different types of educational content. Evaluations revealed preliminary insight into quantifiable thresholds at which student perception for specific types of culturally-contextualised content vary. The findings further support the notion put forth in the paper that student-initiated control of cultural contextualisation should be featured in ILEs aiming to cater for diverse groups of students.
+                        {{pub.abstract}}
                         <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><button class="uk-button uk-button-danger" onclick="readMore(this);">Read More</button></div>
                     </div>          
                 </div>
@@ -114,14 +113,14 @@
                             <li><a href="">Most popular</a></li>
                         </ul> 
                         
-                        <ul class="uk-switcher">
+                        <ul class="uk-switcher uk-height-max-large" uk-overflow-auto>
 
                         {% if researchers %}
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                 {% for pub in researchers %}
                                     <div>
                                         <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left">
                                                 <h4 class="uk-margin-remove"> {{pub.title}} </h4>
                                                 <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
@@ -146,11 +145,11 @@
                         {% endif %}
 
                         {% if topics %}
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                 {% for pub in topics %}
                                     <div>
                                         <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left">
                                                 <h4 class="uk-margin-remove"> {{pub.title}} </h4>
                                                 <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
@@ -174,11 +173,11 @@
                             </li>
                         {% endif %}
 
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;">
+                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                 {% for pub in pubs %}
                                     <div>
                                         <div class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{{pub.cover}}" uk-img></div>
+                                            <div style="height: 140px; width: 112px;" class="uk-background-cover" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left">
                                                 <h4 class="uk-margin-remove"> {{pub.title}} </h4>
                                                 <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
@@ -195,7 +194,6 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                            <a href="#" class="uk-overlay uk-position-cover"></a>
                                         </div>
                                     </div>
                                 {% endfor %}

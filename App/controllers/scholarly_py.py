@@ -62,13 +62,27 @@ def search_pub(pub, fname, lname):
             print('search')
     return pub
 
+def search_pub_again(pub, fname, lname):
+    while True:
+        try:
+            pub = scholarly.search_pubs(query='allintitle: "{}"'.format(pub['bib']['title']), citations=False)
+            break
+        except Exception:
+            set_new_proxy()
+            print('search again')
+    return pub
+
 
 def fill_pub(pub, fname, lname):
     pub1 = search_pub(pub, fname, lname)
     try:
         pub1 = next(pub1)
     except Exception:
-        return None
+        pub1 = search_pub_again(pub, fname, lname)
+        try:
+            pub1 = next(pub1)
+        except Exception:
+            return None
     while True:
         try:
             fill = scholarly.fill(pub1)

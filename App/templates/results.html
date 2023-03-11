@@ -29,6 +29,18 @@
                                     {% for n in range(pub.pub_records.all()|length) %}
                                         <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
                                     {% endfor %}
+                                    {% set coauthors = pub.coauthors.split(', ') %}
+                                    {% set limit = 3 - pub.pub_records.all()|length %}
+                                    {% if limit < coauthors|length %}
+                                        {% for n in range(limit) %}
+                                            <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
+                                        {% endfor %}
+                                        {% if coauthors|length - limit > 0 %} +{{coauthors|length - limit}} More {% endif %}
+                                    {% else %}    
+                                        {% for n in range(coauthors|length) %}
+                                            <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
+                                        {% endfor %}                              
+                                    {% endif %}
                                 {% else %}
                                     {% for n in range(3) %}
                                         <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
