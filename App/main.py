@@ -47,4 +47,3 @@ def create_app(config={}):
     create_db(app)
     app.app_context().push()
     return app
-

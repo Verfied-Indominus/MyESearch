@@ -16,15 +16,47 @@
     {% endif %}
 
     {% if publications %}
-    <div class="uk-background-muted uk-width-1-1 uk-margin-medium-right">
-        <div class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
+    <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter">
+        <h3 class="uk-text-bold uk-padding uk-padding-remove-bottom">All Publications ({{publications|length}} Present) </h3>
+
+        <div class="uk-grid-small uk-grid-divider uk-child-width-auto uk-padding uk-padding-remove-vertical" uk-grid>
+            <div>
+                <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                    <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                    <li><a href="">Year <span class="uk-margin-small-right" uk-icon="chevron-down"></span></a></li>
+                    <div style="min-width: 100px;" uk-dropdown="mode: click" class="uk-padding-remove scroll">
+                        <ul class="uk-nav uk-drowpdown-nav uk-flex-column uk-height-medium">
+                            {% for year in range(now.year, 1969, -1) %}
+                                <li uk-filter-control="[data-year='{{year}}']"><a href="#"> {{year}} </a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <li uk-filter-control="[data-color='white']"><a href="#">White</a></li>
+                    <li uk-filter-control="[data-color='blue']"><a href="#">Blue</a></li>
+                    <li uk-filter-control="[data-color='black']"><a href="#">Black</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                    <li uk-filter-control="[data-size='small']"><a href="#">Small</a></li>
+                    <li uk-filter-control="[data-size='medium']"><a href="#">Medium</a></li>
+                    <li uk-filter-control="[data-size='large']"><a href="#">Large</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <ul class="js-filter uk-grid uk-margin-remove-left uk-margin-remove-top uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: li > .uk-card">
             {% for pub in publications %}
-                <div style="padding: 0 30px">
-                    <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                <li data-year="{{pub.publication_date.strftime('%Y')}}" style="padding: 0 30px" class="uk-grid-margin">
+                    <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                         <div class="uk-margin-small-left uk-width-expand">
                             <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
-                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%Y')}} </div>
                             <div>
                                 {% if pub.pub_records.all()|length < 3 %}
                                     {% for n in range(pub.pub_records.all()|length) %}
@@ -55,9 +87,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </li>
             {% endfor %}
-        </div>
+        </ul>
     </div>
     {% endif %}
 {% endblock %}
