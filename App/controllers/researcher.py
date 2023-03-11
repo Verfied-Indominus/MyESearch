@@ -3,19 +3,13 @@ from App.models import Researcher
 from App.models import ResearcherTag
 from App.models import PubRecord
 from App.controllers import get_topic_by_name
+from App.controllers.pubrecord import add_pub_record
 
 def get_all_researchers():
     return Researcher.query.all()
 
 def add_publication_to_researcher(re_id, pub_id):
-    try:
-        record = PubRecord(re_id, pub_id)
-        db.session.add(record)
-        db.session.commit()
-        return True
-    except Exception:
-        db.session.rollback()
-        return False
+    return add_pub_record(re_id, pub_id)
     
 def add_interests_to_researcher(interests, re_id):
     for int in interests:
