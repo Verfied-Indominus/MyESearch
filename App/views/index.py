@@ -491,9 +491,10 @@ def scholarly_test():
                 print(pub['bib']['author'])
                 print(authors)
 
-                add_coauthors(p, authors)
-                print(add_publication_to_researcher(user.id, p.id))
-                print(p.id)
+                if p:
+                    add_coauthors(p, authors)
+                    print(add_publication_to_researcher(user.id, p.id))
+                    print(p.id)
 
             # publications = get_all_publications_for_user(user)
             # for p in publications:
