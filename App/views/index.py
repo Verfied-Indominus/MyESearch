@@ -126,7 +126,10 @@ def login_page():
 
 @index_views.route('/logout', methods=['GET'])
 def logout():
-    logout_user()
+    if not isinstance(current_user, User):
+        flash('Not currently logged in')
+    else:
+        logout_user()
     return redirect(url_for('.index_page'))
 
 @index_views.route('/signup', methods=['GET', 'POST'])

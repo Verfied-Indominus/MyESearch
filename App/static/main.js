@@ -1,5 +1,6 @@
 let ol = document.getElementById('overlay');
 let messages;
+let run = false;
 
 function pageLoad(){
     ol.style.opacity = '0';
@@ -21,7 +22,13 @@ function getMessages(msg){
     }
 }
 
-window.addEventListener('load', pageLoad);
+window.addEventListener('load', async function (){
+    pageLoad();
+    if (run === false){
+        run = true;
+        // await getPubs();
+    }
+});
 
 let departments = {
     'Engineering': [
@@ -308,6 +315,9 @@ function readMore(btn){
 }
 
 async function getPubs(){
+    getPubs = noop;
     let response = await fetch('/test');
     console.log(response.text);
 }
+
+function noop(){}
