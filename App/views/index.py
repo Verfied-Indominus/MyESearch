@@ -68,7 +68,7 @@ def all_publications():
 def all_researchers():
     researchers = get_all_researchers()
     shuffle(researchers)
-    return render_template("results.html",researchers = researchers)
+    return render_template("results.html",researchers=researchers, faculties=faculties)
 
 @index_views.route('/search',methods=['POST'])
 def search():

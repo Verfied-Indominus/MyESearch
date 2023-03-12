@@ -33,14 +33,14 @@ let departments = {
         'Electrical & Computer Engineering',
         'Mechanical and Manufacturing Enterprise Research',
     ],
-    'Food & Agriculture': [
+    'Food &amp; Agriculture': [
         'Agricultural Economics and Extension',
         'Food Production',
         'Publications and Communications Unit',
         'University Farms',
         'Geography'
     ],
-    'Humanities & Education': [
+    'Humanities &amp; Education': [
         'School of Education',
         'Centre for Language Learning',
         'Creative and Festival Arts',
@@ -65,7 +65,7 @@ let departments = {
         'Caribbean Centre for Health Systems Research and Development',
         'Centre for Medical Sciences Education',
     ],
-    'Science & Technology': [
+    'Science &amp; Technology': [
         'Chemistry',
         'Physics',
         'Life Sciences',
@@ -94,6 +94,27 @@ let departments = {
     'Sport': [
         'St. Augustine Academy of Sport'
     ],
+}
+
+let dpt_section = document.getElementById("department_section");
+let dpt_listing = document.getElementById("department_listing");
+let testing = document.getElementById("testing");
+
+function get_selection(btn){
+    fac = btn.childNodes[0].innerHTML.trim();
+    if (fac === "All"){
+        dpt_section.style.display = 'none';
+    }
+    else{
+        dpt_section.style.display = 'block';
+        let html = '';
+        for (let dpt in departments[fac]){
+            html += `
+                <li data-faculty="${fac}" uk-filter-control="filter: [data-department='${departments[fac][dpt]}']; group: data-department"><a href="#"> ${departments[fac][dpt]} </a></li>
+            `;
+        }
+        dpt_listing.innerHTML = html;
+    }
 }
 
 let re_faculty = document.getElementById("re_faculty_select");
