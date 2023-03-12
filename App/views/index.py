@@ -57,7 +57,12 @@ departments = [
 def all_publications():
     publications = get_all_publications()
     shuffle(publications)
-    return render_template("results.html",publications=publications, now=datetime.utcnow())
+    types = [
+        'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'method', 'misc',
+        'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal', 
+        'technical report', 'techreport', 'thesis'
+    ]
+    return render_template("results.html",publications=publications, now=datetime.utcnow(), types=types)
 
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
