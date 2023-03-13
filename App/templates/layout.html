@@ -78,9 +78,9 @@
     
         <div class="uk-width-1-2 uk-margin-small-right uk-navbar-item uk-navbar-right">
           <div class="uk-margin uk-width-1-1">
-            <form class="uk-search uk-search-default uk-width-1-1">
-                <a href="" class="uk-search-icon-flip" uk-search-icon></a>
-                <input class="uk-search-input" type="search" placeholder="Search for publications, researchers, topics and more" aria-label="Search">
+            <form method="post" action="/search" class="uk-search uk-search-default uk-width-1-1">
+                <a onclick="this.parentNode.submit()" class="uk-search-icon-flip" uk-search-icon></a>
+                <input class="uk-search-input" type="search" name="search" placeholder="Search for publications, researchers, topics and more" aria-label="Search">
             </form>
         </div>
       </div>

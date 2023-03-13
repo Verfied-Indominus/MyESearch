@@ -12,8 +12,8 @@ def add_publication_to_researcher(re_id, pub_id):
     return add_pub_record(re_id, pub_id)
     
 def add_interests_to_researcher(interests, re_id):
-    for int in interests:
-        topic = get_topic_by_name(int)
+    for inte in interests:
+        topic = get_topic_by_name(inte)
         if not topic:
             return False
         tag = ResearcherTag(re_id, topic.id)
@@ -32,6 +32,9 @@ def get_researcher(id):
 
 def get_researcher_by_email(email):
     return Researcher.query.filter_by(email=email).first()
+
+def get_researcher_by_name(first_name, last_name):
+    return
 
 def get_subscribed_researchers(user):
     researchers = []

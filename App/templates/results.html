@@ -7,6 +7,10 @@
 {% block content %}
 {% autoescape off %}
 
+    {% if search %}
+        
+    {% endif %}
+
     {% if researchers %}
         <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter;">
             <h3 class="uk-text-bold uk-padding uk-padding-remove-bottom">All Researchers ({{researchers|length}} Present) </h3>

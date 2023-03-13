@@ -14,6 +14,7 @@ from App.controllers.recents import *
 from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
 from App.controllers.pubrecord import delete_pub_record
+from App.controllers.search import parse_search
 from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
@@ -73,10 +74,12 @@ def all_researchers():
 
 @index_views.route('/search',methods=['POST'])
 def search():
-    results = []
-    terms = request.form
-    # results  = searchFunction(terms)
-    return render_template('results.html',results = results)
+    if request.method == 'POST':
+        form = request.form
+        search_terms = form['search']
+        results = [authors, publications, topics] = parse_search(search_terms)
+        print(results)
+        return render_template('results.html', results=results, search=True)
 
 
 
