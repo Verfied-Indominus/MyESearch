@@ -308,15 +308,17 @@ async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
 
-function readMore(btn){
+async function readMore(btn, id){
     let abs = document.getElementById('abstract');
     btn.parentNode.style.display = 'none';
     abs.style.overflowY = 'auto';
+    let response = await fetch(`/publication/addread/${id}`);
+    console.log(response);
 }
 
 async function getPubs(){
     getPubs = noop;
-    let response = await fetch('/test');
+    let response = await fetch('/update');
     console.log(response.text);
 }
 

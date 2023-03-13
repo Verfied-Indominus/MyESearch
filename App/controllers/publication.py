@@ -73,3 +73,19 @@ def get_all_publications():
 
 def get_pub_containing_title(title):
     return Publication.query.filter(Publication.title.like(title)).first()
+
+def add_read_to_pub(pub):
+    pub.reads += 1
+    db.session.commit()
+
+def add_download_to_pub(pub):
+    pub.downloads += 1
+    db.session.commit()
+
+def add_citation_to_pub(pub):
+    pub.citations += 1
+    db.session.commit()
+
+def add_search_to_pub(pub):
+    pub.searches += 1
+    db.session.commit()

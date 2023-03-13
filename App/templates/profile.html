@@ -67,7 +67,13 @@
                                 <div class="border uk-card uk-card-default uk-padding-small uk-border-rounded">
                                     <div class="uk-text-bold">Academic Qualifications</div>
                                     <hr>
-                                    <div style="white-space: pre-line;" class="uk-display-block"> {{user.qualifications}} </div>
+                                    {% set qualifications = user.qualifications.split('\n') %}
+                        
+                                    <div class="uk-display-block">
+                                        {% for qualification in qualifications %}
+                                            <div class="uk-margin-small-bottom"> {{qualification|trim}} </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                             
@@ -97,7 +103,7 @@
                                     <hr>
                                     <div class="uk-display-block">
                                         {% for skill in skills %}
-                                            <div class="uk-margin-small-bottom"> {{skill}} </div>
+                                            <div class="uk-margin-small-bottom"> {{skill|trim}} </div>
                                         {% endfor %}
                                     </div>
                                 </div>

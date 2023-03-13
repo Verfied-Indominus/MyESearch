@@ -100,10 +100,14 @@
             <a href="#">
               <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
             </a>
-            <div style="min-width: 150px;" class="uk-card uk-card-default uk-background-muted uk-padding-small uk-width-auto" uk-drop="mode: click">
+            <div style="min-width: 120px;" class="uk-card uk-card-default uk-background-muted uk-padding-small uk-width-auto" uk-drop="mode: click">
               <ul class="uk-nav">
-                <li><a href="/login" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Login <span class="uk-margin-auto-left" uk-icon="sign-in"></span></a></li>
-                <li><a href="/logout" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Logout <span class="uk-margin-auto-left" uk-icon="sign-out"></span></a></li>
+                {% if current_user.is_authenticated %}
+                  <li><a href="/logout" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Logout <span class="uk-margin-auto-left" uk-icon="sign-out"></span></a></li>
+                {% else %}
+                  <li><a href="/login" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Login <span class="uk-margin-auto-left" uk-icon="sign-in"></span></a></li>
+                  <li><a href="/signup" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Signup <span class="uk-margin-auto-left" uk-icon="plus-circle"></span></a></li>
+                {% endif %}
               </ul>
               
               
