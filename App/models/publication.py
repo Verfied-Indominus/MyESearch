@@ -12,8 +12,8 @@ class Publication(db.Model):
     downloads = db.Column(db.Integer, nullable=False)
     searches = db.Column(db.Integer, nullable=False)
     cover = db.Column(db.String(120))
-    url = db.Column(db.String(120))
-    eprint = db.Column(db.String(120))
+    url = db.Column(db.String(400)) 
+    eprint = db.Column(db.String(400))
     coauthors = db.Column(db.String(100))
     tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
@@ -49,5 +49,7 @@ class Publication(db.Model):
             'reads': self.reads,
             'citations': self.citations,
             'downloads': self.downloads,
-            'searches': self.searches
+            'searches': self.searches,
+            'coauthors': self.coauthors,
+            'pub_records': self.pub_records
         }

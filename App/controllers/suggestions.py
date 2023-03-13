@@ -66,9 +66,9 @@ def get_publication_suggestions(pub):
         return researchers, topics, pubs
 
     for rec in pub.pub_records:
-        researchers = get_researcher_pubs(rec.researcher.id)
+        researchers.extend(get_researcher_pubs(rec.researcher.id))
     for tag in pub.tags:
-        topics = get_topic_pubs(tag.topic.id)
+        topics.extend(get_topic_pubs(tag.topic.id))
     
     pubs = get_ranked_pubs()
     shuffle(pubs)
@@ -79,10 +79,11 @@ def get_publication_suggestions(pub):
 
 def get_researcher_pubs(id):
     re = get_researcher(id)
-    re_pubs = []
-    for rec in re.pub_records:
-        re_pubs.append(rec.publication)   
-    return re_pubs     
+    # re_pubs = []
+    # for rec in re.pub_records:
+    #     re_pubs.append(rec.publication)   
+    # return re_pubs     
+    return [rec.publication for rec in re.pub_records.all()]
 
 def get_topic_pubs(id):
     topic = get_topic(id)
@@ -93,13 +94,15 @@ def get_topic_pubs(id):
 
 def get_ranked_pubs():
     ranked_pubs = []
-    reads = Publication.query.order_by(Publication.reads.desc()).limit(20)
-    citations = Publication.query.order_by(Publication.citations.desc()).limit(20)
-    searches = Publication.query.order_by(Publication.searches.desc()).limit(20)
+    reads = Publication.query.order_by(Publication.reads.desc()).limit(10)
+    citations = Publication.query.order_by(Publication.citations.desc()).limit(10)
+    searches = Publication.query.order_by(Publication.searches.desc()).limit(10)
 
     ranked_pubs.extend(reads)
     ranked_pubs.extend(citations)
     ranked_pubs.extend(searches)
+
+    ranked_pubs = list(set(ranked_pubs))
 
     return ranked_pubs
     

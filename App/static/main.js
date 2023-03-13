@@ -316,8 +316,15 @@ async function readMore(btn, id){
     console.log(response);
 }
 
+// pubstest = document.getElementById("pubstest");
+// async function loadPubSuggestions(id){
+//     // let response = await fetch(`/loadpubsuggestions/${id}`);
+//     // pubstest.innerHTML = response;
+//     alert('It working');
+// }
+
 async function getPubs(){
-    getPubs = noop;
+    // getPubs = noop;
     let response = await fetch('/update');
     console.log(response.text);
 }

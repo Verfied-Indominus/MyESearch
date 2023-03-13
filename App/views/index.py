@@ -62,6 +62,7 @@ def all_publications():
         'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal', 
         'technical report', 'techreport', 'thesis'
     ]
+    publications = [pub.toDict() for pub in publications]
     return render_template("results.html",publications=publications, now=datetime.utcnow(), types=types)
 
 @index_views.route('/all/researchers',methods=['GET'])
@@ -109,6 +110,14 @@ def publication_page(id):
     researchers, topics, pubs = get_publication_suggestions(pub)
 
     return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
+    # return render_template("publication.html", pub=pub)
+
+@index_views.route('/loadpubsuggestions/<id>', methods=['GET'])
+def load_pub_suggestions(id):
+    pub = get_pub_byid(id)
+
+    researchers, topics, pubs = get_publication_suggestions(pub)
+    return [[r.toDict() for r in researchers], [t.toDict() for t in topics], [p.toDict() for p in pubs]]
 
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():

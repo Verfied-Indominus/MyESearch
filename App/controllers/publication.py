@@ -14,11 +14,14 @@ def create_pub(data): #let data be a dictionary
             url=data['url'],
             eprint=data['eprint']
         )
+        print('Pub Created')
         db.session.add(new_pub)
         db.session.commit()
+        print("Pub Added to DB")
         return new_pub
     except:
         db.session.rollback()
+        print("Error")
         return None
 
 def add_coauthors(publication, coauthors):

@@ -70,9 +70,12 @@
                 <div class="uk-padding">
                     <h4 class="uk-margin-remove">Abstract</h4>
                     <hr class="uk-margin-small">        
-                    <div id="abstract" style="height: 7rem; overflow-y: hidden;" class="uk-inline uk-width-1-1">
+                    <div id="abstract" class="uk-inline uk-width-1-1">
                         {{pub.abstract}}
-                        <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><a href="{{pub.url}}" class="uk-button uk-button-danger" onclick="readMore(this, {{pub.id}});">Read More</a></div>
+                        <!-- height: 7rem; -->
+                        
+                        <!-- <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><a href="{{pub.url}}" class="uk-button uk-button-danger" onclick="readMore(this, {{pub.id}});">Read More</a></div> -->
+                        <div class="uk-flex uk-flex-center"><a href="#" class="uk-button uk-button-danger">Read More</a></div>
                     </div>          
                 </div>
             </div>
@@ -124,24 +127,25 @@
 
                         {% if researchers %}
                             <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for pub in researchers %}
+                                {% for p in researchers %}
+                                {% if p != pub %}
                                     <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
+                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
                                                 <div>
-                                                    {% if pub.pub_records.all()|length < 2 %}
-                                                        {% for n in range(pub.pub_records.all()|length) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                    {% if p.pub_records.all()|length < 2 %}
+                                                        {% for n in range(p.pub_records.all()|length) %}
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
                     
-                                                        {% if pub.coauthors != "" %}
-                                                            {% set coauthors = pub.coauthors.split(', ') %}
+                                                        {% if p.coauthors != "" %}
+                                                            {% set coauthors = p.coauthors.split(', ') %}
                                                         {% endif %}
                     
-                                                        {% set limit = 2 - pub.pub_records.all()|length %}
+                                                        {% set limit = 2 - p.pub_records.all()|length %}
                                                         {% if limit < coauthors|length %}
                                                             {% for n in range(limit) %}
                                                                 <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
@@ -154,38 +158,40 @@
                                                         {% endif %}
                                                     {% else %}
                                                         {% for n in range(2) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
-                                                        {% if pub.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
+                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
                                                     {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                {% endif %}
                                 {% endfor %}
                             </li>
                         {% endif %}
 
                         {% if topics %}
                             <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for pub in topics %}
+                                {% for p in topics %}
+                                {% if p != pub %}
                                     <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
+                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
                                                 <div>
-                                                    {% if pub.pub_records.all()|length < 2 %}
-                                                        {% for n in range(pub.pub_records.all()|length) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                    {% if p.pub_records.all()|length < 2 %}
+                                                        {% for n in range(p.pub_records.all()|length) %}
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
                     
-                                                        {% if pub.coauthors != "" %}
-                                                            {% set coauthors = pub.coauthors.split(', ') %}
+                                                        {% if p.coauthors != "" %}
+                                                            {% set coauthors = p.coauthors.split(', ') %}
                                                         {% endif %}
                     
-                                                        {% set limit = 2 - pub.pub_records.all()|length %}
+                                                        {% set limit = 2 - p.pub_records.all()|length %}
                                                         {% if limit < coauthors|length %}
                                                             {% for n in range(limit) %}
                                                                 <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
@@ -198,37 +204,39 @@
                                                         {% endif %}
                                                     {% else %}
                                                         {% for n in range(2) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
-                                                        {% if pub.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
+                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
                                                     {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                {% endif %}
                                 {% endfor %}
                             </li>
                         {% endif %}
 
                             <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for pub in pubs %}
+                                {% for p in pubs %}
+                                {% if p != pub %}
                                     <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
+                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
                                             <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
+                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
+                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
                                                 <div>
-                                                    {% if pub.pub_records.all()|length < 2 %}
-                                                        {% for n in range(pub.pub_records.all()|length) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                    {% if p.pub_records.all()|length < 2 %}
+                                                        {% for n in range(p.pub_records.all()|length) %}
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
                     
-                                                        {% if pub.coauthors != "" %}
-                                                            {% set coauthors = pub.coauthors.split(', ') %}
+                                                        {% if p.coauthors != "" %}
+                                                            {% set coauthors = p.coauthors.split(', ') %}
                                                         {% endif %}
                     
-                                                        {% set limit = 2 - pub.pub_records.all()|length %}
+                                                        {% set limit = 2 - p.pub_records.all()|length %}
                                                         {% if limit < coauthors|length %}
                                                             {% for n in range(limit) %}
                                                                 <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
@@ -241,14 +249,15 @@
                                                         {% endif %}
                                                     {% else %}
                                                         {% for n in range(2) %}
-                                                            <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
+                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
-                                                        {% if pub.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
+                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
                                                     {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                {% endif %}
                                 {% endfor %}
                             </li>
                         </ul>
