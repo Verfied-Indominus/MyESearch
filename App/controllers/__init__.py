@@ -15,4 +15,3 @@ from .researchersubs import *
 from .topicsub import *
 from .visitrecords import *
 from .scholarly_py import *
-from .search import *
