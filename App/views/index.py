@@ -57,13 +57,16 @@ departments = [
 @index_views.route('/all/publications',methods=['GET'])
 def all_publications():
     publications = get_all_publications()
+    print("all pubs retrieved")
     shuffle(publications)
+    print('shuffling done')
     types = [
         'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'method', 'misc',
         'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal', 
         'technical report', 'techreport', 'thesis'
     ]
     publications = [pub.toDict() for pub in publications]
+    print('all pubs converted to dict')
     return render_template("results.html",publications=publications, now=datetime.utcnow(), types=types)
 
 @index_views.route('/all/researchers',methods=['GET'])

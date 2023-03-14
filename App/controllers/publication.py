@@ -75,7 +75,7 @@ def get_all_publications():
     return Publication.query.all()
 
 def get_pub_containing_title(title):
-    return Publication.query.filter(Publication.title.like(title)).first()
+    return Publication.query.filter(Publication.title.contains(title)).first()
 
 def add_read_to_pub(pub):
     pub.reads += 1

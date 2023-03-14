@@ -61,29 +61,30 @@ def parse_search(search_terms):
                 publications.insert(n, common_pubs[n])
 
     for word in words:
-        result = Topic.query.filter(Topic.name.contains(word.title())).all()
-        if result:
-            topics.extend([topic for topic in result if topic not in topics])
+        if not (word.lower() == 'and' or word.lower() == 'or' or word.lower() == 'the' or word.lower() == 'it' or word.lower() == 'so' or word.lower() == 'to' or word.lower() == 'too'):
+            result = Topic.query.filter(Topic.name.contains(word.title())).all()
+            if result:
+                topics.extend([topic for topic in result if topic not in topics])
 
-        result = Publication.query.filter(Publication.title.contains(word.lower())).all()
-        if result:
-            publications.extend([pub for pub in result if pub not in publications])
+            result = Publication.query.filter(Publication.title.contains(word.lower())).all()
+            if result:
+                publications.extend([pub for pub in result if pub not in publications])
 
-        result = Researcher.query.filter_by(first_name=word.capitalize()).all()
-        if result:
-            authors.extend([re for re in result if re not in authors])
-            publications.extend([rec.publication for rec in result.pub_records.all() if rec.publication not in publications])
+            result = Researcher.query.filter_by(first_name=word.capitalize()).all()
+            if result:
+                authors.extend([re for re in result if re not in authors])
+                for res in result:
+                    publications.extend([rec.publication for rec in res.pub_records.all() if rec.publication not in publications])
 
-        result = Researcher.query.filter_by(last_name=word.capitalize()).all()
-        if result:
-            authors.extend([re for re in result if re not in authors]) 
-            for res in result:
-                publications.extend([rec.publication for rec in res.pub_records.all() if rec.publication not in publications])      
-            print(authors[0].first_name, publications)
+            result = Researcher.query.filter_by(last_name=word.capitalize()).all()
+            if result:
+                authors.extend([re for re in result if re not in authors]) 
+                for res in result:
+                    publications.extend([rec.publication for rec in res.pub_records.all() if rec.publication not in publications])      
 
-        result = Publication.query.filter(Publication.coauthors.contains(word.capitalize())).all()
-        if result:
-            publications.extend([pub for pub in result if pub not in publications]) 
+            result = Publication.query.filter(Publication.coauthors.contains(word.capitalize())).all()
+            if result:
+                publications.extend([pub for pub in result if pub not in publications]) 
         
     return authors, publications, topics 
 
