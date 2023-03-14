@@ -13,10 +13,6 @@ def parse_search(search_terms):
     nums = [int(num.strip()) for num in terms if num.isdigit()]
     words = [word.strip() for word in terms if not word.isdigit()]
 
-    result = Topic.query.get(105)
-    print(result.name)
-    print(search_terms)
-    print(search_terms.title() in result.name)
     result = Publication.query.filter(Publication.title.contains(search_terms.lower())).all()
     if result:
         publications.extend(result)
@@ -51,6 +47,10 @@ def parse_search(search_terms):
             if result:
                 publications.extend([pub for pub in result if pub not in publications])
 
+            result = Publication.query.filter(Publication.coauthors.contains(f"{words[n]} {words[n+1]}".title())).all()
+            if result:
+                publications.extend([pub for pub in result if pub not in publications])
+
         if len(authors) == 2:
             pubs1 = [rec.publication for rec in authors[0].pub_records.all()]
             pubs2 = [rec.publication for rec in authors[1].pub_records.all()]
@@ -68,6 +68,22 @@ def parse_search(search_terms):
         result = Publication.query.filter(Publication.title.contains(word.lower())).all()
         if result:
             publications.extend([pub for pub in result if pub not in publications])
+
+        result = Researcher.query.filter_by(first_name=word.capitalize()).all()
+        if result:
+            authors.extend([re for re in result if re not in authors])
+            publications.extend([rec.publication for rec in result.pub_records.all() if rec.publication not in publications])
+
+        result = Researcher.query.filter_by(last_name=word.capitalize()).all()
+        if result:
+            authors.extend([re for re in result if re not in authors]) 
+            for res in result:
+                publications.extend([rec.publication for rec in res.pub_records.all() if rec.publication not in publications])      
+            print(authors[0].first_name, publications)
+
+        result = Publication.query.filter(Publication.coauthors.contains(word.capitalize())).all()
+        if result:
+            publications.extend([pub for pub in result if pub not in publications]) 
         
     return authors, publications, topics 
 
