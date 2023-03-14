@@ -10,8 +10,10 @@ def parse_search(search_terms):
     topics = []
     terms = search_terms.split(" ")
 
-    nums = [int(num.strip()) for num in terms if num.isdigit()]
+    nums = [int(num.strip()) for num in terms if (num.isdigit() and len(num) == 4)]
     words = [word.strip() for word in terms if not word.isdigit()]
+    print(nums)
+    print(words)
 
     result = Publication.query.filter(Publication.title.contains(search_terms.lower())).all()
     if result:
@@ -61,7 +63,7 @@ def parse_search(search_terms):
                 publications.insert(n, common_pubs[n])
 
     for word in words:
-        if not (word.lower() == 'and' or word.lower() == 'or' or word.lower() == 'the' or word.lower() == 'it' or word.lower() == 'so' or word.lower() == 'to' or word.lower() == 'too'):
+        if not (word.lower() == 'and' or word.lower() == 'or' or word.lower() == 'for' or word.lower() == 'the' or word.lower() == 'it' or word.lower() == 'so' or word.lower() == 'to' or word.lower() == 'too'):
             result = Topic.query.filter(Topic.name.contains(word.title())).all()
             if result:
                 topics.extend([topic for topic in result if topic not in topics])
