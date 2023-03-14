@@ -79,7 +79,7 @@ def search():
         search_terms = form['search']
         results = [authors, publications, topics] = parse_search(search_terms)
         print(results)
-        return render_template('results.html', results=results, search=True)
+        return render_template('results.html', results=results, search=True, search_terms=search_terms)
 
 
 

@@ -71,7 +71,6 @@ def get_publication_suggestions(pub):
         topics.extend(get_topic_pubs(tag.topic.id))
     
     pubs = get_ranked_pubs()
-    shuffle(pubs)
     shuffle(researchers)
     shuffle(topics)
 
@@ -99,10 +98,9 @@ def get_ranked_pubs():
     searches = Publication.query.order_by(Publication.searches.desc()).limit(10)
 
     ranked_pubs.extend(reads)
-    ranked_pubs.extend(citations)
-    ranked_pubs.extend(searches)
+    ranked_pubs.extend([citation for citation in citations if citation not in ranked_pubs])
+    ranked_pubs.extend([search for search in searches if search not in ranked_pubs])
 
-    ranked_pubs = list(set(ranked_pubs))
-
+    print([pub.title for pub in ranked_pubs])
     return ranked_pubs
     

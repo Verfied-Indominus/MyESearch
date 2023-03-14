@@ -13,13 +13,20 @@ def parse_search(search_terms):
     nums = [int(num.strip()) for num in terms if num.isdigit()]
     words = [word.strip() for word in terms if not word.isdigit()]
 
-    result = Publication.query.get(19)
-    print(result.title)
+    result = Topic.query.get(105)
+    print(result.name)
     print(search_terms)
-    print(search_terms in result.title)
-    result = Publication.query.filter(Publication.title.like(search_terms.lower())).all()
+    print(search_terms.title() in result.name)
+    result = Publication.query.filter(Publication.title.contains(search_terms.lower())).all()
     if result:
         publications.extend(result)
+
+    result = Topic.query.filter(Topic.name.contains(search_terms.title())).all()
+    if result:
+        topics.extend(result)
+        for res in result:
+            authors.extend([rec.researcher for rec in res.researcher_tags])
+            publications.extend([rec.publication for rec in res.pub_tags if rec.publication not in publications])
 
     for num in nums:
         result = Publication.query.filter(extract('year', Publication.publication_date) == datetime.date(datetime.strptime(f"{num}-1-1", "%Y-%m-%d")).year).all()
@@ -35,21 +42,30 @@ def parse_search(search_terms):
                 publications.extend([rec.publication for rec in result.pub_records.all() if rec.publication not in publications])
             
             result = Topic.query.filter_by(name=f"{words[n]} {words[n+1]}".title()).first()
-            if result:
+            if result and result not in topics:
                 topics.append(result)
                 authors.extend([rec.researcher for rec in result.researcher_tags.all() if rec.researcher not in authors])
                 publications.extend([rec.publication for rec in result.pub_tags.all() if rec.publication not in publications])
 
-            result = Publication.query.filter(Publication.title.like(f"{words[n]} {words[n+1]}".lower())).all()
+            result = Publication.query.filter(Publication.title.contains(f"{words[n]} {words[n+1]}".lower())).all()
             if result:
                 publications.extend([pub for pub in result if pub not in publications])
 
+        if len(authors) == 2:
+            pubs1 = [rec.publication for rec in authors[0].pub_records.all()]
+            pubs2 = [rec.publication for rec in authors[1].pub_records.all()]
+            common_pubs = list(set(pubs1) & set(pubs2))
+            for n in range(len(common_pubs)):
+                if common_pubs[n] in publications:
+                    publications.remove(common_pubs[n])
+                publications.insert(n, common_pubs[n])
+
     for word in words:
-        result = Topic.query.filter(Topic.name.like(word.title())).all()
+        result = Topic.query.filter(Topic.name.contains(word.title())).all()
         if result:
             topics.extend([topic for topic in result if topic not in topics])
 
-        result = Publication.query.filter(Publication.title.like(word.lower())).all()
+        result = Publication.query.filter(Publication.title.contains(word.lower())).all()
         if result:
             publications.extend([pub for pub in result if pub not in publications])
         
