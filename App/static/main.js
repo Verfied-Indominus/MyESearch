@@ -24,7 +24,7 @@ function getMessages(msg){
 
 window.addEventListener('load', async function (){
     pageLoad();
-    await getPubs();
+    await update();
 });
 
 let departments = {
@@ -298,12 +298,17 @@ async function addToLibrary(user_id, pub_id){
     }
 }
 
-// read more button in publication page's abstract
-let read_more = document.getElementById('read-more');
+// functions to add to recents and library
+async function addToLibrary(user_id, pub_id){
+    return await fetch(`/addtolibrary/${user_id}/${pub_id}`);
+}
 
 async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
+
+// read more button in publication page's abstract
+let read_more = document.getElementById('read-more');
 
 async function readMore(btn, id){
     let abs = document.getElementById('abstract');
@@ -313,7 +318,10 @@ async function readMore(btn, id){
     console.log(response);
 }
 
-async function getPubs(){
+
+
+// background updater for researcher publications
+async function update(){
     if (sessionStorage.getItem('update') == null){
         sessionStorage.setItem('update', true);
         alert(sessionStorage.getItem('update'));
@@ -322,7 +330,6 @@ async function getPubs(){
     }
 }
 
-function noop(){}
 
 
 function test(){
