@@ -32,7 +32,7 @@
                 <hr>
                 <ul class="uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-4 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-match="target: .uk-card">
                     {% for re in results[0] %}
-                        <li data-name="{{re.first_name[0]|capitalize}}" data-faculty="{{re.faculty}}" data-department="{{re.department}}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
+                        <li onclick="await addSearchResearcher({{re.id}})" data-name="{{re.first_name[0]|capitalize}}" data-faculty="{{re.faculty}}" data-department="{{re.department}}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
                             <div style="cursor: pointer;" onclick="window.location='/profile/{{re.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                                 <div class="uk-margin-small-top uk-margin-small-bottom uk-width-1-1 uk-text-center">
                                     <div class="uk-flex uk-flex-center uk-margin-small-bottom">
@@ -55,7 +55,7 @@
                 <hr>
                 <ul class="uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-match="target: .uk-card">
                     {% for pub in results[1] %}
-                        <li data-year="{{pub['publication_date'].strftime('%Y')}}" data-type="{{pub['pub_type']}}" data-name="{{pub['title'][0]|capitalize}}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
+                        <li onclick="await addSearchPublication({{pub.id}})" data-year="{{pub['publication_date'].strftime('%Y')}}" data-type="{{pub['pub_type']}}" data-name="{{pub['title'][0]|capitalize}}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
                             <div style="cursor: pointer;" onclick="window.location=`/publication/{{pub['id']}}`" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                                 <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub['cover'] %} /static/images/publications/{{pub['pub_type']}}.png {% else %} {{pub['cover']}} {% endif %}" uk-img></div>
                                 <div class="uk-margin-small-left uk-width-expand">

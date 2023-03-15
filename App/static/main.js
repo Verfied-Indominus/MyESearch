@@ -307,15 +307,53 @@ async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
 
-// read more button in publication page's abstract
-let read_more = document.getElementById('read-more');
+// function to add read to publication
+async function addRead(id){
+    if (pastDate()){
+        let response = await fetch(`/publication/addread/${id}`);
+        console.log(response);
+    }
+}
 
-async function readMore(btn, id){
-    let abs = document.getElementById('abstract');
-    btn.parentNode.style.display = 'none';
-    abs.style.overflowY = 'auto';
-    let response = await fetch(`/publication/addread/${id}`);
-    console.log(response);
+// function to add download to publication
+async function addDownload(id){
+    if (pastDate()){
+        let response = await fetch(`/publication/adddownload/${id}`);
+        console.log(response);
+    }
+}
+
+// function to add citation to publication
+async function addCitation(id){
+    if (pastDate()){
+        let response = await fetch(`/publication/addcitation/${id}`);
+        console.log(response);
+    }
+}
+
+// function to add search to publication
+async function addSearchPublication(id){
+    alert('it works');
+    if (pastDate()){
+        let response = await fetch(`/publication/addsearch/${id}`);
+        console.log(response);
+    }
+}
+
+// function to add view for profile
+async function addView(id){
+    if (pastDate()){
+        let response = await fetch(`/profile/addview/${id}`);
+        console.log(response);
+    }
+}
+
+// function to add search for profile
+async function addSearchResearcher(id){
+    if (pastDate()){
+        let response = await fetch(`/profile/addsearch/${id}`);
+        console.log(response);
+    }
 }
 
 
@@ -350,4 +388,18 @@ function getDate(){
     let year = date.getFullYear();
     date = `${day}/${month}/${year}`;
     return date;
+}
+
+function pastDate(){
+    let date = getDate();
+    if (localStorage.getItem('date') == null){
+        localStorage.setItem('date', date);
+        return true;
+    }
+    if (date > localStorage.getItem('date')){
+        return true;
+    }
+    else{
+        return false;
+    }
 }

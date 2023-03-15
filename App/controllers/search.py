@@ -50,6 +50,13 @@ def parse_search(search_terms):
             result = Publication.query.filter(Publication.coauthors.contains(f"{words[n]} {words[n+1]}".title())).all()
             if result:
                 publications.extend([pub for pub in result if pub not in publications])
+        else:
+            if len(authors) > 0:
+                result = Publication.query.filter(Publication.title.contains(words[n].lower())).all()
+                for x in range(len(result)):
+                    if result[x] in publications:
+                        publications.remove(result[x])
+                    publications.insert(x, result[x])
 
         if len(authors) == 2:
             pubs1 = [rec.publication for rec in authors[0].pub_records.all()]

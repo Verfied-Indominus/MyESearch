@@ -287,7 +287,8 @@ def add_citation(id):
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):
     pub = get_pub_byid(id)
-    add_search_to_pub(pub)
+    print('test')
+    # add_search_to_pub(pub)
     return 'Added'
 
 @index_views.route('/myprofile', methods=['GET'])

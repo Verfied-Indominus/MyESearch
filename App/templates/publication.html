@@ -141,7 +141,7 @@
                                                             <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
                                                         {% endfor %}
                     
-                                                        {% if p.coauthors != "" %}
+                                                        {% if p.coauthors != "" and p.coauthors %}
                                                             {% set coauthors = p.coauthors.split(', ') %}
                                                         {% endif %}
                     

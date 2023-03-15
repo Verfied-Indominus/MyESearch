@@ -101,6 +101,5 @@ def get_ranked_pubs():
     ranked_pubs.extend([citation for citation in citations if citation not in ranked_pubs])
     ranked_pubs.extend([search for search in searches if search not in ranked_pubs])
 
-    print([pub.title for pub in ranked_pubs])
     return ranked_pubs
     
