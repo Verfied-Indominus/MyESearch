@@ -124,7 +124,7 @@
                         <div>
                             {% if researchers %}
                                 {% for re in researchers %}
-                                    <a href="/profile/{{re.id}}" style="padding: 0 10px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 40px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
+                                    <a href="/profile/{{re.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if re.image_url %} {{re.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{re.first_name}} {{re.last_name}} </a>
                                 {% endfor %}
                             {% else %}
                                 <div class="uk-padding-small uk-padding-remove-horizontal">No Subscriptions yet</div>

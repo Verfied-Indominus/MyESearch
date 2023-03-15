@@ -24,10 +24,7 @@ function getMessages(msg){
 
 window.addEventListener('load', async function (){
     pageLoad();
-    if (run === false){
-        run = true;
-        // await getPubs();
-    }
+    await getPubs();
 });
 
 let departments = {
@@ -316,17 +313,34 @@ async function readMore(btn, id){
     console.log(response);
 }
 
-// pubstest = document.getElementById("pubstest");
-// async function loadPubSuggestions(id){
-//     // let response = await fetch(`/loadpubsuggestions/${id}`);
-//     // pubstest.innerHTML = response;
-//     alert('It working');
-// }
-
 async function getPubs(){
-    // getPubs = noop;
-    let response = await fetch('/update');
-    console.log(response.text);
+    if (sessionStorage.getItem('update') == null){
+        sessionStorage.setItem('update', true);
+        alert(sessionStorage.getItem('update'));
+        let response = await fetch('/update');
+        console.log(response.text);
+    }
 }
 
 function noop(){}
+
+
+function test(){
+    let t = document.getElementById("t");
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth()+1;
+    let year = date.getFullYear();
+    date = `${day}/${month}/${year}`;
+    localStorage.setItem('date', date);
+    alert(localStorage.getItem('date'));
+}
+
+function getDate(){
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth()+1;
+    let year = date.getFullYear();
+    date = `${day}/${month}/${year}`;
+    return date;
+}

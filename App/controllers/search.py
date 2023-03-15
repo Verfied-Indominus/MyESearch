@@ -12,8 +12,6 @@ def parse_search(search_terms):
 
     nums = [int(num.strip()) for num in terms if (num.isdigit() and len(num) == 4)]
     words = [word.strip() for word in terms if not word.isdigit()]
-    print(nums)
-    print(words)
 
     result = Publication.query.filter(Publication.title.contains(search_terms.lower())).all()
     if result:
