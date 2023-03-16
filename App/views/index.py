@@ -287,8 +287,13 @@ def add_citation(id):
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):
     pub = get_pub_byid(id)
-    print('test')
-    # add_search_to_pub(pub)
+    add_search_to_pub(pub)
+    return 'Added'
+
+@index_views.route('/profile/addsearch/<id>', methods=['GET'])
+def add_search_re(id):
+    re = get_researcher(id)
+    add_search(re)
     return 'Added'
 
 @index_views.route('/myprofile', methods=['GET'])
@@ -362,127 +367,9 @@ def mails():
 
 @index_views.route('/update', methods=['GET'])
 def scholarly_update():
-    # builder = (
-    #     ResearcherBuilder()
-    #     .first_name('Patrick')
-    #     .last_name('Hosein')
-    #     .email('patrick.hosein@sta.uwi.edu')
-    #     .password('patrickpass')
-    #     .institution('The University of The West Indies, St. Augustine')
-    #     .faculty('Science & Technology')
-    #     .department('Computing & Information Technology')
-    #     .title('Prof.')
-    #     .position('Professor')
-    #     .start_year('2010')
-    #     .qualifications('PhD (MIT)')
-    #     .skills('Wireless Networks')
-    #     .build()
-    # )
-    # print("Patrick Created")
-
-    # builder = (
-    #     ResearcherBuilder()
-    #     .first_name('Phaedra')
-    #     .last_name('Mohammed')
-    #     .email('phaedra.mohammed@sta.uwi.edu')
-    #     .password('phaedrapass')
-    #     .institution('The University of The West Indies, St. Augustine')
-    #     .faculty('Science & Technology')
-    #     .department('Computing & Information Technology')
-    #     .title('Dr.')
-    #     .position('Full-Time Lecturer')
-    #     .start_year('2017')
-    #     .qualifications('Ph.D. Computer Science (UWI)')
-    #     .certifications('Raspberry Pi Certified Educator')
-    #     .skills('Computational Models of Culture, Intelligent Tutoring Systems, Expert Systems, Knowledge Representation, Ontological Modelling')
-    #     .build()
-    # )
-    # image_url = uploadFile(builder.researcher.id, 'phaedra.jpg')
-    # remove("App/uploads/phaedra.jpg")
-    # builder.image_url(image_url)
-    # builder.build()
-    # print("Phaedra Created")
-
-    # builder = (
-    #     ResearcherBuilder()
-    #     .first_name('Amit')
-    #     .middle_name('Neil')
-    #     .last_name('Ramkissoon')
-    #     .email('amit.ramkissoon@my.uwi.edu')
-    #     .password('amitpass')
-    #     .institution('The University of The West Indies, St. Augustine')
-    #     .faculty('Science & Technology')
-    #     .department('Computing & Information Technology')
-    #     .title('Mr.')
-    #     .position('Teaching Assistant')
-    #     .start_year('2020')
-    #     .qualifications('B.Sc. Computer Science (UWI)\nM.Sc. Computer Science (UWI)\nPh.D. Computer Science (UWI) - in progress')
-    #     .skills('Fake News Detection\nSocial Computing\nInfrastructureless Social Networks')
-    #     .introduction('Amit Neil Ramkissoon is a PhD Computer Science Candidate at the Department of Computing & Information Technology at The University of the West Indies at St Augustine. He did both his Bachelors Degree and Masters Degree at The University of the West Indies at St Augustine. His research interest entails Artificial Intelligence, Computational Social Systems, Data Mining, Distributed Computing, Fake News Detection and Mobile Ad Hoc Networks.')
-    #     .website_url('https://sites.google.com/site/amitneilramkissoon')
-    #     .build()
-    # )
-    # image_url = uploadFile(builder.researcher.id, 'amit.jpg')
-    # remove("App/uploads/amit.jpg")
-    # builder.image_url(image_url)
-    # builder.build()
-    # print("Amit Created")
-
-    # builder = (
-    #     ResearcherBuilder()
-    #     .first_name('Vijayanandh')
-    #     .last_name('Rajamanickam')
-    #     .email('vijayanandh.rajamanickam@sta.uwi.edu')
-    #     .password('vijayanandhpass')
-    #     .institution('The University of The West Indies, St. Augustine')
-    #     .faculty('Science & Technology')
-    #     .department('Computing & Information Technology')
-    #     .title('Dr.')
-    #     .position('Full-Time Lecturer')
-    #     .start_year('2021')
-    #     .qualifications('B.Sc. Mathematics\nM.C.A Computer Applications\nM.Phil Computer Science\nPh.D Computer Science')
-    #     .skills('Image Processing')
-    #     .build()
-    # )
-    # print("Vijayanandh Created")
-
-    # interests = [
-    #     ['Artificial Intelligence'],
-    #     ['Artificial Intelligence in Education', 'Learning Engineering', 'Semantic Web Technologies', 'Natural Language Processing', 'Intelligent Learning Environments'],
-    #     ['Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection'],
-    #     ['Image Processing', 'Image Segmenation', 'Image and Video Security']
-    # ]
-
-    # re = get_all_researchers()
-    # for r in re:
-    #     create_library(r.id)
-    #     create_recents(r.id)
-
-
-    # for index, interest in enumerate(interests):
-    #     for inte in interest:
-    #         topic = get_topic_by_name(inte)
-    #         if not topic:
-    #             topic = create_topic(inte)
-    #             for top in get_all_topics():
-    #                 if top.name in topic.name:
-    #                     set_topic_parent(topic.name, top.id)
-    #     re = get_user(index+1)
-    #     add_interests_to_researcher(interest, re.id)
-    #     print(re.research_interests.all())
-
-    # for pub in get_all_publications():
-    #     records = pub.pub_records.all()
-    #     for n in range(1, len(records)):
-    #         re_id = records[n].researcher_id
-    #         pub_id = records[n].publication_id
-    #         delete_pub_record(re_id, pub_id)
-    
-    # print('records deleted')
-
-
-    for n in range(1, 0, -1):
-        user = get_user(n)
+    users = get_all_researchers()
+    for n in range(len(users), 0, -1):
+        user = users[n-1]
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
         for i in range(len(pubs)):
@@ -516,7 +403,6 @@ def scholarly_update():
                         data['pub_type'] = pub['bib']['pub_type'].lower()
                     
                     if pub['bib']['pub_year'] == 'NA':
-                        print(pub['bib']['pub_year'])
                         data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
                     else:
                         data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
@@ -534,7 +420,7 @@ def scholarly_update():
                                 author.reverse()
                                 temp.append(' '.join(author))
                         authors = temp
-                        for re in get_all_researchers():
+                        for re in users:
                             target = []
                             for co in authors:
                                 if re.first_name in co and re.last_name in co:
@@ -543,33 +429,15 @@ def scholarly_update():
                                 print(add_publication_to_researcher(re.id, p.id))
                                 authors.remove(authors[t])
                         authors = ', '.join(authors)
-                        print(pub['bib']['author'])
-                        print(authors)
 
                         add_coauthors(p, authors)
                         print(add_publication_to_researcher(user.id, p.id))
-                        print(p.id) 
-
-            # publications = get_all_publications_for_user(user)
-            # for p in publications:
-            #     print(p.title)
-            #     print(p.coauthors)
-            #     coauthors = p.coauthors.split(', ')
-            #     for re in get_all_researchers():
-            #         target = []
-            #         for co in coauthors:
-            #             if re.first_name in co and re.last_name in co:
-            #                 print(re.first_name, 'was found and this is co  ', co)
-            #                 target.append(coauthors.index(co))
-            #         for t in target:
-            #             add_publication_to_researcher(re.id, p.id)
-            #             coauthors.remove(coauthors[t])
-            #     coauthors = ', '.join(coauthors)
-            #     add_coauthors(p, coauthors)
-            #     print('Coauthor List: ', coauthors)
-            #     print(p.coauthors)
-            #     print('\n\n')
-
-    # print(get_all_publications())
+                        print(p.id)
 
     return 'Created'
+
+
+@index_views.route('/test', methods=['GET'])
+def test():
+    print('started')
+    

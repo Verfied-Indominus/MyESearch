@@ -101,30 +101,20 @@ def get_shortened_name(name):
     return name
 
 
-# pubs = get_pubs('Shareeda', 'Mohammed')
-# for pub in pubs:
-#     print(pub)
-#     print('\n\n')
-#     fill = fill_pub(pub, 'Shareeda', 'Mohammed')
-#     print(fill)
-#     break
-# print('\n\n')
-# authors = fill['bib']['author'].split(' and ')
-# temp = []
-# for author in authors:
-#     temp.append(author.split(', '))
-# authors = temp
-# temp = []
-# for author in authors:
-#     author.reverse()
-#     temp.append(' '.join(author))
-# authors = temp
-# authors.remove('Shareeda Mohammed')
-# authors = ', '.join(authors)
-# print(authors)
-# request = f"Extract the research Keywords from the following as a python list'{fill['bib']['abstract']}'"
-# key_list  = prompt(request)["choices"][0]["text"]
-# print(key_list)
+# to get citations
+# def search_pub_title(pub):
+#     while True:
+#         try:
+#             pub = scholarly.search_pubs(query='allintitle: "{}"'.format(pub.title), citations=False)
+#             break
+#         except Exception:
+#             set_new_proxy()
+#             print('search title')
+#     try:
+#         pub = next(pub)
+#         return pub
+#     except Exception:
+#         return None
 
 # Retrieve the first result from the iterator
 # try:

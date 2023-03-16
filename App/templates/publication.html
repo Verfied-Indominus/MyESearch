@@ -18,7 +18,7 @@
                         Add to Library
                     </div>
 
-                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                    <div onclick="addCitation({{pub.id}});" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
                         Cite
                     </div>
                     {% if not pub.free_access %}
@@ -70,7 +70,7 @@
                 <div class="uk-padding">
                     <h4 class="uk-margin-remove">Abstract</h4>
                     <hr class="uk-margin-small">        
-                    <div id="abstract" class="uk-inline uk-width-1-1">
+                    <div class="uk-inline uk-width-1-1">
                         {{pub.abstract}}
                         <!-- height: 7rem; -->
                         

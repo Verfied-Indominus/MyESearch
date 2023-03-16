@@ -333,20 +333,19 @@ async function addCitation(id){
 
 // function to add search to publication
 async function addSearchPublication(id){
-    alert('it works');
     if (pastDate()){
         let response = await fetch(`/publication/addsearch/${id}`);
         console.log(response);
     }
 }
 
-// function to add view for profile
-async function addView(id){
-    if (pastDate()){
-        let response = await fetch(`/profile/addview/${id}`);
-        console.log(response);
-    }
-}
+// function to add view for profile             NOT WORKING!!!
+// async function addView(id){
+//     if (pastDate()){
+//         let response = await fetch(`/profile/addview/${id}`);
+//         console.log(response);
+//     }
+// }
 
 // function to add search for profile
 async function addSearchResearcher(id){
@@ -362,7 +361,6 @@ async function addSearchResearcher(id){
 async function update(){
     if (sessionStorage.getItem('update') == null){
         sessionStorage.setItem('update', true);
-        alert(sessionStorage.getItem('update'));
         let response = await fetch('/update');
         console.log(response.text);
     }
@@ -370,15 +368,8 @@ async function update(){
 
 
 
-function test(){
-    let t = document.getElementById("t");
-    let date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth()+1;
-    let year = date.getFullYear();
-    date = `${day}/${month}/${year}`;
-    localStorage.setItem('date', date);
-    alert(localStorage.getItem('date'));
+async function test(){
+    await fetch('/test');
 }
 
 function getDate(){

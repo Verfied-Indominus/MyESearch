@@ -14,7 +14,6 @@ def create_pub(data): #let data be a dictionary
             url=data['url'],
             eprint=data['eprint']
         )
-        print('Pub Created')
         db.session.add(new_pub)
         db.session.commit()
         print("Pub Added to DB")
@@ -38,6 +37,8 @@ def update_pub(data,id): #let data be a dictionary
         query.free_access = data["free_access"]
         query.pub_type= data["pub_type"]
         query.publication_date = data['publication_date']
+        query.url=data['url']
+        query.eprint=data['eprint']
         db.session.commit()
         return True
     except:

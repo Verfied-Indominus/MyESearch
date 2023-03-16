@@ -58,6 +58,4 @@ def add_view(researcher):
 
 def add_search(researcher):
     researcher.searches += 1
-    db.session.add(researcher)
     db.session.commit()
-    return researcher
