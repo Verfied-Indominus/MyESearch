@@ -116,11 +116,13 @@ def publication_page(id):
 def topic_page(id):
     topic_ = get_topic_id(id)
 
-    if not topic:
+    if not topic_:
         flash('Topic does not exist or is inaccessible')
         return redirect(url_for('.index_page'))
+
+    topic_pubs = [tag.publication.toDict() for tag in topic_.pub_tags]
     
-    return render_template('results.html', topic_=topic_, topic_page=True)
+    return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs)
 
 @index_views.route('/loadpubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
@@ -450,6 +452,7 @@ def scholarly_update():
 @index_views.route('/test', methods=['GET'])
 def test():
     pubs = get_all_publications()
+    count = 0
     for n in range(len(pubs)):
         pub = pubs[n]
         if not pub.bibtex:
@@ -465,6 +468,7 @@ def test():
             bibtex = json.dumps(bibtex)
             set_pub_bibtex(pub, bibtex)
             print(pub.bibtex)
+            print(pub.id)
             print('\n\n')
             
     return 'bibtex'

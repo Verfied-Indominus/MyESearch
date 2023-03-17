@@ -127,6 +127,32 @@ def search_pub_title(pub):
             print('bibtex')
     return bibtex
 
+def verify_author(name):
+    while True:
+        try:
+            author = scholarly.search_author(name)
+            break
+        except Exception:
+            set_new_proxy()
+    try:
+        author = next(author)
+        return author
+    except StopIteration:
+        return verify_author_from_search(name)
+
+def verify_author_from_search(name):
+    while True:
+        try:
+            author = scholarly.search_pubs(query='author: "{}"'.format(name), citations=False)
+            break
+        except Exception:
+            set_new_proxy()
+    try:
+        author = next(author)
+        return author
+    except StopIteration:
+        return None
+
 # Retrieve the first result from the iterator
 # try:
 #     first_author_result = next(search_query)
