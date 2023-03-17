@@ -112,6 +112,16 @@ def publication_page(id):
     return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
     # return render_template("publication.html", pub=pub)
 
+@index_views.route('/topic/<id>', methods=['GET'])
+def topic_page(id):
+    topic_ = get_topic_id(id)
+
+    if not topic:
+        flash('Topic does not exist or is inaccessible')
+        return redirect(url_for('.index_page'))
+    
+    return render_template('results.html', topic_=topic_, topic_page=True)
+
 @index_views.route('/loadpubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
     pub = get_pub_byid(id)
@@ -439,8 +449,9 @@ def scholarly_update():
 
 @index_views.route('/test', methods=['GET'])
 def test():
-    for n in range(len(get_all_publications())):
-        pub = get_pub_byid(n)
+    pubs = get_all_publications()
+    for n in range(len(pubs)):
+        pub = pubs[n]
         bibtex = search_pub_title(pub)
         items = []
         bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
@@ -454,5 +465,5 @@ def test():
         set_pub_bibtex(pub, bibtex)
         print(pub.bibtex)
         print('\n\n')
-        return 'bibtex'
+    return 'bibtex'
     
