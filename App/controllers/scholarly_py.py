@@ -106,7 +106,7 @@ def search_pub_title(pub):
     set_new_proxy()
     while True:
         try:
-            pub = scholarly.search_pubs(query='allintitle: "{}"'.format(pub.title), citations=False)
+            pub = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
             break
         except Exception:
             set_new_proxy()
@@ -118,6 +118,13 @@ def search_pub_title(pub):
         except Exception:
             set_new_proxy()
             print('next pub')
+            while True:
+                try:
+                    pub = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
+                    break
+                except Exception:
+                    set_new_proxy() 
+                    print('search title and author')
     while True:
         try:
             bibtex = scholarly.bibtex(pub)
