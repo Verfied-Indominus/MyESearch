@@ -96,3 +96,7 @@ def add_citation_to_pub(pub):
 def add_search_to_pub(pub):
     pub.searches += 1
     db.session.commit()
+
+def set_pub_bibtex(pub, bibtex):
+    pub.bibtex = bibtex
+    db.session.commit()

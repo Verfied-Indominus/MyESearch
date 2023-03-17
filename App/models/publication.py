@@ -15,6 +15,7 @@ class Publication(db.Model):
     url = db.Column(db.String(400)) 
     eprint = db.Column(db.String(400))
     coauthors = db.Column(db.String(425))
+    bibtex = db.Column(db.String(425))
     tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")

@@ -102,19 +102,30 @@ def get_shortened_name(name):
 
 
 # to get citations
-# def search_pub_title(pub):
-#     while True:
-#         try:
-#             pub = scholarly.search_pubs(query='allintitle: "{}"'.format(pub.title), citations=False)
-#             break
-#         except Exception:
-#             set_new_proxy()
-#             print('search title')
-#     try:
-#         pub = next(pub)
-#         return pub
-#     except Exception:
-#         return None
+def search_pub_title(pub):
+    set_new_proxy()
+    while True:
+        try:
+            pub = scholarly.search_pubs(query='allintitle: "{}"'.format(pub.title), citations=False)
+            break
+        except Exception:
+            set_new_proxy()
+            print('search title')
+    while True:
+        try:
+            pub = next(pub)
+            break
+        except Exception:
+            set_new_proxy()
+            print('next pub')
+    while True:
+        try:
+            bibtex = scholarly.bibtex(pub)
+            break
+        except Exception:
+            set_new_proxy()
+            print('bibtex')
+    return bibtex
 
 # Retrieve the first result from the iterator
 # try:

@@ -439,5 +439,20 @@ def scholarly_update():
 
 @index_views.route('/test', methods=['GET'])
 def test():
-    print('started')
+    for n in range(len(get_all_publications())):
+        pub = get_pub_byid(n)
+        bibtex = search_pub_title(pub)
+        items = []
+        bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
+        bibtex = bibtex[:-3]
+        items.extend([item.strip() for item in bibtex.split(',\n')])
+        items.pop(0)
+        bibtex = {}
+        for item in items:
+            bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
+        bibtex = json.dumps(bibtex)
+        set_pub_bibtex(pub, bibtex)
+        print(pub.bibtex)
+        print('\n\n')
+        return 'bibtex'
     
