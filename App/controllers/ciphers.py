@@ -9,7 +9,7 @@ def doubleDeCipher(cipher_text,railkey,caesarkey):
 
 def railFenceEncrypt(plainText, key):
     cipherText = ""
-    array = [["" for x in range(len(plainText))] for y in range(key)]
+    array = [["" for x in range(len(plainText))] for y in range(len(key))]
     i = 1
     row = 0
     col = 0
@@ -29,7 +29,7 @@ def railFenceEncrypt(plainText, key):
 
 def railFenceDecrypt(cipherText, key):
     plainText = ""
-    array = [["" for x in range(len(cipherText))] for y in range(key)]
+    array = [["" for x in range(len(cipherText))] for y in range(len(key))]
     j = 0
     i = 1
 

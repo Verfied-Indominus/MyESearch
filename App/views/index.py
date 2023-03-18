@@ -15,12 +15,15 @@ from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
 from App.controllers.pubrecord import delete_pub_record
 from App.controllers.search import parse_search
+from App.controllers.open_ai import prompt, RAIL_KEY, CAESAR_KEY
+from App.controllers.ciphers import doubleCipher, doubleDeCipher
 from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
 from random import shuffle
 import json
 import gmail
+import ast
 
 from App.models.builder import *
 
@@ -452,24 +455,63 @@ def scholarly_update():
 @index_views.route('/test', methods=['GET'])
 def test():
     pubs = get_all_publications()
+    topics = get_all_topics()
     for pub in pubs:
-        if not pub.bibtex:
-            print(pub.title, '\n')
-            bibtex = search_pub_title(pub)
-            if bibtex:
-                items = []
-                bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
-                bibtex = bibtex[:-3]
-                items.extend([item.strip() for item in bibtex.split(',\n')])
-                items.pop(0)
-                bibtex = {}
-                for item in items:
-                    bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
-                bibtex = json.dumps(bibtex)
-                set_pub_bibtex(pub, bibtex)
-                print(pub.bibtex)
-                print(pub.id)
-                print('\n\n')
+        if len(pub.tags.all()) == 0:
+            abstract = pub.abstract
+            request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
+            keywords  = prompt(request)["choices"][0]["text"]
+            keywords = '[' + keywords.split('[')[1]
+            keywords = ast.literal_eval(node_or_string=keywords)
+            for key in keywords:
+                topic = get_topic_by_name(key.title())
+                if not topic and len(key) < 60:
+                    topic = create_topic(key.title())
+                    for top in topics:
+                        if top.name in topic.name:
+                            set_topic_parent(topic.name, top.id)
+                if topic:
+                    added = add_topic_to_pub(pub, topic)
+                    if not added:
+                        print('\nNOT ADDED\n')
+                        print(pub.title)
+                        print(topic.name)
+                        print('\n')
+            print('\n\n', abstract)
+            print(keywords)
+            print([tag.topic.name for tag in pub.tags.all()])
+
+    print('\n\nDONE\n\n')
+
+    # cipher = doubleCipher("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", RAIL_KEY(), CAESAR_KEY())
+    # print(cipher)
+
+    # print(doubleDeCipher(cipher, RAIL_KEY(), CAESAR_KEY()))
+
+    # for pub in pubs:
+        # if pub.bibtex and 'Patent' in pub.bibtex:
+        #     set_pub_type(pub, 'patent')
+        # if not pub.bibtex:
+        #     print(pub.title, '\n')
+        #     bibtex = search_pub_title(pub)
+        #     if bibtex:
+        #         items = []
+        #         bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
+        #         bibtex = bibtex[:-3]
+        #         items.extend([item.strip() for item in bibtex.split(',\n')])
+        #         items.pop(0)
+        #         bibtex = {}
+        #         for item in items:
+        #             bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
+        #         bibtex = json.dumps(bibtex)
+        #         set_pub_bibtex(pub, bibtex)
+        #         if 'Patent' in pub.bibtex:
+        #             set_pub_type(pub, 'patent')
+        #         print(pub.bibtex)
+        #         print(pub.id)
+        #         print('\n\n')
+        #     else:
+        #         print('\nNot Found\n')
             
     return 'bibtex'
     

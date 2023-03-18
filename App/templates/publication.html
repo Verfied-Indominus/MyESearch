@@ -41,8 +41,8 @@
                     <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%Y')}} </div>
                     <hr>
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
-                        {% for top in topics %}
-                            <a href="" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{top.name}} </a>
+                        {% for tag in pub.tags.all() %}
+                            <a href="/topic/{{tag.topic.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{tag.topic.name}} </a>
                         {% endfor %}
                     </div>                   
                 </div>
