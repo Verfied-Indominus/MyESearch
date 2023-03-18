@@ -251,6 +251,10 @@ def signup_page():
         return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
+@index_views.route('/addpublication', methods=['GET'])
+def add_publication():
+    return render_template('addpublication.html')
+
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
     selected = json.loads(selected)
@@ -356,7 +360,7 @@ def profile(id):
                 vrec = create_visit_record(current_user.id, user.id)
 
             if update_visit_record(vrec):
-                user = add_view(user)
+                add_view(user)
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
 
@@ -480,13 +484,9 @@ def test():
             print('\n\n', abstract)
             print(keywords)
             print([tag.topic.name for tag in pub.tags.all()])
+            print(pub.id)
 
     print('\n\nDONE\n\n')
-
-    # cipher = doubleCipher("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", RAIL_KEY(), CAESAR_KEY())
-    # print(cipher)
-
-    # print(doubleDeCipher(cipher, RAIL_KEY(), CAESAR_KEY()))
 
     # for pub in pubs:
         # if pub.bibtex and 'Patent' in pub.bibtex:

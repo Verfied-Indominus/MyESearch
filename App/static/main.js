@@ -367,6 +367,10 @@ async function update(){
 }
 
 
+function alerting(){
+    alert('it works');
+}
+
 
 async function test(){
     await fetch('/test');

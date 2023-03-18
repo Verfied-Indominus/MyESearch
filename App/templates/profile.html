@@ -7,6 +7,7 @@
 {% block content %}
 
 <div class="uk-padding">
+    <script src="/static/main.js">alerting();</script>
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
         <div class="uk-card uk-light uk-background-primary uk-width-1-3 uk-padding-remove uk-flex uk-flex-center" style="color: white">
             <div class="uk-margin-medium-top uk-margin-medium-bottom">
@@ -215,7 +216,7 @@
                                                                         <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
                                                                     {% endfor %}
                                 
-                                                                    {% if pub.coauthors != "" %}
+                                                                    {% if pub.coauthors != "" and pub.coauthors %}
                                                                         {% set coauthors = pub.coauthors.split(', ') %}
                                                                     {% endif %}
                                 

@@ -52,9 +52,7 @@ def delete_researcher(id):
 
 def add_view(researcher):
     researcher.views += 1
-    db.session.add(researcher)
     db.session.commit()
-    return researcher
 
 def add_search(researcher):
     researcher.searches += 1

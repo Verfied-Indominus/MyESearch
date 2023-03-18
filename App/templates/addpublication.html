@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}Add Publication{% endblock %}
+{% block page %}Add Publication{% endblock %}
+{% block nav %}{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <div class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-cover uk-padding-small" data-src="/static/images/loginBG.jpg" uk-img tabindex="-1">
+        <div class="uk-background-default uk-width-3-5 uk-container">
+            <div class="uk-flex">
+                <img class="uk-width-2-5 uk-flex-top" src="/static/images/MyeSearch Logo.jpg" alt="MyeSearch Logo">
+                <a class="uk-margin-auto-left uk-margin-auto-vertical uk-button uk-button-text uk-text-capitalize" href="/">Skip for now <span uk-icon="arrow-right"></span></a>
+            </div>
+            <h3 class="uk-text-center uk-margin-small-top">Add Publication</h3>
+            <form action="/addpublication/{{id}}" method="post" class="uk-form-stacked uk-margin uk-margin-auto uk-margin-large-bottom uk-width-4-5">
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Title</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="title" type="text">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="abstract" class="uk-form-label">Abstract</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <textarea class="uk-width-1-1 uk-textarea" name="abstract" rows="10"></textarea>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="pub_type" class="uk-form-label">Publication Type</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <select class="uk-select" name="pub_type">
+                            {% for p in pub_ %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="uk-margin uk-flex">
+                    <span>
+                        Remember Me
+                        <input class="uk-checkbox" name="remember" type="checkbox">
+                    </span>
+                    <button class="uk-button uk-button-text uk-text-capitalize uk-margin-auto-left">Forgot your password?</button>
+                </div>
+
+                <div class="uk-margin-medium-top uk-margin uk-flex uk-flex-center">
+                    <button type="submit" class="uk-button uk-button-primary">Login</button>
+                </div>
+            </form>
+            <div class="uk-margin-medium-bottom uk-flex uk-flex-center">
+                <span class="uk-flex uk-flex-middle">Don't Have An Account? <a href="/signup" class="uk-button uk-button-text uk-text-capitalize uk-text-decoration-none uk-margin-small-left">Sign Up Here</a></span>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
+{% block footer %}{% endblock %}

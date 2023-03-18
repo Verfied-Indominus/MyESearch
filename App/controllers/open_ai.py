@@ -1,8 +1,7 @@
 import openai
 from App.controllers.ciphers import doubleDeCipher
-#API KEY
-# API_KEY="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"
-API_KEY="w7\oXFVg1vptXr^fpjvo58{JgjFNnkp|o:xU{S8JGWY6h^|RLTN"
+#ENCRYPTED API KEY
+API_KEY='!@ xaOQg:yyv|R\o#~VxCr~SWt=WCF Ot$^O^pY#{"R] ?ZOB@z'
          
 #SET API KEY
 
@@ -10,7 +9,7 @@ API_KEY="w7\oXFVg1vptXr^fpjvo58{JgjFNnkp|o:xU{S8JGWY6h^|RLTN"
 R_KEY="MyeSearch2023"
 
 #CAESER KEY
-C_KEY=4
+C_KEY=13
 
 openai.api_key = doubleDeCipher(API_KEY, R_KEY, C_KEY)
 
