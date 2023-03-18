@@ -106,28 +106,29 @@ def search_pub_title(pub):
     set_new_proxy()
     while True:
         try:
-            pub = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
+            pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
             break
         except Exception:
             set_new_proxy()
             print('search title')
     while True:
         try:
-            pub = next(pub)
+            pub1 = next(pub1)
             break
-        except Exception:
+        except Exception as e:
             set_new_proxy()
             print('next pub')
-            while True:
-                try:
-                    pub = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
-                    break
-                except Exception:
-                    set_new_proxy() 
-                    print('search title and author')
+            if isinstance(e, StopIteration):
+                while True:
+                    try:
+                        pub1 = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
+                        break
+                    except Exception:
+                        set_new_proxy() 
+                        print('search title and author') 
     while True:
         try:
-            bibtex = scholarly.bibtex(pub)
+            bibtex = scholarly.bibtex(pub1)
             break
         except Exception:
             set_new_proxy()

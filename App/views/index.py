@@ -452,24 +452,24 @@ def scholarly_update():
 @index_views.route('/test', methods=['GET'])
 def test():
     pubs = get_all_publications()
-    count = 0
-    for n in range(len(pubs)):
-        pub = pubs[n] 
-        # if not pub.bibtex:
-        bibtex = search_pub_title(pub)
-        items = []
-        bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
-        bibtex = bibtex[:-3]
-        items.extend([item.strip() for item in bibtex.split(',\n')])
-        items.pop(0)
-        bibtex = {}
-        for item in items:
-            bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
-        bibtex = json.dumps(bibtex)
-        set_pub_bibtex(pub, bibtex)
-        print(pub.bibtex)
-        print(pub.id)
-        print('\n\n')
+    for pub in pubs:
+        if not pub.bibtex:
+            print(pub.title, '\n')
+            bibtex = search_pub_title(pub)
+            if bibtex:
+                items = []
+                bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
+                bibtex = bibtex[:-3]
+                items.extend([item.strip() for item in bibtex.split(',\n')])
+                items.pop(0)
+                bibtex = {}
+                for item in items:
+                    bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
+                bibtex = json.dumps(bibtex)
+                set_pub_bibtex(pub, bibtex)
+                print(pub.bibtex)
+                print(pub.id)
+                print('\n\n')
             
     return 'bibtex'
     
