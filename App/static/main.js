@@ -102,7 +102,6 @@ let departments = {
 
 let dpt_section = document.getElementById("department_section");
 let dpt_listing = document.getElementById("department_listing");
-let testing = document.getElementById("testing");
 
 function get_selection(btn){
     fac = btn.childNodes[0].innerHTML.trim();
@@ -327,7 +326,7 @@ async function addDownload(id){
 async function addCitation(id){
     if (pastDate()){
         let response = await fetch(`/publication/addcitation/${id}`);
-        let citation = await response.JSON();
+        let citation = await response.json();
         
     }
 }

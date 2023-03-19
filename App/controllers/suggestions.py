@@ -70,6 +70,8 @@ def get_publication_suggestions(pub):
     for tag in pub.tags:
         topics.extend(get_topic_pubs(tag.topic.id))
     
+    topics = list(set(topics))
+
     pubs = get_ranked_pubs()
     shuffle(researchers)
     shuffle(topics)

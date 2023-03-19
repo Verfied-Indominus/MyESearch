@@ -71,9 +71,13 @@ def all_publications():
 
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
+    return render_template("results.html", researchers=True, faculties=faculties)
+
+@index_views.route('/load/reasearchers', methods=['GET'])
+def load_researchers():
     researchers = get_all_researchers()
     shuffle(researchers)
-    return render_template("results.html",researchers=researchers, faculties=faculties)
+    return [re.toDict() for re in researchers]
  
 @index_views.route('/search',methods=['POST'])
 def search():
