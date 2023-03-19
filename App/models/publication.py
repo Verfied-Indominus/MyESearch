@@ -51,6 +51,5 @@ class Publication(db.Model):
             'citations': self.citations,
             'downloads': self.downloads,
             'searches': self.searches,
-            'coauthors': self.coauthors,
-            'pub_records': self.pub_records
+            'coauthors': self.coauthors
         }
