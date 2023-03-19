@@ -301,7 +301,9 @@ def add_download(id):
 def add_citation(id):
     pub = get_pub_byid(id)
     add_citation_to_pub(pub)
-    return 'Added'
+    request = f"Generate a Chicago style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation  = prompt(request)["choices"][0]["text"]
+    return citation
 
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):
@@ -458,33 +460,45 @@ def scholarly_update():
 
 @index_views.route('/test', methods=['GET'])
 def test():
-    pubs = get_all_publications()
-    topics = get_all_topics()
-    for pub in pubs:
-        if len(pub.tags.all()) == 0:
-            abstract = pub.abstract
-            request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
-            keywords  = prompt(request)["choices"][0]["text"]
-            keywords = '[' + keywords.split('[')[1]
-            keywords = ast.literal_eval(node_or_string=keywords)
-            for key in keywords:
-                topic = get_topic_by_name(key.title())
-                if not topic and len(key) < 60:
-                    topic = create_topic(key.title())
-                    for top in topics:
-                        if top.name in topic.name:
-                            set_topic_parent(topic.name, top.id)
-                if topic:
-                    added = add_topic_to_pub(pub, topic)
-                    if not added:
-                        print('\nNOT ADDED\n')
-                        print(pub.title)
-                        print(topic.name)
-                        print('\n')
-            print('\n\n', abstract)
-            print(keywords)
-            print([tag.topic.name for tag in pub.tags.all()])
-            print(pub.id)
+    # pubs = get_all_publications()
+    # count = 1
+    # for pub in pubs:
+    #     print(count)
+    #     count += 1
+    #     if len(pub.tags.all()) == 0:
+    #         abstract = pub.abstract
+    #         print(abstract)
+    #         request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
+    #         keywords  = prompt(request)["choices"][0]["text"]
+    #         print(keywords)
+    #         keywords = '[' + keywords.split('[')[1]
+    #         keywords = ast.literal_eval(node_or_string=keywords.strip())
+    #         for key in keywords:
+    #             topic = get_topic_by_name(key.title())
+    #             if not topic and len(key) < 60:
+    #                 topic = create_topic(key.title())
+    #                 for top in get_all_topics():
+    #                     if top.name in topic.name:
+    #                         set_topic_parent(topic.name, top.id)
+    #                     if topic.name in top.name:
+    #                         set_topic_parent(top.name, topic.id)
+    #             if topic:
+    #                 added = add_topic_to_pub(pub, topic)
+    #                 if not added:
+    #                     print('\nNOT ADDED\n') 
+    #                     print(pub.title)
+    #                     print(topic.name)
+    #                     print('\n')
+    #         print('\n\n', abstract)
+    #         print(keywords)
+    #         print([tag.topic.name for tag in pub.tags.all()])
+
+    for n in range(1, 3):
+        pub = get_pub_byid(n)
+        print('\n',pub.bibtex)
+        request = f"Generate a Chicago style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+        citation  = prompt(request)["choices"][0]["text"]
+        print(citation)
 
     print('\n\nDONE\n\n')
 

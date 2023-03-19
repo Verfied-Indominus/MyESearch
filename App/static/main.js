@@ -327,7 +327,8 @@ async function addDownload(id){
 async function addCitation(id){
     if (pastDate()){
         let response = await fetch(`/publication/addcitation/${id}`);
-        console.log(response);
+        let citation = await response.JSON();
+        
     }
 }
 
