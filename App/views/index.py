@@ -134,7 +134,13 @@ def topic_page(id):
     
     return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs)
 
-@index_views.route('/loadpubsuggestions/<id>', methods=['GET'])
+@index_views.route('/load/profilepubs/<id>', methods=['GET'])
+def load_profile_pubs(id):
+    re = get_researcher(id)
+    publications = [record.publication.toDict() for record in re.pub_records.all()]
+    return publications
+
+@index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
     pub = get_pub_byid(id)
 
