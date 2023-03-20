@@ -134,11 +134,11 @@ def publication_page(id):
 
 @index_views.route('/topic/<id>', methods=['GET'])
 def topic_page(id):
-    topic_ = get_topic_id(id)
+    topic_ = get_topic_id(id) 
 
     if not topic_:
         flash('Topic does not exist or is inaccessible')
-        return redirect(url_for('.index_page'))
+        return redirect(url_for('.index_page')) 
 
     topic_pubs = [tag.publication.toDict() for tag in topic_.pub_tags]
     

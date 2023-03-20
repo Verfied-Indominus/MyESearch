@@ -113,7 +113,7 @@ function get_selection(btn){
         let html = '';
         for (let dpt in departments[fac]){
             html += `
-                <li data-faculty="${fac}" uk-filter-control="filter: [data-department='${departments[fac][dpt]}']; group: data-department"><a href="#"> ${departments[fac][dpt]} </a></li>
+                <li data-faculty="${fac}" uk-filter-control="filter: [data-department='${departments[fac][dpt]}']; group: data-department"><a href=""> ${departments[fac][dpt]} </a></li>
             `;
         }
         dpt_listing.innerHTML = html;
@@ -298,9 +298,6 @@ async function addToLibrary(user_id, pub_id){
 }
 
 // functions to add to recents and library
-async function addToLibrary(user_id, pub_id){
-    return await fetch(`/addtolibrary/${user_id}/${pub_id}`);
-}
 
 async function addToRecents(user_id, pub_id){
     return await fetch(`/addtorecents/${user_id}/${pub_id}`);
@@ -364,16 +361,6 @@ async function update(){
         let response = await fetch('/update');
         console.log(response.text);
     }
-}
-
-
-function alerting(){
-    alert('it works');
-}
-
-
-async function test(){
-    await fetch('/test');
 }
 
 function getDate(){

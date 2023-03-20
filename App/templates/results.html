@@ -14,9 +14,11 @@
             {% if topic_.subtopics|length %}
                 <h4 class="uk-margin-small-bottom">Subtopics</h4>
                 <hr>
-                {% for top in topic_.subtopics %}
-                    <a href="/topic/{{top.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-default uk-border-pill"> {{top.name}} </a>
-                {% endfor %}
+                <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
+                    {% for top in topic_.subtopics %}
+                        <a href="/topic/{{top.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-default uk-border-pill"> {{top.name}} </a>
+                    {% endfor %}
+                </div>
             {% endif %}
 
             {% if not topic_.researcher_tags.all()|length and not topic_pubs|length %}
@@ -60,14 +62,14 @@
                                     <h4 class="uk-margin-remove"> {{pub['title']|title}} </h4>
                                     <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub['pub_type']}} </span> {% if pub['publication_date'] != '1' %} {{pub['publication_date']}} {% endif %} </div>
                                     <div>
+                                        {% set coauthors = [] %}
+                                        {% if pub['coauthors'] != "" and pub['coauthors'] %}
+                                            {% set coauthors = pub['coauthors'].split(', ') %}
+                                        {% endif %}
                                         {% if pub['authors']|length < 3 %}
                                             {% for n in range(pub['authors']|length) %}
                                                 <a href="/profile/{{pub['authors'][n]['id']}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub['authors'][n]['image_url'] %} {{pub['authors'][n]['image_url']}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub['authors'][n]['first_name']}}  {{pub['authors'][n]['last_name']}} </a>                              
                                             {% endfor %}
-
-                                            {% if pub['coauthors'] != "" and pub['coauthors'] %}
-                                                {% set coauthors = pub['coauthors'].split(', ') %}
-                                            {% endif %}
 
                                             {% set limit = 3 - pub['authors']|length %}
                                             {% if limit < coauthors|length %}
@@ -84,7 +86,7 @@
                                             {% for n in range(3) %}
                                                 <a href="/profile/{{pub['authors'][n]['id']}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url(`{% if pub['authors'][n]['image_url'] %} {{pub['authors'][n]['image_url']}} {% else %} /static/images/unknown.png {% endif %} `);" uk-icon></span> {{pub['authors'][n]['first_name']}}  {{pub['authors'][n]['last_name']}} </a>                              
                                             {% endfor %}
-                                            {% if pub['authors']|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                            {% if pub['authors']|length > 3 %} +{{(pub['authors']|length + coauthors|length ) - 3}} More {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -152,14 +154,14 @@
                                     <h4 class="uk-margin-remove"> {{pub['title']|title}} </h4>
                                     <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub['pub_type']}} </span> {% if pub['publication_date'] != '1' %} {{pub['publication_date']}} {% endif %} </div>
                                     <div>
+                                        {% set coauthors = [] %}
+                                        {% if pub['coauthors'] != "" and pub['coauthors'] %}
+                                            {% set coauthors = pub['coauthors'].split(', ') %}
+                                        {% endif %}
                                         {% if pub['authors']|length < 3 %}
                                             {% for re in pub['authors'] %}
                                                 <a href="/profile/{{re['id']}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if re['image_url'] %} {{re['image_url']}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{re['first_name']}}  {{re['last_name']}} </a>                              
                                             {% endfor %}
-
-                                            {% if pub['coauthors'] != "" and pub['coauthors'] %}
-                                                {% set coauthors = pub['coauthors'].split(', ') %}
-                                            {% endif %}
 
                                             {% set limit = 3 - pub['authors']|length %}
                                             {% if limit < coauthors|length %}
@@ -176,7 +178,7 @@
                                             {% for n in range(3) %}
                                                 <a href="/profile/{{pub['authors'][n]['id']}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url(`{% if pub['authors'][n]['image_url'] %} {{pub['authors'][n]['image_url']}} {% else %} /static/images/unknown.png {% endif %} `);" uk-icon></span> {{pub['authors'][n]['first_name']}}  {{pub['authors'][n]['last_name']}} </a>                              
                                             {% endfor %}
-                                            {% if pub['authors']|length > 3 %} +{{test|length - 3}} More {% endif %}
+                                            {% if pub['authors']|length > 3 %} +{{(pub['authors']|length + coauthors|length) - 3}} More {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -197,7 +199,7 @@
                 <h4 class="uk-first-column uk-width-1-1">Faculty</h4>
                 <div>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
-                        <li onclick="get_selection(this)" class="uk-active" uk-filter-control><a href="#">All</a></li>
+                        <li onclick="get_selection(this)" class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for faculty in faculties %}
                             <li onclick="get_selection(this)" uk-filter-control="filter: [data-faculty='{{faculty}}']; group: data-faculty"><a href="#"> {{faculty}} </a></li>
                         {% endfor %}
@@ -216,7 +218,7 @@
                 <h4 class="uk-first-column uk-width-1-1">Alphabetically</h4>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
-                        <li onclick="get_selection(this)" class="uk-active" uk-filter-control><a href="#">All</a></li>
+                        <li onclick="get_selection(this)" class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"|list %}
                             <li class="uk-padding-remove uk-margin-small-left" uk-filter-control="filter: [data-name='{{char}}']; group: data-name"><a href="#"> {{char}} </a></li>
                         {% endfor %}
@@ -271,9 +273,6 @@
     {% endif %}
 
     {% if publications %}
-    <script>
-        let ol = document.getElementById('overlay');
-    </script>
         <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter;">
             <h3 id="publication_num" class="uk-text-bold uk-padding uk-padding-remove-bottom"></h3>
 
@@ -281,7 +280,7 @@
                 <h4 class="uk-first-column">Publication Type</h4>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
-                        <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+                        <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for type in types %}
                             <li uk-filter-control="filter: [data-type='{{type}}']; group: data-type"><a href="#"> {{type}} </a></li>
                         {% endfor %}
@@ -292,7 +291,7 @@
                 <h4 class="uk-first-column">Publication Year</h4>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
-                        <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+                        <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for year in range(now.year, 1984, -1) %}
                             <li uk-filter-control="filter: [data-year='{{year}}']; group: data-year"><a href="#"> {{year}} </a></li>
                         {% endfor %}
@@ -303,7 +302,7 @@
                 <h4 class="uk-first-column uk-width-1-1">Alphabetically</h4>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
-                        <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+                        <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"|list %}
                             <li class="uk-padding-remove uk-margin-small-left" uk-filter-control="filter: [data-name='{{char}}']; group: data-name"><a href="#"> {{char}} </a></li>
                         {% endfor %}
@@ -312,7 +311,9 @@
             </div>
             
             <ul id="all_publication_ul" class="js-filter uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-match="target: .uk-card"></ul>
-            <script>
+            <script>                
+                let ol = document.getElementById('overlay');
+
                 let ap_ul = document.getElementById('all_publication_ul');
                 let pub_num = document.getElementById('publication_num');
 
@@ -330,8 +331,13 @@
                                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
                                         <div class="uk-margin-small-left uk-width-expand">
                                             <h4 class="uk-margin-remove"> ${titleCase(pub['title'])} </h4>
-                                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${pub['pub_type']} </span>${pub['publication_date']}</div>
+                                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${pub['pub_type']} </span>`;
+                                                if (pub['publication_date'] != 1){
+                                                    html1 += `${pub['publication_date']}`;
+                                                }
+                                                html1 += `</div>
                                             <div>`;
+                                                let coauthors = [];
                                                 if (pub['authors'].length < 3){
                                                     for (let re of pub['authors']){
                                                         html1 += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
@@ -344,7 +350,7 @@
                                                         html1 += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
                                                     }
                                                     if (pub['coauthors'] != "" && pub['coauthors'] != null){
-                                                        let coauthors = pub['coauthors'].split(', ');
+                                                        coauthors = pub['coauthors'].split(', ');
                                                         let limit = 3 - pub['authors'].length;
                                                         if (limit < coauthors.length){
                                                             for (let n = 0; n < limit; n += 1){
@@ -371,7 +377,7 @@
                                                         html1 += `');" uk-icon></span> ${pub['authors'][n]['first_name']}  ${pub['authors'][n]['last_name']} </a>`;
                                                     }
                                                     if (pub['authors'].length > 3){
-                                                        html1 += `+${pub['authors'].length - 3} More`;
+                                                        html1 += `+${(pub['authors'].length + coauthors.length) - 3} More`;
                                                     }
                                                 }
                                             html1 += `</div>
