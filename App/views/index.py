@@ -69,8 +69,14 @@ def all_publications():
 @index_views.route('/load/publications', methods=['GET'])
 def load_publications():
     publications = get_all_publications()
-    shuffle(publications)
-    return [pub.toDict() for pub in publications]
+    shuffle(publications) 
+    publications = [pub.toDict() for pub in publications]
+    return publications
+
+@index_views.route('/load/pubauthors/<id>', methods=['GET'])
+def load_pub_authors(id):
+    pub = get_pub_byid(id)
+    return [record.researcher.toDict() for record in pub.pub_records.all()]
 
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
@@ -87,7 +93,11 @@ def search():
     if request.method == 'POST':
         form = request.form
         search_terms = form['search']
-        results = [authors, publications, topics] = parse_search(search_terms)
+        authors, publications, topics = parse_search(search_terms)
+        results = []
+        results.append(authors)
+        results.append([pub.toDict() for pub in publications])
+        results.append(topics)
         return render_template('results.html', results=results, search=True, search_terms=search_terms)
 
 @index_views.route('/', methods=['GET'])
@@ -137,8 +147,7 @@ def topic_page(id):
 @index_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    publications = [record.publication.toDict() for record in re.pub_records.all()]
-    return publications
+    return [record.publication.toDict() for record in re.pub_records.all()]
 
 @index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):

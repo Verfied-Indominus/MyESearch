@@ -1,4 +1,6 @@
 from App.database import db
+import datetime
+from datetime import datetime
 
 class Publication(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,13 +45,15 @@ class Publication(db.Model):
             'abstract': self.abstract,
             'pub_type':self.pub_type,
             'free_access': self.free_access,
-            'publication_date': self.publication_date,
+            'publication_date': datetime.strftime(self.publication_date, '%Y'),
             'cover': self.cover,
             'url': self.url,
             'eprint': self.eprint,
+            'coauthors': self.coauthors,
             'reads': self.reads,
             'citations': self.citations,
             'downloads': self.downloads,
             'searches': self.searches,
-            'coauthors': self.coauthors
+            'coauthors': self.coauthors,
+            'authors': [rec.researcher.toDict() for rec in self.pub_records.all()]
         }
