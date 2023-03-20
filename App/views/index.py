@@ -82,12 +82,15 @@ def load_pub_authors(id):
 def all_researchers():
     return render_template("results.html", researchers=True, faculties=faculties)
 
-@index_views.route('/load/reasearchers', methods=['GET'])
+@index_views.route('/load/researchers', methods=['GET'])
 def load_researchers():
     researchers = get_all_researchers()
     shuffle(researchers)
+    print('test')
     return [re.toDict() for re in researchers]
- 
+
+search_pubs = []
+
 @index_views.route('/search',methods=['POST'])
 def search():
     if request.method == 'POST':
@@ -99,6 +102,8 @@ def search():
         results.append([pub.toDict() for pub in publications])
         results.append(topics)
         return render_template('results.html', results=results, search=True, search_terms=search_terms)
+
+
 
 @index_views.route('/', methods=['GET'])
 def index_page():

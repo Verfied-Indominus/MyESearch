@@ -22,8 +22,8 @@ def parse_search(search_terms):
         topics.extend(result)
         for res in result:
             authors.extend([rec.researcher for rec in res.researcher_tags])
-            publications.extend([rec.publication for rec in res.pub_tags[:10] if rec.publication not in publications])
-
+            publications.extend([rec.publication for rec in res.pub_tags[:5] if rec.publication not in publications])
+ 
     for num in nums:
         result = Publication.query.filter(extract('year', Publication.publication_date) == datetime.date(datetime.strptime(f"{num}-1-1", "%Y-%m-%d")).year).all()
         if result:
@@ -35,7 +35,7 @@ def parse_search(search_terms):
             result = Researcher.query.filter_by(first_name=f"{words[n]}".title(), last_name=f"{words[n+1]}".title()).first()
             if result:
                 authors.append(result)
-                publications.extend([rec.publication for rec in result.pub_records[:10] if rec.publication not in publications])
+                publications.extend([rec.publication for rec in result.pub_records[:15] if rec.publication not in publications])
             
             result = Topic.query.filter_by(name=f"{words[n]} {words[n+1]}".title()).first()
             if result and result not in topics:
@@ -81,13 +81,13 @@ def parse_search(search_terms):
             if result:
                 authors.extend([re for re in result if re not in authors])
                 for res in result:
-                    publications.extend([rec.publication for rec in res.pub_records[:10] if rec.publication not in publications])
+                    publications.extend([rec.publication for rec in res.pub_records[:15] if rec.publication not in publications])
 
             result = Researcher.query.filter_by(last_name=word.capitalize()).all()
             if result:
                 authors.extend([re for re in result if re not in authors]) 
                 for res in result:
-                    publications.extend([rec.publication for rec in res.pub_records[:10] if rec.publication not in publications])      
+                    publications.extend([rec.publication for rec in res.pub_records[:15] if rec.publication not in publications])      
 
             result = Publication.query.filter(Publication.coauthors.contains(word.capitalize())).all()
             if result:

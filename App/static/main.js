@@ -385,3 +385,135 @@ function pastDate(){
         return false;
     }
 }
+
+
+async function loadResearchers(researchers){
+    let ar_ul = document.getElementById('all_researcher_ul');
+    let re_num = document.getElementById('researcher_num');
+
+    re_num.innerHTML = `All Researchers (${researchers.length} Present)`;
+    let html1 = "";
+    for (let x = 0; x < researchers.length; x += 1){
+        window.setTimeout(() => {
+            let re = researchers[x];
+            html1 += `
+                <li data-name="${re['first_name'][0].toUpperCase()}" data-faculty="${re['faculty']}" data-department="${re['department']}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
+                    <div style="cursor: pointer;" onclick="window.location='/profile/${re['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
+                        <div class="uk-margin-small-top uk-margin-small-bottom uk-width-1-1 uk-text-center">
+                            <div class="uk-flex uk-flex-center uk-margin-small-bottom">`;
+                                let html2 = "";
+                                if (re['image_url'] != null){
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="${re['image_url']}" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                else{
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="/static/images/unknown.png" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                html1 += html2;
+                                html1 += `
+                            </div>
+                            <h4 class="uk-margin-auto"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
+                            <div> ${re['position']} </div>
+                            <div> ${re['faculty']} </div>
+                            <div> ${re['department']} </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            if (x % (researchers.length - 1) == 0){
+                ar_ul.innerHTML = html1;
+            }
+        }, 0);
+    } 
+    ol.style.opacity = '0';
+    this.document.body.style.overflowY = 'auto';
+    this.setTimeout(function(){
+        ol.style.visibility = 'hidden';
+        ol.style.display = 'none';
+    }, 200);
+}
+
+
+async function loadPublications(publications){
+    let ap_ul = document.getElementById('all_publication_ul');
+    let pub_num = document.getElementById('publication_num');
+    pub_num.innerHTML = `All Publications (${publications.length} Present)`;
+    let html1 = "";
+    for (let x = 0; x < publications.length; x += 1){
+        let pub = publications[x];
+        window.setTimeout(() => {
+            html1 += `
+                <li data-year="${pub['publication_date']}" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
+                    <div style="cursor: pointer;" onclick="window.location='/publication/${pub['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
+                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
+                        <div class="uk-margin-small-left uk-width-expand">
+                            <h4 class="uk-margin-remove"> ${titleCase(pub['title'])} </h4>
+                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${pub['pub_type']} </span>`;
+                                if (pub['publication_date'] != 1){
+                                    html1 += `${pub['publication_date']}`;
+                                }
+                                html1 += `</div>
+                            <div>`;
+                                let coauthors = [];
+                                if (pub['authors'].length < 3){
+                                    for (let re of pub['authors']){
+                                        html1 += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (re['image_url'] != null){
+                                                html1 += `${re['image_url']}`;
+                                            } 
+                                            else {
+                                                html1 += '/static/images/unknown.png';
+                                            }   
+                                        html1 += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                    }
+                                    if (pub['coauthors'] != "" && pub['coauthors'] != null){
+                                        coauthors = pub['coauthors'].split(', ');
+                                        let limit = 3 - pub['authors'].length;
+                                        if (limit < coauthors.length){
+                                            for (let n = 0; n < limit; n += 1){
+                                                html1 += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                            html1 += `+${coauthors.length - limit} More`;
+                                        }
+                                        else {
+                                            for (let n = 0; n < coauthors.length; n += 1){
+                                                html1 += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (let n = 0; n < 3; n += 1){
+                                        html1 += `<a href="/profile/${pub['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (pub['authors'][n]['image_url'] != null){
+                                                html1 += `${pub['authors'][n]['image_url']}`;
+                                            } 
+                                            else {
+                                                html1 += '/static/images/unknown.png';
+                                            }   
+                                        html1 += `');" uk-icon></span> ${pub['authors'][n]['first_name']}  ${pub['authors'][n]['last_name']} </a>`;
+                                    }
+                                    if (pub['authors'].length > 3){
+                                        html1 += `+${(pub['authors'].length + coauthors.length) - 3} More`;
+                                    }
+                                }
+                            html1 += `</div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            if (x % (publications.length - 1) == 0){
+                ap_ul.innerHTML = html1;
+            }
+        }, 0); 
+    } 
+    ol.style.opacity = '0';
+    this.document.body.style.overflowY = 'auto';
+    this.setTimeout(function(){
+        ol.style.visibility = 'hidden';
+        ol.style.display = 'none';
+    }, 200);
+}
+
+function titleCase(str) {
+    return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+}
