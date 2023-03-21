@@ -190,9 +190,11 @@ def signup_page():
 
     if request.method == 'POST':
         form = request.form 
+        re = False
 
         if 'title' in form:
             builder = ResearcherBuilder()
+            re = True
         else:
             builder = StudentBuilder()
 
@@ -210,7 +212,7 @@ def signup_page():
         if form['middle_name']:
             builder.middle_name(form['middle_name'])
         
-        if isinstance(builder, ResearcherBuilder):
+        if re:
             builder = (
                 builder
                     .title(form['title'])
@@ -229,7 +231,7 @@ def signup_page():
 
         builder.build()
 
-        if isinstance(builder, ResearcherBuilder):
+        if re:
             user = builder.researcher
         else:
             user = builder.student
@@ -241,7 +243,8 @@ def signup_page():
         create_library(user.id)
         create_recents(user.id)
 
-        add_interests_to_researcher(re_interests, user.id)
+        if re:
+            add_interests_to_researcher(re_interests, user.id)
 
         if image:
             image_url = uploadFile(user.id, image[0])
@@ -252,7 +255,10 @@ def signup_page():
         login_user(user, False)
         flash('You successfully created your account')
 
-        return redirect(url_for('.add_publication', id=user.id))
+        if re:
+            return redirect(url_for('.add_publication', id=user.id))
+        else:
+            return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
 @index_views.route('/addpublication/<id>', methods=['GET', 'POST'])
