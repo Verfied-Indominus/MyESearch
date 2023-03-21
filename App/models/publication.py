@@ -45,7 +45,6 @@ class Publication(db.Model):
             'pub_type':self.pub_type,
             'free_access': self.free_access,
             'publication_date': datetime.strftime(self.publication_date, '%Y'),
-            'cover': self.cover,
             'url': self.url,
             'eprint': self.eprint,
             'coauthors': self.coauthors,

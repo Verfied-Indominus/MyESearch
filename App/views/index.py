@@ -163,6 +163,7 @@ def login_page():
             if 'remember' in form:
                 remember = True
             login_user(user, remember)
+            flash(f'Welcome {user.first_name}')
             return redirect(url_for('.index_page'))
 
     return render_template('login.html')
@@ -177,19 +178,6 @@ def logout():
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
-    # interests = [
-    #     'Artificial Intelligence',
-    #     'Biotechnology',
-    #     'Climate Change',
-    #     'Computer Science',
-    #     'Energy',
-    #     'Materials Science',
-    #     'Medicine',
-    #     'Neuroscience',
-    #     'Quantum Computing',
-    #     'Robotics'
-    # ]
-    
     interests = get_signup_topics()
 
     baseForm = BaseSignUpForm()
@@ -253,7 +241,6 @@ def signup_page():
         create_library(user.id)
         create_recents(user.id)
 
-        print(re_interests)
         add_interests_to_researcher(re_interests, user.id)
 
         if image:
@@ -262,17 +249,41 @@ def signup_page():
             builder.image_url(image_url)
             builder.build()
 
-        if isinstance(current_user, User):
-            logout_user()
         login_user(user, False)
         flash('You successfully created your account')
 
-        return redirect(url_for('.index_page'))
+        return redirect(url_for('.add_publication', id=user.id))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
-@index_views.route('/addpublication', methods=['GET'])
-def add_publication():
-    return render_template('addpublication.html', types=types, dates=dates)
+@index_views.route('/addpublication/<id>', methods=['GET', 'POST'])
+def add_publication(id):
+    re = get_researcher(id)
+    if not re:
+        flash("The specified User ID does not exist or is not a Researcher's")
+        flash('Researchers may also add publications in their profile')
+        return redirect(url_for('.index_page'))
+
+    if request.method == 'POST':
+        form = request.form
+        data = {
+            'title': form['title'],
+            'abstract': form['abstract'],
+            'pub_type': form['pub_type'],
+            'publication_date': datetime.date(datetime(form['publication_date'], 1, 1)),
+            'url': form['url'],
+            'eprint': form['eprint']
+        }
+        if '.pdf' in form['url'] or '.pdf' in form['eprint']:
+            data['free_access'] = True
+        else:
+            data['free_access'] = False
+
+        pub = create_pub(data)
+        add_pub_record(re.id, pub.id)
+
+        flash('A publication has been succesfully added')
+        return redirect(url_for('.index_page'))
+    return render_template('addpublication.html', id=id, types=types, dates=dates)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
@@ -336,6 +347,11 @@ def add_search_re(id):
     add_search(re)
     return 'Added'
 
+@index_views.route('/profile/addpublication', methods=['POST'])
+def add_profile_pub():
+    # re = current_user
+    return 'temp'
+
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
     if not isinstance(current_user, User):
@@ -383,7 +399,8 @@ def profile(id):
             if update_visit_record(vrec):
                 add_view(user)
 
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, 
+                            researchers=researchers, interests=interests, skills=skills, types=types, dates=dates)
 
 @index_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):

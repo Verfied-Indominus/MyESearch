@@ -800,7 +800,7 @@ async function loadProfilePubs(pubs){
                 </div>
             `;
         }
-        propubs.innerHTML = html;
+        propubs.innerHTML += html;
     }
 
     endLoad();
