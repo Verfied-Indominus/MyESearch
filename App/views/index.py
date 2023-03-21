@@ -281,6 +281,40 @@ def add_publication(id):
         pub = create_pub(data)
         add_pub_record(re.id, pub.id)
 
+        bibtex = {}
+
+        bibtex['author'] = f"{re.first_name} {re.last_name}, "
+        bibtex['author'] += form['coauthors']
+
+        if form['journal']:
+            bibtex['journal'] = form['journal']
+
+        if form['publisher']:
+            bibtex['publisher'] = form['publisher']
+
+        if form['organization']:
+            bibtex['organization'] = form['organization']
+
+        if form['institution']:
+            bibtex['institution'] = form['institution']
+
+        if form['booktitle']:
+            bibtex['booktitle'] = form['booktitle']
+
+        if form['month']:
+            bibtex['month'] = form['month']
+
+        if form['note']:
+            bibtex['note'] = form['note']
+
+        if form['pages']:
+            bibtex['pages'] = form['pages']
+
+        if form['volume']:
+            bibtex['volume'] = form['volume']
+
+        set_pub_bibtex(pub, bibtex)
+
         flash('A publication has been succesfully added')
         return redirect(url_for('.index_page'))
     return render_template('addpublication.html', id=id, types=types, dates=dates)
@@ -349,8 +383,60 @@ def add_search_re(id):
 
 @index_views.route('/profile/addpublication', methods=['POST'])
 def add_profile_pub():
-    # re = current_user
-    return 'temp'
+    re = current_user
+    form = request.form
+    data = {
+        'title': form['title'],
+        'abstract': form['abstract'],
+        'pub_type': form['pub_type'],
+        'publication_date': datetime.date(datetime(int(form['publication_date']), 1, 1)),
+        'url': form['url'],
+        'eprint': form['eprint']
+    }
+    if '.pdf' in form['url'] or '.pdf' in form['eprint']:
+        data['free_access'] = True
+    else:
+        data['free_access'] = False
+
+    pub = create_pub(data)
+    add_pub_record(re.id, pub.id)
+
+    bibtex = {}
+
+    bibtex['author'] = f"{re.first_name} {re.last_name}, "
+    bibtex['author'] += form['coauthors']
+
+    if form['journal']:
+        bibtex['journal'] = form['journal']
+
+    if form['publisher']:
+        bibtex['publisher'] = form['publisher']
+
+    if form['organization']:
+        bibtex['organization'] = form['organization']
+
+    if form['institution']:
+        bibtex['institution'] = form['institution']
+
+    if form['booktitle']:
+        bibtex['booktitle'] = form['booktitle']
+
+    if form['month']:
+        bibtex['month'] = form['month']
+
+    if form['note']:
+        bibtex['note'] = form['note']
+
+    if form['pages']:
+        bibtex['pages'] = form['pages']
+
+    if form['volume']:
+        bibtex['volume'] = form['volume']
+
+    set_pub_bibtex(pub, bibtex)
+
+    flash('A publication has been succesfully added')
+    return redirect(url_for('.profile', id=re.id))
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
@@ -533,9 +619,9 @@ def test():
     #         print(keywords)
     #         print([tag.topic.name for tag in pub.tags.all()])
 
-    for pub in get_all_publications():
-        print('\n', pub.pub_type)
-        print(pub.bibtex, '\n') 
+    # for pub in get_all_publications(): 
+    #     print('\n', pub.pub_type)
+    #     print(pub.bibtex, '\n') 
 
     print('\n\nDONE\n\n')
 

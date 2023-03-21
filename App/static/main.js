@@ -10,7 +10,7 @@ function getMessages(msg){
     if (msg.length > 0){
         UIkit.notification({
             message: msg,
-            status: 'danger',
+            status: 'primary',
             pos: 'top-center',
             timeout: 5000
         });
