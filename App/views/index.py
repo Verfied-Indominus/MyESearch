@@ -132,10 +132,10 @@ def publication_page(id):
         flash('Publication does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
     
-    researchers, topics, pubs = get_publication_suggestions(pub)
+    # researchers, topics, pubs = get_publication_suggestions(pub)
 
-    return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
-    # return render_template("publication.html", pub=pub)
+    # return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
+    return render_template("publication.html", pub=pub)
 
 @index_views.route('/topic/<id>', methods=['GET'])
 def topic_page(id):
@@ -148,11 +148,6 @@ def topic_page(id):
     topic_pubs = [tag.publication.toDict() for tag in topic_.pub_tags]
     
     return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs)
-
-@index_views.route('/load/profilepubs/<id>', methods=['GET'])
-def load_profile_pubs(id):
-    re = get_researcher(id)
-    return [record.publication.toDict() for record in re.pub_records.all()]
 
 @index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
@@ -371,7 +366,7 @@ def profile(id):
 
     if (isinstance(user, Researcher)):
         re = True
-        pubs = get_all_publications_for_user(user)
+        pubs = len(user.pub_records.all())
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
         skills = [user.skills]
@@ -393,6 +388,10 @@ def profile(id):
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
 
+@index_views.route('/load/profilepubs/<id>', methods=['GET'])
+def load_profile_pubs(id):
+    re = get_researcher(id)
+    return [record.publication.toDict() for record in re.pub_records.all()]
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply

@@ -5,6 +5,15 @@
 {{ super() }}
 
 {% block content %}
+<script type="text/javascript" src="/static/main.js"></script>
+<script>        
+    function pageLoad(){null}
+    fetch('/load/pubsuggestions/{{pub.id}}').then((response) => response.json()).then((data) => {
+        
+        loadSuggestions(data, {{pub.id}});
+    });
+</script>
+
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
         <div class="uk-card lightred-background uk-width-1-3 uk-padding-remove uk-flex uk-flex-center">
@@ -117,149 +126,10 @@
                     <div class="uk-padding">
                         <h4 class="uk-margin-remove">Suggested Publications</h4>
                         <hr class="uk-margin-small">
-                        <ul uk-tab>
-                            {% if researchers %} <li><a href=""> More from the authors</a></li> {% endif %}
-                            {% if topics|length > 1 %} <li><a href="">More from the topics</a></li> {% endif %}
-                            <li><a href="">Most popular</a></li>
-                        </ul> 
+                        <ul id="tabs" uk-tab></ul> 
                         
-                        <ul class="uk-switcher uk-height-max-large" uk-overflow-auto>
+                        <ul id="switcher" class="uk-switcher uk-height-max-large" uk-overflow-auto>
 
-                        {% if researchers %}
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for p in researchers %}
-                                {% if p != pub %}
-                                    <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
-                                            <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
-                                                <div>
-                                                    {% if p.pub_records.all()|length < 2 %}
-                                                        {% for n in range(p.pub_records.all()|length) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                    
-                                                        {% if p.coauthors != "" and p.coauthors %}
-                                                            {% set coauthors = p.coauthors.split(', ') %}
-                                                        {% endif %}
-                    
-                                                        {% set limit = 2 - p.pub_records.all()|length %}
-                                                        {% if limit < coauthors|length %}
-                                                            {% for n in range(limit) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}
-                                                            {% if coauthors|length - limit > 0 %} +{{coauthors|length - limit}} More {% endif %}
-                                                        {% else %}    
-                                                            {% for n in range(coauthors|length) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}                              
-                                                        {% endif %}
-                                                    {% else %}
-                                                        {% for n in range(2) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% endfor %}
-                            </li>
-                        {% endif %}
-
-                        {% if topics|length > 1 %}
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for p in topics %}
-                                {% if p != pub %}
-                                    <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
-                                            <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
-                                                <div>
-                                                    {% if p.pub_records.all()|length < 2 %}
-                                                        {% for n in range(p.pub_records.all()|length) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                    
-                                                        {% if p.coauthors != "" and p.coauthors %}
-                                                            {% set coauthors = p.coauthors.split(', ') %}
-                                                        {% endif %}
-                    
-                                                        {% set limit = 2 - p.pub_records.all()|length %}
-                                                        {% if limit < coauthors|length %}
-                                                            {% for n in range(limit) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}
-                                                            {% if coauthors|length - limit > 0 %} +{{coauthors|length - limit}} More {% endif %}
-                                                        {% else %}    
-                                                            {% for n in range(coauthors|length) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}                              
-                                                        {% endif %}
-                                                    {% else %}
-                                                        {% for n in range(2) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% endfor %}
-                            </li>
-                        {% endif %}
-
-                            <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                {% for p in pubs %}
-                                {% if p != pub %}
-                                    <div style="padding: 0 30px">
-                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{p.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not p.cover %} /static/images/publications/{{p.pub_type}}.png {% else %} {{p.cover}} {% endif %}" uk-img></div>
-                                            <div class="uk-margin-small-left uk-width-expand">
-                                                <h4 class="uk-margin-remove"> {{p.title|title}} </h4>
-                                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{p.pub_type}} </span> {{p.publication_date.strftime('%Y')}} </div>
-                                                <div>
-                                                    {% if p.pub_records.all()|length < 2 %}
-                                                        {% for n in range(p.pub_records.all()|length) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                    
-                                                        {% if p.coauthors != "" %}
-                                                            {% set coauthors = p.coauthors.split(', ') %}
-                                                        {% endif %}
-                    
-                                                        {% set limit = 2 - p.pub_records.all()|length %}
-                                                        {% if limit < coauthors|length %}
-                                                            {% for n in range(limit) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}
-                                                            {% if coauthors|length - limit > 0 %} +{{coauthors|length - limit}} More {% endif %}
-                                                        {% else %}    
-                                                            {% for n in range(coauthors|length) %}
-                                                                <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                            {% endfor %}                              
-                                                        {% endif %}
-                                                    {% else %}
-                                                        {% for n in range(2) %}
-                                                            <a href="/profile/{{p.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if p.pub_records[n].researcher.image_url %} {{p.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{p.pub_records[n].researcher.first_name}}  {{p.pub_records[n].researcher.last_name}} </a>                              
-                                                        {% endfor %}
-                                                        {% if p.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% endfor %}
-                            </li>
                         </ul>
 
                     </div>
