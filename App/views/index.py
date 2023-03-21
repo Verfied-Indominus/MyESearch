@@ -57,13 +57,14 @@ departments = [
         'Mechanical and Manufacturing Enterprise Research'
     ]
 
-@index_views.route('/all/publications',methods=['GET'])
-def all_publications():
-    types = [
-        'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'method', 'misc',
-        'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal', 
+types = [
+        'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'incollection', 'method', 'misc',
+        'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal',
         'technical report', 'techreport', 'thesis'
     ]
+
+@index_views.route('/all/publications',methods=['GET'])
+def all_publications():
     return render_template("results.html", publications=True, now=datetime.utcnow(), types=types)
 
 @index_views.route('/load/publications', methods=['GET'])
@@ -131,10 +132,6 @@ def publication_page(id):
     if not pub:
         flash('Publication does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
-    
-    # researchers, topics, pubs = get_publication_suggestions(pub)
-
-    # return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
     return render_template("publication.html", pub=pub)
 
 @index_views.route('/topic/<id>', methods=['GET'])
@@ -275,7 +272,7 @@ def signup_page():
 
 @index_views.route('/addpublication', methods=['GET'])
 def add_publication():
-    return render_template('addpublication.html')
+    return render_template('addpublication.html', types=types, dates=dates)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
@@ -519,14 +516,32 @@ def test():
     #         print(keywords)
     #         print([tag.topic.name for tag in pub.tags.all()])
 
-    for n in range(1, 3):
-        pub = get_pub_byid(n)
-        print('\n',pub.bibtex)
-        request = f"Generate a Chicago style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-        citation  = prompt(request)["choices"][0]["text"]
-        print(citation)
+    for pub in get_all_publications():
+        print('\n', pub.pub_type)
+        print(pub.bibtex, '\n') 
 
     print('\n\nDONE\n\n')
+
+
+    '''
+    conference paper:
+    booktitle, organization, pages
+
+    patent:
+    month, note, publisher
+
+    article:
+    journal, number, pages, publisher
+
+    incollection:
+    booktitle, pages, publisher
+
+    techreport:
+    institution
+
+    phdthesis:
+    author, pub_year, title
+    '''
 
     # for pub in pubs:
         # if pub.bibtex and 'Patent' in pub.bibtex:

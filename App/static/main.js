@@ -3,12 +3,7 @@ let messages;
 let run = false;
 
 function pageLoad(){
-    ol.style.opacity = '0';
-    this.document.body.style.overflowY = 'auto';
-    this.setTimeout(function(){
-        ol.style.visibility = 'hidden';
-        ol.style.display = 'none';
-    }, 200);
+    endLoad();
 }
 
 function getMessages(msg){
@@ -307,7 +302,6 @@ async function addToRecents(user_id, pub_id){
 async function addRead(id){
     if (pastDate()){
         let response = await fetch(`/publication/addread/${id}`);
-        console.log(response);
     }
 }
 
@@ -315,7 +309,6 @@ async function addRead(id){
 async function addDownload(id){
     if (pastDate()){
         let response = await fetch(`/publication/adddownload/${id}`);
-        console.log(response);
     }
 }
 
@@ -332,7 +325,6 @@ async function addCitation(id){
 async function addSearchPublication(id){
     if (pastDate()){
         let response = await fetch(`/publication/addsearch/${id}`);
-        console.log(response);
     }
 }
 
@@ -348,11 +340,12 @@ async function addSearchPublication(id){
 async function addSearchResearcher(id){
     if (pastDate()){
         let response = await fetch(`/profile/addsearch/${id}`);
-        console.log(response);
     }
 }
 
-
+async function test(){
+    await fetch('/test');
+}
 
 // background updater for researcher publications
 async function update(){
@@ -424,12 +417,8 @@ async function loadResearchers(researchers){
             }
         }, 0);
     } 
-    ol.style.opacity = '0';
-    this.document.body.style.overflowY = 'auto';
-    this.setTimeout(function(){
-        ol.style.visibility = 'hidden';
-        ol.style.display = 'none';
-    }, 200);
+    
+    endLoad();
 }
 
 
@@ -506,12 +495,8 @@ async function loadPublications(publications){
             }
         }, 0); 
     } 
-    ol.style.opacity = '0';
-    this.document.body.style.overflowY = 'auto';
-    this.setTimeout(function(){
-        ol.style.visibility = 'hidden';
-        ol.style.display = 'none';
-    }, 200);
+    
+    endLoad();
 }
 
 function titleCase(str) {
@@ -746,12 +731,7 @@ async function loadSuggestions(data, id){
     html += '</li>';
     switcher.innerHTML += html;
 
-    ol.style.opacity = '0';
-    this.document.body.style.overflowY = 'auto';
-    this.setTimeout(function(){
-        ol.style.visibility = 'hidden';
-        ol.style.display = 'none';
-    }, 200);
+    endLoad();
 }
 
 async function loadProfilePubs(pubs){
@@ -823,6 +803,10 @@ async function loadProfilePubs(pubs){
         propubs.innerHTML = html;
     }
 
+    endLoad();
+}
+
+function endLoad(){
     ol.style.opacity = '0';
     this.document.body.style.overflowY = 'auto';
     this.setTimeout(function(){

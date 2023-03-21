@@ -13,7 +13,8 @@
                 <a class="uk-margin-auto-left uk-margin-auto-vertical uk-button uk-button-text uk-text-capitalize" href="/">Skip for now <span uk-icon="arrow-right"></span></a>
             </div>
             <h3 class="uk-text-center uk-margin-small-top">Add Publication</h3>
-            <form action="/addpublication/{{id}}" method="post" class="uk-form-stacked uk-margin uk-margin-auto uk-margin-large-bottom uk-width-4-5">
+            <form action="/addpublication/{{id}}" method="post" class="uk-padding-small uk-padding-remove-vertical uk-height-large uk-form-stacked uk-margin uk-margin-auto uk-margin-large-bottom uk-width-4-5 scroll">
+                
                 <div class="uk-margin">
                     <label for="title" class="uk-form-label">Title</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
@@ -24,7 +25,21 @@
                 <div class="uk-margin">
                     <label for="abstract" class="uk-form-label">Abstract</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
-                        <textarea class="uk-width-1-1 uk-textarea" name="abstract" rows="10"></textarea>
+                        <textarea class="uk-width-1-1 uk-textarea" name="abstract" rows="8"></textarea>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="abstract" class="uk-form-label">Keywords</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <textarea class="uk-width-1-1 uk-textarea" name="keywords" rows="3" placeholder="Enter comma-separated keywords"></textarea>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="abstract" class="uk-form-label">Co-Authors</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <textarea class="uk-width-1-1 uk-textarea" name="coauthors" rows="3" placeholder="Enter comma-separated names e.g., John Doe, Jane N Doe"></textarea>
                     </div>
                 </div>
 
@@ -32,26 +47,109 @@
                     <label for="pub_type" class="uk-form-label">Publication Type</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
                         <select class="uk-select" name="pub_type">
-                            {% for p in pub_ %}
+                            <option value="0" selected disabled>Select A Publication Type</option>
+                            {% for t in types %}
+                                <option value="{{t|title}}">{{t|title}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
 
-                <div class="uk-margin uk-flex">
-                    <span>
-                        Remember Me
-                        <input class="uk-checkbox" name="remember" type="checkbox">
-                    </span>
-                    <button class="uk-button uk-button-text uk-text-capitalize uk-margin-auto-left">Forgot your password?</button>
+                <div class="uk-margin">
+                    <label for="pub_type" class="uk-form-label">Publication Date</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <select class="uk-select" name="pub_type">
+                            <option value="0" selected disabled>Select Year Published</option>
+                            {% for d in dates %}
+                                <option value="{{d}}">{{d}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">URL/DOI</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="url" type="url">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Link For PDF File</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="eprint" type="url">
+                    </div>
+                </div>
+
+                <h4>Fill out where applicable</h4>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Journal</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="journal" type="text" placeholder="e.g. SIAM Journal on Control and Optimization">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Publisher</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="publisher" type="text" placeholder="e.g. SIAM">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Organization</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="organization" type="text" placeholder="e.g. IEEE">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Institution</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="institution" type="text" placeholder="e.g. Massachusetts Inst of Tech">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Booktitle</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="booktitle" type="text" placeholder="e.g. 2009 IEEE 70th Vehicular Technology Conference Fall">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Month</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="month" type="text" placeholder="e.g. Nov 23">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Note</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="note" type="text" placeholder="e.g. US Patent 8,331,249">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Pages</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="pages" type="text" placeholder="e.g. 340-365">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="title" class="uk-form-label">Volume</label>
+                    <div class="uk-inline uk-form-controls uk-width-expand">
+                        <input class="uk-input" name="volume" type="text" placeholder="e.g. 5">
+                    </div>
                 </div>
 
                 <div class="uk-margin-medium-top uk-margin uk-flex uk-flex-center">
                     <button type="submit" class="uk-button uk-button-primary">Login</button>
                 </div>
             </form>
-            <div class="uk-margin-medium-bottom uk-flex uk-flex-center">
-                <span class="uk-flex uk-flex-middle">Don't Have An Account? <a href="/signup" class="uk-button uk-button-text uk-text-capitalize uk-text-decoration-none uk-margin-small-left">Sign Up Here</a></span>
-            </div>
         </div>
     </div>
 {% endblock %} 
