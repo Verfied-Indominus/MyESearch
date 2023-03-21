@@ -317,6 +317,8 @@ async function addCitation(id){
     if (pastDate()){
         let response = await fetch(`/publication/addcitation/${id}`);
         let citation = await response.json();
+        let cite_body = document.getElementById('citation-modal-body');
+        cite_body.innerHTML = citation['citation'];
         // add element to display citation
     }
 }

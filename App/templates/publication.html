@@ -27,8 +27,19 @@
                         Add to Library
                     </div>
 
-                    <div onclick="addCitation({{pub.id}});" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
+                    <div uk-toggle="target: #citation-modal" onclick="addCitation({{pub.id}});" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
                         Cite
+                    </div>
+
+                    <div id="citation-modal" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                            <h4 class="uk-modal-title">Chicago</h4>
+                            <div id="citation-modal-body">
+                                <div uk-spinner></div>
+                                <div>Loading Citation</div>
+                            </div>
+                        </div>
                     </div>
                     {% if not pub.free_access %}
                     <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >

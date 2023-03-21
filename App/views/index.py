@@ -373,7 +373,7 @@ def add_citation(id):
     add_citation_to_pub(pub)
     request = f"Generate a Chicago style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
     citation  = prompt(request)["choices"][0]["text"]
-    return citation
+    return {'citation': citation}
 
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):
