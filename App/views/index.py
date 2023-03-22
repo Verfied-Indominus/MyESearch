@@ -365,7 +365,7 @@ def add_read(id):
 def add_download(id):
     pub = get_pub_byid(id)
     add_download_to_pub(pub)
-    return 'Added'
+    return 'Added' 
 
 @index_views.route('/publication/addcitation/<id>', methods=['GET'])
 def add_citation(id):
