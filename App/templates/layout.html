@@ -123,13 +123,133 @@
             </form>
         </div>
       </div>
+      
       <div>
         <ul class="uk-navbar-nav">
           <li>
-            <a href="#">
+            <a href="">
               <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>
             </a>
-            <div class="uk-card uk-card-default uk-card-body" uk-drop="mode: click">Test Code</div>
+            <!-- Researcher added a new publication and a Peer Researcher posted a new publication -->
+            <div class="uk-card uk-card-default uk-width-1-3@m " uk-drop="mode: click">
+              <div class="uk-card-header uk-padding-small">
+                  <div class="uk-grid-small uk-flex-middle" uk-grid>
+                      <div class="uk-width-auto ">
+                        <div class="uk-flex">
+                          <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                          <div> 
+                            <p class="uk-margin-small-bottom">Mr. Amit Ramkissoon added a New Article.</p>
+                            <div class="uk-flex">
+                              <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/article.png" alt="Avatar">
+                              <a>Database Administration for Professional in Trinidad and Tobago</a>
+                            </div>
+                            <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+            
+            
+              <!-- Follower(person) requested access to a publication -->
+              <div class="uk-card-header uk-padding-small">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                        <div> 
+                          <p class="uk-margin-small-bottom">Sam Smith Requested Access to your Book.</p>
+                          <div class="uk-flex">
+                            <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/book.png" alt="Avatar">
+                            <a>We will Rise Up High Like the Mountains</a> 
+                          </div>
+                            <button class="uk-margin-small-top uk-button uk-button-small uk-button-primary uk-border-pill">Accept</button> 
+                            <button class="uk-margin-small-top uk-button uk-button-small uk-button-danger uk-border-pill">Decline</button>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <!-- Peer Verification -->
+              <div class="uk-card-header uk-padding-small">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                        <div> 
+                          <p class="uk-margin-small-bottom"> Dr. Boba Tea needs to be Verified as a UWI Researcher.</p>
+                            <button class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
+                            <button class="uk-button uk-button-small uk-button-danger uk-border-pill">Dismiss</button>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+
+              <!-- Publication was added under a Specific Topic -->
+              <div class="uk-card-header uk-padding-small">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/book.png" alt="Avatar">
+                        <div> 
+                          <p class="uk-margin-small-bottom">
+                          <a>Technology for Industrical Plantations</a> was added to Computer Science.</p>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+              <!-- Researcher gain a new follower -->
+              <div class="uk-card-header uk-padding-small">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                        <div> 
+                          <p class="uk-margin-small-bottom">Sanjiv Ramlal started following you.</p>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              
+
+
+              <!-- Researcher gain a new  Researcher follower -->
+              <div class="uk-card-header uk-padding-small">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                        <div> 
+                          <p class="uk-margin-small-bottom">Shareeda Mohammed started following you.
+                          <button class="uk-button uk-margin-small-top uk-button-small uk-button-primary uk-border-pill">Follow Back</button> 
+                          </p>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <!-- Read more option -->
+              <div class="uk-card-footer">
+                <div class="uk-flex uk-flex-center"> 
+                  <a href="#" class="uk-button uk-button-text ">Read more</a>
+                </div>
+              </div>
+            </div>
+
           </li>
         </ul>
       </div>
