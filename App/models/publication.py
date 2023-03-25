@@ -53,5 +53,5 @@ class Publication(db.Model):
             'downloads': self.downloads,
             'searches': self.searches,
             'coauthors': self.coauthors,
-            'authors': [rec.researcher.toDict() for rec in self.pub_records]
+            'authors': [rec.researcher.toDictPub() for rec in self.pub_records]
         }

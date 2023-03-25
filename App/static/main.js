@@ -123,28 +123,36 @@ let re_department = document.getElementById("re_department_select");
 let stu_faculty = document.getElementById("stu_faculty_select");
 let stu_department = document.getElementById("stu_department_select");
 
-re_faculty.onchange = function() {
-    let html = '';
-
-    for (let index in departments[re_faculty.value]){
-        html += `
-            <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
-        `;
+try {
+    re_faculty.onchange = function() {
+        let html = '';
+    
+        for (let index in departments[re_faculty.value]){
+            html += `
+                <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
+            `;
+        }
+    
+        re_department.innerHTML = html;
     }
-
-    re_department.innerHTML = html;
+} catch (error) {
+    console.log(error);
 }
 
-stu_faculty.onchange = function() {
-    let html = '';
-
-    for (let index in departments[stu_faculty.value]){
-        html += `
-            <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
-        `;
+try {
+    stu_faculty.onchange = function() {
+        let html = '';
+    
+        for (let index in departments[stu_faculty.value]){
+            html += `
+                <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
+            `;
+        }
+    
+        stu_department.innerHTML = html;
     }
-
-    stu_department.innerHTML = html;
+} catch (error) {
+    console.log(error);
 }
 
 async function getInterests(){
@@ -487,8 +495,7 @@ async function loadPublications(publications){
         let pub = publications[x];
         window.setTimeout(() => {
             html1 += `
-                <li data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
-                    <span class="citation" hidden>${pub['citations']}</span>
+                <li data-cite="${pub['citations']}" data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
                     <div style="cursor: pointer;" onclick="window.location='/publication/${pub['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
                         <div class="uk-margin-small-left uk-width-expand">

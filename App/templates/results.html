@@ -423,6 +423,15 @@
                     </ul>
                 </span>
             </div>
+            <div class="uk-grid uk-grid-small uk-grid-divider uk-child-width-auto uk-padding uk-padding-remove-vertical" uk-grid>
+                <div><h4 class="uk-first-column uk-width-1-1">Sort By</h4></div>
+                <span>
+                    <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                        <li class="uk-active" uk-filter-control="sort: data-year; order: desc"><a href="">Most Recent</a></li>
+                        <li uk-filter-control="sort: data-cite; order: desc"><a href="">Most Cited</a></li>
+                    </ul>
+                </span>
+            </div>
             
             <ul id="all_publication_ul" class="js-filter uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-match="target: .uk-card"></ul>
         </div>
