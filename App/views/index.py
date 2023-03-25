@@ -79,11 +79,6 @@ def load_publications():
     publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
     return publications
 
-@index_views.route('/load/pubauthors/<id>', methods=['GET'])
-def load_pub_authors(id):
-    pub = get_pub_byid(id)
-    return [record.researcher.toDict() for record in pub.pub_records.all()]
-
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
     return render_template("results.html", researchers=True, faculties=faculties)
@@ -92,7 +87,6 @@ def all_researchers():
 def load_researchers():
     researchers = get_all_researchers()
     shuffle(researchers)
-    print('test')
     return [re.toDict() for re in researchers]
 
 search_pubs = []
@@ -102,14 +96,16 @@ def search():
     if request.method == 'POST':
         form = request.form
         search_terms = form['search']
-        authors, publications, topics = parse_search(search_terms)
+        authors, author_publications, topic_authors, publications, topic_publications, topics  = parse_search(search_terms)
         results = []
         results.append(authors)
+        results.append([pub.toDict() for pub in author_publications])
+        results.append(topic_authors)
         results.append([pub.toDict() for pub in publications])
+        results.append([pub.toDict() for pub in topic_publications])
         results.append(topics)
+
         return render_template('results.html', results=results, search=True, search_terms=search_terms)
-
-
 
 @index_views.route('/', methods=['GET'])
 def index_page():
@@ -147,9 +143,16 @@ def topic_page(id):
         flash('Topic does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
 
-    topic_pubs = [tag.publication.toDict() for tag in topic_.pub_tags]
+    topic_pubs = []
+    topic_researchers = []
+    for tag in topic_.pub_tags:
+        topic_pubs.append(tag.publication.toDict())
+        for rec in tag.publication.pub_records:
+            re = rec.researcher.toDict()
+            if re not in topic_researchers:
+                topic_researchers.append(re)
     
-    return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs)
+    return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs, topic_researchers=topic_researchers)
 
 @index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
@@ -375,9 +378,32 @@ def add_download(id):
 @index_views.route('/publication/addcitation/<id>', methods=['GET'])
 def add_citation(id):
     pub = get_pub_byid(id)
-    add_citation_to_pub(pub)
-    request = f"Generate a Chicago style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation  = prompt(request)["choices"][0]["text"]
+    # add_citation_to_pub(pub)
+    citation = []
+    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    return {'citation': citation}
+
+@index_views.route('/publication/getcitation/<id>', methods=['GET'])
+def get_citation(id):
+    pub = get_pub_byid(id)
+    citation = []
+    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
     return {'citation': citation}
 
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
@@ -389,7 +415,9 @@ def add_search_pub(id):
 @index_views.route('/profile/addsearch/<id>', methods=['GET'])
 def add_search_re(id):
     re = get_researcher(id)
+    print('\n\n', re, '\n\n')
     add_search(re)
+    print(re.searches)
     return 'Added'
 
 @index_views.route('/profile/addpublication', methods=['POST'])

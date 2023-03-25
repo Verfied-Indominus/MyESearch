@@ -6,7 +6,8 @@
 
 {% block content %}
 <script type="text/javascript" src="/static/main.js"></script>
-<script>        
+<script>      
+    this.document.body.style.overflowY = 'hidden';
     function pageLoad(){null}
     fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
 

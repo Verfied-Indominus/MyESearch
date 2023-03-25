@@ -300,32 +300,53 @@ async function addToRecents(user_id, pub_id){
 
 // function to add read to publication
 async function addRead(id){
-    if (pastDate()){
+    if (pastDate() || analytics('read') || identifier(id)){
         let response = await fetch(`/publication/addread/${id}`);
     }
 }
 
 // function to add download to publication
 async function addDownload(id){
-    if (pastDate()){
+    if (pastDate() || analytics('download') || identifier(id)){
         let response = await fetch(`/publication/adddownload/${id}`);
     }
 }
 
 // function to add citation to publication
 async function addCitation(id){
-    if (pastDate()){
+    if (pastDate() || analytics('citation') || identifier(id)){
         let response = await fetch(`/publication/addcitation/${id}`);
         let citation = await response.json();
         let cite_body = document.getElementById('citation-modal-body');
-        cite_body.innerHTML = citation['citation'];
-        // add element to display citation
+        let html = `
+            <h4 class="uk-modal-title">Chicago</h4>
+            <div>${citation['citation'][0]}</div>
+            <h4 class="uk-modal-title">APA</h4>
+            <div>${citation['citation'][1]}</div>
+            <h4 class="uk-modal-title">MLA</h4>
+            <div>${citation['citation'][2]}</div>
+        `;
+        cite_body.innerHTML = html;
+    }
+    else {
+        let response = await fetch(`/publication/getcitation/${id}`);
+        let citation = await response.json();
+        let cite_body = document.getElementById('citation-modal-body');
+        let html = `
+            <h4 class="uk-modal-title">Chicago</h4>
+            <div>${citation['citation'][0]}</div>
+            <h4 class="uk-modal-title">APA</h4>
+            <div>${citation['citation'][1]}</div>
+            <h4 class="uk-modal-title">MLA</h4>
+            <div>${citation['citation'][2]}</div>
+        `;
+        cite_body.innerHTML = html;
     }
 }
 
 // function to add search to publication
 async function addSearchPublication(id){
-    if (pastDate()){
+    if (pastDate() || analytics('publicationSearch') || identifier(id)){
         let response = await fetch(`/publication/addsearch/${id}`);
     }
 }
@@ -340,7 +361,7 @@ async function addSearchPublication(id){
 
 // function to add search for profile
 async function addSearchResearcher(id){
-    if (pastDate()){
+    if (pastDate() || analytics('researcherSearch') || identifier(id)){
         let response = await fetch(`/profile/addsearch/${id}`);
     }
 }
@@ -358,6 +379,34 @@ async function update(){
     }
 }
 
+function identifier(id){
+    if (localStorage.getItem('id') == null){
+        localStorage.setItem('id', id);
+        return true;
+    }
+    if (localStorage.getItem('id').includes(id)){
+        return false;
+    }
+    else {
+        localStorage.setItem('id', localStorage.getItem('id').concat(', ', id));
+        return true;
+    }
+}
+
+function analytics(term){
+    if (localStorage.getItem('analytics') == 'null'){
+        localStorage.setItem('analytics', term);
+        return true;
+    }
+    if (localStorage.getItem('analytics').includes(term)){
+        return false;
+    }
+    else {
+        localStorage.setItem('analytics', localStorage.getItem('analytics').concat(', ', term));
+        return true;
+    }
+}
+
 function getDate(){
     let date = new Date();
     let day = date.getDate();
@@ -369,11 +418,14 @@ function getDate(){
 
 function pastDate(){
     let date = getDate();
-    if (localStorage.getItem('date') == null){
+    if (localStorage.getItem('date') == 'null'){
         localStorage.setItem('date', date);
+        localStorage.setItem('analytics', 'null');
         return true;
     }
-    if (date > localStorage.getItem('date')){
+    else if (date > localStorage.getItem('date')){
+        localStorage.setItem('date', date);
+        localStorage.setItem('analytics', 'null');
         return true;
     }
     else{

@@ -7,6 +7,7 @@
 {% block content %}
 <script type="text/javascript" src="/static/main.js"></script>
 <script>        
+    this.document.body.style.overflowY = 'hidden';
     function pageLoad(){null}
     fetch('/load/pubsuggestions/{{pub.id}}').then((response) => response.json()).then((data) => {
         
@@ -34,7 +35,6 @@
                     <div id="citation-modal" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                             <button class="uk-modal-close-default" type="button" uk-close></button>
-                            <h4 class="uk-modal-title">Chicago</h4>
                             <div id="citation-modal-body">
                                 <div uk-spinner></div>
                                 <div>Loading Citation</div>
@@ -58,7 +58,7 @@
             <div class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
                     <h3 class="uk-margin-small-bottom uk-text-capitalize"> {{pub.title|title}} </h3>
-                    <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%Y')}} </div>
+                    <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {% if pub.publication_date.strftime('%Y') != '1' %} {{pub.publication_date.strftime('%Y')}} {% endif %} </div>
                     <hr>
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
                         {% for tag in pub.tags.all() %}
@@ -92,10 +92,7 @@
                     <hr class="uk-margin-small">        
                     <div class="uk-inline uk-width-1-1">
                         {{pub.abstract}}
-                        <!-- height: 7rem; -->
-                        
-                        <!-- <div style="background-image: linear-gradient(rgba(255, 0, 0, 0), rgb(255, 255, 255))!important" class="uk-overlay uk-position-bottom uk-flex uk-flex-center uk-flex-bottom uk-padding-remove-bottom"><a href="{{pub.url}}" class="uk-button uk-button-danger" onclick="readMore(this, {{pub.id}});">Read More</a></div> -->
-                        <div class="uk-flex uk-flex-center"><a href="#" class="uk-button uk-button-danger">Read More</a></div>
+                        <div class="uk-flex uk-flex-center uk-margin-small-top"><a href="{{pub.url}}" onclick="addRead({{pub.id}});" class="uk-button uk-button-danger">Read More</a></div>
                     </div>          
                 </div>
             </div>
@@ -105,10 +102,12 @@
                     <h4 class="uk-margin-remove">Analytics</h4>
                     <hr class="uk-margin-small">
                     <div class="uk-grid uk-grid-divider uk-child-width-expand uk-text-center" uk-grid>
-                        <div class="uk-position-relative">
-                            Downloads
-                            <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="download"></span> {{pub.downloads}} </div>
-                        </div>
+                        {% if pub.free_access %}
+                            <div class="uk-position-relative">
+                                Downloads
+                                <div class="uk-card uk-card-default uk-padding-small border"><span class="uk-position-center-left uk-margin-small-left" uk-icon="download"></span> {{pub.downloads}} </div>
+                            </div>
+                        {% endif %}
         
                         <div class="uk-position-relative">
                             Citations
