@@ -13,6 +13,7 @@ class Researcher(UserMixin, User):
     introduction = db.Column(db.String(500))
     views = db.Column(db.Integer)
     searches = db.Column(db.Integer)
+    verified = db.Column(db.Boolean)
     research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="dynamic", cascade="all, delete-orphan")
@@ -26,6 +27,10 @@ class Researcher(UserMixin, User):
         super(Researcher, self).__init__()
         self.views = 0
         self.searches = 0
+        self.verified = False
+
+    def verify(self):
+        self.verified = True
 
     def toDict(self):
         return super().toDict() | {

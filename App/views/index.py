@@ -472,4 +472,9 @@ def test():
         print('\n\n')
             
     return 'bibtex'
+
+@index_views.route("/verify/<auth_id>/<new_auth>")
+def verify(auth_id,new_auth):
     
+    
+    pass
