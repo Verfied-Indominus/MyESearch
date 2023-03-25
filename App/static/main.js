@@ -99,6 +99,8 @@ let dpt_section = document.getElementById("department_section");
 let dpt_listing = document.getElementById("department_listing");
 
 function get_selection(btn){
+    let dpt_section = document.getElementById("department_section");
+    let dpt_listing = document.getElementById("department_listing");
     fac = btn.childNodes[0].innerHTML.trim();
     if (fac === "All"){
         dpt_section.style.display = 'none';
