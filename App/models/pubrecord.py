@@ -15,6 +15,6 @@ class PubRecord(db.Model):
             'id': self.id,
             'researcher_id': self.researcher_id,
             'publication_id': self.publication_id,
-            'researcher': self.researcher.toDict(),
-            'publication': self.publication.toDict()
+            # 'researcher': self.researcher.toDict(),
+            # 'publication': self.publication.toDict()
         }

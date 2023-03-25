@@ -61,7 +61,7 @@
                     <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {% if pub.publication_date.strftime('%Y') != '1' %} {{pub.publication_date.strftime('%Y')}} {% endif %} </div>
                     <hr>
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
-                        {% for tag in pub.tags.all() %}
+                        {% for tag in pub.tags %}
                             <a href="/topic/{{tag.topic.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-muted uk-border-pill"> {{tag.topic.name}} </a>
                         {% endfor %}
                     </div>                   
@@ -73,7 +73,7 @@
                     <h4>Authors</h4>
                     <hr class="uk-margin-small">
                     <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
-                        {% for rec in pub.pub_records.all() %}
+                        {% for rec in pub.pub_records %}
                             <a href="/profile/{{rec.researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-margin-small-right uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if rec.researcher.image_url %} {{rec.researcher.image_url}} {% else %} /static/images/unknown.png {% endif %}');" uk-icon></span> {{rec.researcher.first_name}} {{rec.researcher.last_name}} </a>
                         {% endfor %}
                         {% if pub.coauthors != "" %}
