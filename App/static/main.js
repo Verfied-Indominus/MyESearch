@@ -433,7 +433,7 @@ async function loadPublications(publications){
         let pub = publications[x];
         window.setTimeout(() => {
             html1 += `
-                <li data-year="${pub['publication_date']}" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
+                <li data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
                     <div style="cursor: pointer;" onclick="window.location='/publication/${pub['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
                         <div class="uk-margin-small-left uk-width-expand">

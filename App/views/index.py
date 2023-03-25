@@ -6,7 +6,7 @@ from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_user_by_name
 from App.controllers.publication import *
-from App.controllers.visitrecords import *
+from App.controllers.visitrecords import * 
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
 from App.controllers.library import *
@@ -65,13 +65,18 @@ types = [
 
 @index_views.route('/all/publications',methods=['GET'])
 def all_publications():
+    pubs = get_all_publications()
+    types = []
+    for pub in pubs:
+        if pub.pub_type not in types:
+            types.append(pub.pub_type)
     return render_template("results.html", publications=True, now=datetime.utcnow(), types=types)
 
 @index_views.route('/load/publications', methods=['GET'])
 def load_publications():
     publications = get_all_publications()
-    shuffle(publications) 
     publications = [pub.toDict() for pub in publications]
+    publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
     return publications
 
 @index_views.route('/load/pubauthors/<id>', methods=['GET'])

@@ -192,13 +192,13 @@
     {% endif %}
 
     {% if researchers %}
-    <script type="text/javascript" src="/static/main.js"></script>
-    <script>        
-        function pageLoad(){null}
-        fetch('/load/researchers').then((response) => response.json()).then((researchers) => {
-            loadResearchers(researchers);
-        });
-    </script>
+        <script type="text/javascript" src="/static/main.js"></script>
+        <script>        
+            function pageLoad(){null}
+            fetch('/load/researchers').then((response) => response.json()).then((researchers) => {
+                loadResearchers(researchers);
+            });
+        </script>
         <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter;">
             <h3 id="researcher_num" class="uk-text-bold uk-padding uk-padding-remove-bottom"></h3>
                         
@@ -238,18 +238,18 @@
     {% endif %}
 
     {% if publications %}
-    <script type="text/javascript" src="/static/main.js"></script>
-    <script>        
-        function pageLoad(){null}
-        fetch('/load/publications').then((response) => response.json()).then((pubs) => {
-            loadPublications(pubs);
-        });
-    </script>
+        <script type="text/javascript" src="/static/main.js"></script>
+        <script>        
+            function pageLoad(){null}
+            fetch('/load/publications').then((response) => response.json()).then((pubs) => {
+                loadPublications(pubs);
+            });
+        </script>
         <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter;">
             <h3 id="publication_num" class="uk-text-bold uk-padding uk-padding-remove-bottom"></h3>
 
             <div class="uk-grid uk-grid-small uk-grid-divider uk-child-width-auto uk-padding uk-padding-remove-vertical" uk-grid>
-                <h4 class="uk-first-column">Publication Type</h4>
+                <div><h4 class="uk-first-column">Publication Type</h4></div>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
@@ -260,18 +260,19 @@
                 </span>
             </div>
             <div class="uk-grid uk-grid-small uk-grid-divider uk-child-width-auto uk-padding uk-padding-remove-vertical" uk-grid>
-                <h4 class="uk-first-column">Publication Year</h4>
+                <div><h4 class="uk-first-column">Publication Year</h4></div>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
-                        {% for year in range(now.year, 1984, -1) %}
+                        {% for year in range(now.year, now.year - 11, -1) %}
                             <li uk-filter-control="filter: [data-year='{{year}}']; group: data-year"><a href="#"> {{year}} </a></li>
                         {% endfor %}
+                        <li uk-filter-control="filter: [data-year='{{now.year-11}}']; group: data-year"><a href="#"> <{{now.year - 11}} </a></li>
                     </ul>
                 </span>
             </div>
             <div class="uk-grid uk-grid-small uk-grid-divider uk-child-width-auto uk-padding uk-padding-remove-vertical" uk-grid>
-                <h4 class="uk-first-column uk-width-1-1">Alphabetically</h4>
+                <div><h4 class="uk-first-column uk-width-1-1">Alphabetically</h4></div>
                 <span>
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
