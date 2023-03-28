@@ -144,3 +144,19 @@ def author_added(p_id,r_id):
     except e:
         return False
 
+def verified_notif(auth_id,res_id):
+    auth = Researcher.query.filter_by(id = auth_sid).first()
+    researcher = Researcher.query.filter_by(id = res_id).first()
+    title = f"Verified"
+    message = f"You have been verified by {researcher.first_name} {researcher.last_name}."
+    try:
+        notif = Notification(title, message)
+        db.session.add(notif)
+        db.sesion.commit()
+        record = NotificationRecord(auth_id, notif.id)
+        db.session.add(record)
+        db.sesion.commit()
+        sendEmail(message,title,auth.email)
+        return True
+    except e:
+        return False
