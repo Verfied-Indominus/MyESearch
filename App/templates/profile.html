@@ -13,6 +13,9 @@
 
         loadProfilePubs(pubs);
     });
+    {% if re and user.id != current_user.id %}
+        addView({{user.id}});    
+    {% endif %}
 </script>
 
 <div class="uk-padding">
@@ -122,7 +125,7 @@
                 </div>  
             {% endif %}
 
-            <div class="uk-card uk-card-default uk-margin">
+            <div id="anchor" class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
                     <h3 class="uk-text-bold">Subscriptions</h3>
                     <hr>
@@ -152,7 +155,7 @@
                         </div>
                     {% endif %}
                 </div>
-            </div> 
+            </div>
             
             {% if re %}
                 <div id="scroll-target" class="uk-card uk-card-default uk-margin">

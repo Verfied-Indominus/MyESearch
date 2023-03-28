@@ -395,7 +395,7 @@
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for type in types %}
-                            <li uk-filter-control="filter: [data-type='{{type}}']; group: data-type"><a href="#"> {{type}} </a></li>
+                            <li uk-filter-control="filter: [data-type='{{type}}']; group: data-type"><a href=""> {{type}} </a></li>
                         {% endfor %}
                     </ul>
                 </span>
@@ -406,9 +406,9 @@
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for year in range(now.year, now.year - 11, -1) %}
-                            <li uk-filter-control="filter: [data-year='{{year}}']; group: data-year"><a href="#"> {{year}} </a></li>
+                            <li uk-filter-control="filter: [data-year='{{year}}']; group: data-year"><a href=""> {{year}} </a></li>
                         {% endfor %}
-                        <li uk-filter-control="filter: [data-year='{{now.year-11}}']; group: data-year"><a href="#"> <{{now.year - 11}} </a></li>
+                        <li uk-filter-control="filter: [data-year='{{now.year-11}}']; group: data-year"><a href=""> <{{now.year - 11}} </a></li>
                     </ul>
                 </span>
             </div>
@@ -418,7 +418,7 @@
                     <ul class="uk-subnav uk-subnav-pill" uk-margin>
                         <li class="uk-active" uk-filter-control><a href="">All</a></li>
                         {% for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"|list %}
-                            <li class="uk-padding-remove uk-margin-small-left" uk-filter-control="filter: [data-name='{{char}}']; group: data-name"><a href="#"> {{char}} </a></li>
+                            <li class="uk-padding-remove uk-margin-small-left" uk-filter-control="filter: [data-name='{{char}}']; group: data-name"><a href=""> {{char}} </a></li>
                         {% endfor %}
                     </ul>
                 </span>

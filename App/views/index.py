@@ -6,7 +6,6 @@ from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_user_by_name
 from App.controllers.publication import *
-from App.controllers.visitrecords import * 
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
 from App.controllers.library import *
@@ -378,7 +377,7 @@ def add_download(id):
 @index_views.route('/publication/addcitation/<id>', methods=['GET'])
 def add_citation(id):
     pub = get_pub_byid(id)
-    # add_citation_to_pub(pub)
+    add_citation_to_pub(pub)
     citation = []
     request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
     citation.append(prompt(request)["choices"][0]["text"])
@@ -410,6 +409,12 @@ def get_citation(id):
 def add_search_pub(id):
     pub = get_pub_byid(id)
     add_search_to_pub(pub)
+    return 'Added'
+
+@index_views.route('/profile/addview/<id>', methods=['GET'])
+def add_view_re(id):
+    re = get_researcher(id)
+    add_view(re)
     return 'Added'
 
 @index_views.route('/profile/addsearch/<id>', methods=['GET'])
@@ -514,15 +519,6 @@ def profile(id):
             skills = user.skills.split('\n')
         if ',\n' in user.skills:
             skills = user.skills.split(',\n')
-
-        if (isinstance(current_user, User)) and (current_user.id is not user.id):
-            vrec = get_visit_record(current_user.id, user.id)
-
-            if not vrec:
-                vrec = create_visit_record(current_user.id, user.id)
-
-            if update_visit_record(vrec):
-                add_view(user)
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, 
                             researchers=researchers, interests=interests, skills=skills, types=types, dates=dates)

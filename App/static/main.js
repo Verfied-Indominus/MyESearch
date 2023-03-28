@@ -305,20 +305,20 @@ async function addToLibrary(user_id, pub_id){
 // functions to add to recents and library
 
 async function addToRecents(user_id, pub_id){
-    return await fetch(`/addtorecents/${user_id}/${pub_id}`);
+    await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
 
 // function to add read to publication
 async function addRead(id){
     if (pastDate() || analytics('read') || identifier(id)){
-        let response = await fetch(`/publication/addread/${id}`);
+        await fetch(`/publication/addread/${id}`);
     }
 }
 
 // function to add download to publication
 async function addDownload(id){
     if (pastDate() || analytics('download') || identifier(id)){
-        let response = await fetch(`/publication/adddownload/${id}`);
+        await fetch(`/publication/adddownload/${id}`);
     }
 }
 
@@ -357,22 +357,22 @@ async function addCitation(id){
 // function to add search to publication
 async function addSearchPublication(id){
     if (pastDate() || analytics('publicationSearch') || identifier(id)){
-        let response = await fetch(`/publication/addsearch/${id}`);
+        await fetch(`/publication/addsearch/${id}`);
     }
 }
 
-// function to add view for profile             NOT WORKING!!!
-// async function addView(id){
-//     if (pastDate()){
-//         let response = await fetch(`/profile/addview/${id}`);
-//         console.log(response);
-//     }
-// }
+// function to add view for profile
+async function addView(id){
+    if (pastDate() || analytics('profileView') || identifier(id)){
+        await fetch(`/profile/addview/${id}`);
+    }
+}
+
 
 // function to add search for profile
 async function addSearchResearcher(id){
     if (pastDate() || analytics('researcherSearch') || identifier(id)){
-        let response = await fetch(`/profile/addsearch/${id}`);
+        await fetch(`/profile/addsearch/${id}`);
     }
 }
 
@@ -404,7 +404,7 @@ function identifier(id){
 }
 
 function analytics(term){
-    if (localStorage.getItem('analytics') == 'null'){
+    if (localStorage.getItem('analytics') == 'null' || localStorage.getItem('analytics') == null){
         localStorage.setItem('analytics', term);
         return true;
     }
@@ -495,7 +495,7 @@ async function loadPublications(publications){
         let pub = publications[x];
         window.setTimeout(() => {
             html1 += `
-                <li data-cite="${pub['citations']}" data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px); display: none;" class="uk-margin-medium-top">
+                <li data-cite="${pub['citations']}" data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
                     <div style="cursor: pointer;" onclick="window.location='/publication/${pub['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
                         <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
                         <div class="uk-margin-small-left uk-width-expand">
