@@ -5,6 +5,18 @@
 {{ super() }}
 
 {% block content %}
+<script type="text/javascript" src="/static/main.js"></script>
+<script>      
+    this.document.body.style.overflowY = 'hidden';
+    function pageLoad(){null}
+    fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
+
+        loadProfilePubs(pubs);
+    });
+    {% if re and user.id != current_user.id %}
+        addView({{user.id}});    
+    {% endif %}
+</script>
 
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
@@ -113,7 +125,7 @@
                 </div>  
             {% endif %}
 
-            <div class="uk-card uk-card-default uk-margin">
+            <div id="anchor" class="uk-card uk-card-default uk-margin">
                 <div class="uk-padding">
                     <h3 class="uk-text-bold">Subscriptions</h3>
                     <hr>
@@ -143,7 +155,7 @@
                         </div>
                     {% endif %}
                 </div>
-            </div> 
+            </div>
             
             {% if re %}
                 <div id="scroll-target" class="uk-card uk-card-default uk-margin">
@@ -179,7 +191,162 @@
             {% endif %}
                     <div class="uk-width-1-1">
                         <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
-                            <div class="uk-padding">
+                            <div style="position: relative;" class="uk-padding">
+                                {% if current_user.id == user.id %}
+                                    <a id="add_pro_pub" href="#pub-modal" class="uk-icon-button" uk-icon="plus" uk-toggle></a>
+
+                                    <div id="pub-modal" class="uk-padding-small" uk-modal>
+                                        <div class="uk-modal-dialog uk-width-3-5">
+                                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                                            <div class="uk-modal-header">
+                                                <h4 class="uk-modal-title">Add Publication</h4>
+                                                <legend class="uk-legend uk-text-small uk-text-light uk-text-italic"><span class="required">*</span> indicates a required field</legend>
+                                            </div>
+                                            <div class="uk-modal-body">
+                                                <form id="pubForm" action="/profile/addpublication" method="post" class="uk-margin-auto uk-padding-small uk-padding-remove-vertical uk-height-large uk-form-stacked uk-width-4-5 scroll">
+                
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label"><span class="required">*</span> Title</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="title" type="text" required>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="abstract" class="uk-form-label">Abstract</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <textarea class="uk-width-1-1 uk-textarea" name="abstract" rows="8"></textarea>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="abstract" class="uk-form-label"><span class="required">*</span> Keywords</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <textarea class="uk-width-1-1 uk-textarea" name="keywords" rows="3" placeholder="Enter comma-separated keywords" required></textarea>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="abstract" class="uk-form-label">Co-Authors</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <textarea class="uk-width-1-1 uk-textarea" name="coauthors" rows="3" placeholder="Enter comma-separated names e.g., John Doe, Jane N Doe"></textarea>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="pub_type" class="uk-form-label"><span class="required">*</span> Publication Type</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <select class="uk-select" name="pub_type" required>
+                                                                <option value="0" selected disabled>Select A Publication Type</option>
+                                                                {% for t in types %}
+                                                                    <option value="{{t|title}}">{{t|title}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="pub_type" class="uk-form-label"><span class="required">*</span> Publication Year</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <select class="uk-select" name="publication_date" required>
+                                                                <option value="0" selected disabled>Select Year Published</option>
+                                                                {% for d in dates %}
+                                                                    <option value="{{d}}">{{d}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label"><span class="required">*</span> URL/DOI</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="url" type="url" required>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Link For PDF File</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="eprint" type="url">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <h4>Fill out where applicable</h4>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Journal</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="journal" type="text" placeholder="e.g. SIAM Journal on Control and Optimization">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Publisher</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="publisher" type="text" placeholder="e.g. SIAM">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Organization</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="organization" type="text" placeholder="e.g. IEEE">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Institution</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="institution" type="text" placeholder="e.g. Massachusetts Inst of Tech">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Booktitle</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="booktitle" type="text" placeholder="e.g. 2009 IEEE 70th Vehicular Technology Conference Fall">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Month & Day</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="month" type="text" placeholder="e.g. Nov 23">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Note</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="note" type="text" placeholder="e.g. US Patent 8,331,249">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Pages</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="pages" type="text" placeholder="e.g. 340-365">
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="uk-margin">
+                                                        <label for="title" class="uk-form-label">Volume</label>
+                                                        <div class="uk-inline uk-form-controls uk-width-expand">
+                                                            <input class="uk-input" name="volume" type="text" placeholder="e.g. 5">
+                                                        </div>
+                                                    </div>
+
+                                                    <input id="subBtn" type="submit" value="" hidden>
+                                                </form>
+                                            </div>
+                                            <div class="uk-modal-footer uk-text-right">
+                                                <button onclick="document.getElementById('pubForm').reset();" class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                                <button onclick="document.getElementById('subBtn').click();" class="uk-button uk-button-primary" type="button">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 <ul uk-tab>
                                     {% if re %}
                                     <li class="uk-button uk-button-danger"><a style="color: white;" href=""> {% if current_user.id == user.id %} My {% endif %} Publications</a></li>
@@ -190,61 +357,30 @@
                                     {% endif %}
                                 </ul> 
                                 
-                                <h4 class="uk-margin-small-top uk-text-bold">{{pubs|length}} Publications Present</h4>
-                                <ul class="uk-switcher uk-height-max-large scroll">
+                                
+                                <ul class="uk-switcher">
                                     {% if re %}
-                                        <li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
-                                            {% if not pubs|length %}
-
+                                    <li>
+                                        {% if pubs > 0 %}
+                                            <h4 class="uk-margin-small-top uk-text-bold">{{pubs}} Publications Present</h4>
+                                        {% endif %}
+                                        <div id="profile-pubs" class="uk-height-max-large uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top scroll" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
+                                            {% if pubs == 0 %}
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
                                                     <img src="https://img.icons8.com/ios-filled/100/null/empty-box.png"/>
                                                     Nothing Added Yet
                                                 </div>
-
                                             {% endif %}
-                                            {% for pub in pubs %}
-                                                <div style="padding: 0 30px">
-                                                    <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
-                                                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
-                                                        <div class="uk-margin-small-left uk-width-expand">
-                                                            <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
-                                                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label"> {{pub.pub_type}} </span> {{pub.publication_date.strftime('%b %Y')}} </div>
-                                                            <div>
-                                                                {% if pub.pub_records.all()|length < 2 %}
-                                                                    {% for n in range(pub.pub_records.all()|length) %}
-                                                                        <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
-                                                                    {% endfor %}
-                                
-                                                                    {% if pub.coauthors != "" %}
-                                                                        {% set coauthors = pub.coauthors.split(', ') %}
-                                                                    {% endif %}
-                                
-                                                                    {% set limit = 2 - pub.pub_records.all()|length %}
-                                                                    {% if limit < coauthors|length %}
-                                                                        {% for n in range(limit) %}
-                                                                            <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                                        {% endfor %}
-                                                                        {% if coauthors|length - limit > 0 %} +{{coauthors|length - limit}} More {% endif %}
-                                                                    {% else %}    
-                                                                        {% for n in range(coauthors|length) %}
-                                                                            <a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22{{coauthors[n]}}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> {{coauthors[n]}} </a>
-                                                                        {% endfor %}                              
-                                                                    {% endif %}
-                                                                {% else %}
-                                                                    {% for n in range(2) %}
-                                                                        <a href="/profile/{{pub.pub_records[n].researcher.id}}" style="padding: 2px 3px; height: 45px;" class="uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('{% if pub.pub_records[n].researcher.image_url %} {{pub.pub_records[n].researcher.image_url}} {% else %} /static/images/unknown.png {% endif %} ');" uk-icon></span> {{pub.pub_records[n].researcher.first_name}}  {{pub.pub_records[n].researcher.last_name}} </a>                              
-                                                                    {% endfor %}
-                                                                    {% if pub.pub_records.all()|length > 2 %} +{{test|length - 2}} More {% endif %}
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </li>
+                                        </div>
+                                    </li>
                                     {% endif %}
+                                    
                                     {% if current_user.id == user.id %}
-                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
+                                    <li>
+                                        {% if library|length > 0 %}
+                                            <h4 class="uk-margin-small-top uk-text-bold">{{library|length}} Publications Present</h4>
+                                        {% endif %}
+                                        <div class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} uk-height-max-large scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                             {% if not library|length %}
 
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
@@ -295,9 +431,14 @@
                                                 {% endfor %}
 
                                             {% endif%}
-                                        </li>
+                                        </div>
+                                    </li>
 
-                                        <li class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
+                                    <li>
+                                        {% if recents|length > 0 %}
+                                            <h4 class="uk-margin-small-top uk-text-bold">{{recents|length}} Publications Present</h4>
+                                        {% endif %}
+                                        <div class="uk-grid uk-margin-remove {% if re %} uk-child-width-1-2 {% endif %} uk-height-max-large scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">
                                             {% if not recents|length %}
 
                                                 <div class="uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center" uk-height-match>
@@ -348,7 +489,8 @@
                                                 {% endfor %}
 
                                             {% endif %}
-                                        </li>
+                                        </div>
+                                    </li>
                                     {% endif %}
                                 </ul>
                             </div>

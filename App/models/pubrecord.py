@@ -9,3 +9,12 @@ class PubRecord(db.Model):
     def __init__(self, researcher_id, publication_id):
         self.researcher_id = researcher_id
         self.publication_id = publication_id
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'researcher_id': self.researcher_id,
+            'publication_id': self.publication_id,
+            # 'researcher': self.researcher.toDict(),
+            # 'publication': self.publication.toDict()
+        }

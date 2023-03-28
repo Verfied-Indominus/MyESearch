@@ -16,7 +16,6 @@ class User(db.Model):
     library = db.relationship("Library", backref="lib_user", lazy="dynamic", overlaps="recents_user, library")
     recents = db.relationship("Library", backref="recents_user", lazy="dynamic", overlaps="lib_user, library")
     researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
-    visit_records = db.relationship("VisitRecord", foreign_keys="VisitRecord.user_id", backref="user", lazy="dynamic", cascade="all, delete-orphan")
     topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
     notification_records = db.relationship("NotificationRecord", backref="user", lazy="dynamic", cascade="all, delete-orphan")
 

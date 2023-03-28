@@ -1,4 +1,4 @@
-from App.models import Publication
+from App.models import Publication, PublicationTag
 from App.database import db
 from datetime import date
 
@@ -81,6 +81,16 @@ def get_pub_containing_title(title):
         pub = Publication.query.filter(Publication.title.like(title)).first()
     return pub
 
+def add_topic_to_pub(pub, topic):
+    try:
+        pubtag = PublicationTag(pub.id, topic.id)
+        db.session.add(pubtag)
+        db.session.commit()
+        return True
+    except IntegrityError:
+        db.session.rollback()
+        return False
+
 def add_read_to_pub(pub):
     pub.reads += 1
     db.session.commit()
@@ -99,4 +109,8 @@ def add_search_to_pub(pub):
 
 def set_pub_bibtex(pub, bibtex):
     pub.bibtex = bibtex
+    db.session.commit()
+
+def set_pub_type(pub, pub_type):
+    pub.pub_type = pub_type
     db.session.commit()

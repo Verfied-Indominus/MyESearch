@@ -747,7 +747,7 @@
 
 body{
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
 } 
 
 .jetblack-background{
@@ -844,4 +844,16 @@ body{
   box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+
+
+#add_pro_pub{
+  position: absolute; 
+  right: 40px; 
+  top: 60px; 
+  color: #1e87f0; 
+  z-index: 999;
+  height: 45px;
+  width: 45px;
 }

@@ -76,5 +76,6 @@ def delete_topic(name):
         db.session.delete(topic)
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        print(type(e))
         return False

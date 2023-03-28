@@ -6,7 +6,6 @@ from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
 from App.controllers.user import get_user, get_user_by_email, get_user_by_name
 from App.controllers.publication import *
-from App.controllers.visitrecords import *
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
 from App.controllers.library import *
@@ -17,12 +16,15 @@ from App.controllers.pubrecord import delete_pub_record
 from App.controllers.search import parse_search
 from App.controllers.verify import verified
 from App.controller.notification import verified_notif
+from App.controllers.open_ai import prompt, RAIL_KEY, CAESAR_KEY
+from App.controllers.ciphers import doubleCipher, doubleDeCipher
 from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
 from random import shuffle
 import json
 import gmail
+import ast
 
 from App.models.builder import *
 
@@ -56,30 +58,54 @@ departments = [
         'Mechanical and Manufacturing Enterprise Research'
     ]
 
-@index_views.route('/all/publications',methods=['GET'])
-def all_publications():
-    publications = get_all_publications()
-    shuffle(publications)
-    types = [
-        'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'method', 'misc',
-        'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal', 
+types = [
+        'article', 'book', 'chapter', 'code', 'conference paper', 'cover page', 'data', 'experiment finding', 'incollection', 'method', 'misc',
+        'negative results', 'patent', 'phdthesis', 'poster', 'preprint', 'presentation', 'raw data', 'research proposal',
         'technical report', 'techreport', 'thesis'
     ]
+
+@index_views.route('/all/publications',methods=['GET'])
+def all_publications():
+    pubs = get_all_publications()
+    types = []
+    for pub in pubs:
+        if pub.pub_type not in types:
+            types.append(pub.pub_type)
+    return render_template("results.html", publications=True, now=datetime.utcnow(), types=types)
+
+@index_views.route('/load/publications', methods=['GET'])
+def load_publications():
+    publications = get_all_publications()
     publications = [pub.toDict() for pub in publications]
-    return render_template("results.html",publications=publications, now=datetime.utcnow(), types=types)
+    publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
+    return publications
 
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
+    return render_template("results.html", researchers=True, faculties=faculties)
+
+@index_views.route('/load/researchers', methods=['GET'])
+def load_researchers():
     researchers = get_all_researchers()
     shuffle(researchers)
-    return render_template("results.html",researchers=researchers, faculties=faculties)
- 
+    return [re.toDict() for re in researchers]
+
+search_pubs = []
+
 @index_views.route('/search',methods=['POST'])
 def search():
     if request.method == 'POST':
         form = request.form
         search_terms = form['search']
-        results = [authors, publications, topics] = parse_search(search_terms)
+        authors, author_publications, topic_authors, publications, topic_publications, topics  = parse_search(search_terms)
+        results = []
+        results.append(authors)
+        results.append([pub.toDict() for pub in author_publications])
+        results.append(topic_authors)
+        results.append([pub.toDict() for pub in publications])
+        results.append([pub.toDict() for pub in topic_publications])
+        results.append(topics)
+
         return render_template('results.html', results=results, search=True, search_terms=search_terms)
 
 @index_views.route('/', methods=['GET'])
@@ -108,25 +134,28 @@ def publication_page(id):
     if not pub:
         flash('Publication does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
-    
-    researchers, topics, pubs = get_publication_suggestions(pub)
-
-    return render_template("publication.html", pub=pub, researchers=researchers, topics=topics, pubs=pubs)
-    # return render_template("publication.html", pub=pub)
+    return render_template("publication.html", pub=pub)
 
 @index_views.route('/topic/<id>', methods=['GET'])
 def topic_page(id):
-    topic_ = get_topic_id(id)
+    topic_ = get_topic_id(id) 
 
     if not topic_:
         flash('Topic does not exist or is inaccessible')
-        return redirect(url_for('.index_page'))
+        return redirect(url_for('.index_page')) 
 
-    topic_pubs = [tag.publication.toDict() for tag in topic_.pub_tags]
+    topic_pubs = []
+    topic_researchers = []
+    for tag in topic_.pub_tags:
+        topic_pubs.append(tag.publication.toDict())
+        for rec in tag.publication.pub_records:
+            re = rec.researcher.toDict()
+            if re not in topic_researchers:
+                topic_researchers.append(re)
     
-    return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs)
+    return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs, topic_researchers=topic_researchers)
 
-@index_views.route('/loadpubsuggestions/<id>', methods=['GET'])
+@index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
     pub = get_pub_byid(id)
 
@@ -143,6 +172,7 @@ def login_page():
             if 'remember' in form:
                 remember = True
             login_user(user, remember)
+            flash(f'Welcome {user.first_name}')
             return redirect(url_for('.index_page'))
 
     return render_template('login.html')
@@ -157,19 +187,6 @@ def logout():
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
-    # interests = [
-    #     'Artificial Intelligence',
-    #     'Biotechnology',
-    #     'Climate Change',
-    #     'Computer Science',
-    #     'Energy',
-    #     'Materials Science',
-    #     'Medicine',
-    #     'Neuroscience',
-    #     'Quantum Computing',
-    #     'Robotics'
-    # ]
-    
     interests = get_signup_topics()
 
     baseForm = BaseSignUpForm()
@@ -182,9 +199,11 @@ def signup_page():
 
     if request.method == 'POST':
         form = request.form 
+        re = False
 
         if 'title' in form:
             builder = ResearcherBuilder()
+            re = True
         else:
             builder = StudentBuilder()
 
@@ -202,7 +221,7 @@ def signup_page():
         if form['middle_name']:
             builder.middle_name(form['middle_name'])
         
-        if isinstance(builder, ResearcherBuilder):
+        if re:
             builder = (
                 builder
                     .title(form['title'])
@@ -221,7 +240,7 @@ def signup_page():
 
         builder.build()
 
-        if isinstance(builder, ResearcherBuilder):
+        if re:
             user = builder.researcher
         else:
             user = builder.student
@@ -233,8 +252,8 @@ def signup_page():
         create_library(user.id)
         create_recents(user.id)
 
-        print(re_interests)
-        add_interests_to_researcher(re_interests, user.id)
+        if re:
+            add_interests_to_researcher(re_interests, user.id)
 
         if image:
             image_url = uploadFile(user.id, image[0])
@@ -242,13 +261,78 @@ def signup_page():
             builder.image_url(image_url)
             builder.build()
 
-        if isinstance(current_user, User):
-            logout_user()
         login_user(user, False)
         flash('You successfully created your account')
 
-        return redirect(url_for('.index_page'))
+        if re:
+            return redirect(url_for('.add_publication', id=user.id))
+        else:
+            return redirect(url_for('.index_page'))
     return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
+
+@index_views.route('/addpublication/<id>', methods=['GET', 'POST'])
+def add_publication(id):
+    re = get_researcher(id)
+    if not re:
+        flash("The specified User ID does not exist or is not a Researcher's")
+        flash('Researchers may also add publications in their profile')
+        return redirect(url_for('.index_page'))
+
+    if request.method == 'POST':
+        form = request.form
+        data = {
+            'title': form['title'],
+            'abstract': form['abstract'],
+            'pub_type': form['pub_type'],
+            'publication_date': datetime.date(datetime(form['publication_date'], 1, 1)),
+            'url': form['url'],
+            'eprint': form['eprint']
+        }
+        if '.pdf' in form['url'] or '.pdf' in form['eprint']:
+            data['free_access'] = True
+        else:
+            data['free_access'] = False
+
+        pub = create_pub(data)
+        add_pub_record(re.id, pub.id)
+
+        bibtex = {}
+
+        bibtex['author'] = f"{re.first_name} {re.last_name}, "
+        bibtex['author'] += form['coauthors']
+
+        if form['journal']:
+            bibtex['journal'] = form['journal']
+
+        if form['publisher']:
+            bibtex['publisher'] = form['publisher']
+
+        if form['organization']:
+            bibtex['organization'] = form['organization']
+
+        if form['institution']:
+            bibtex['institution'] = form['institution']
+
+        if form['booktitle']:
+            bibtex['booktitle'] = form['booktitle']
+
+        if form['month']:
+            bibtex['month'] = form['month']
+
+        if form['note']:
+            bibtex['note'] = form['note']
+
+        if form['pages']:
+            bibtex['pages'] = form['pages']
+
+        if form['volume']:
+            bibtex['volume'] = form['volume']
+
+        set_pub_bibtex(pub, bibtex)
+
+        flash('A publication has been succesfully added')
+        return redirect(url_for('.index_page'))
+    return render_template('addpublication.html', id=id, types=types, dates=dates)
 
 @index_views.route('/interests/<selected>', methods=['GET'])
 def parse_interests(selected):
@@ -290,13 +374,38 @@ def add_read(id):
 def add_download(id):
     pub = get_pub_byid(id)
     add_download_to_pub(pub)
-    return 'Added'
+    return 'Added' 
 
 @index_views.route('/publication/addcitation/<id>', methods=['GET'])
 def add_citation(id):
     pub = get_pub_byid(id)
     add_citation_to_pub(pub)
-    return 'Added'
+    citation = []
+    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    return {'citation': citation}
+
+@index_views.route('/publication/getcitation/<id>', methods=['GET'])
+def get_citation(id):
+    pub = get_pub_byid(id)
+    citation = []
+    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
+    citation.append(prompt(request)["choices"][0]["text"])
+
+    return {'citation': citation}
 
 @index_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):
@@ -304,11 +413,76 @@ def add_search_pub(id):
     add_search_to_pub(pub)
     return 'Added'
 
+@index_views.route('/profile/addview/<id>', methods=['GET'])
+def add_view_re(id):
+    re = get_researcher(id)
+    add_view(re)
+    return 'Added'
+
 @index_views.route('/profile/addsearch/<id>', methods=['GET'])
 def add_search_re(id):
     re = get_researcher(id)
+    print('\n\n', re, '\n\n')
     add_search(re)
+    print(re.searches)
     return 'Added'
+
+@index_views.route('/profile/addpublication', methods=['POST'])
+def add_profile_pub():
+    re = current_user
+    form = request.form
+    data = {
+        'title': form['title'],
+        'abstract': form['abstract'],
+        'pub_type': form['pub_type'],
+        'publication_date': datetime.date(datetime(int(form['publication_date']), 1, 1)),
+        'url': form['url'],
+        'eprint': form['eprint']
+    }
+    if '.pdf' in form['url'] or '.pdf' in form['eprint']:
+        data['free_access'] = True
+    else:
+        data['free_access'] = False
+
+    pub = create_pub(data)
+    add_pub_record(re.id, pub.id)
+
+    bibtex = {}
+
+    bibtex['author'] = f"{re.first_name} {re.last_name}, "
+    bibtex['author'] += form['coauthors']
+
+    if form['journal']:
+        bibtex['journal'] = form['journal']
+
+    if form['publisher']:
+        bibtex['publisher'] = form['publisher']
+
+    if form['organization']:
+        bibtex['organization'] = form['organization']
+
+    if form['institution']:
+        bibtex['institution'] = form['institution']
+
+    if form['booktitle']:
+        bibtex['booktitle'] = form['booktitle']
+
+    if form['month']:
+        bibtex['month'] = form['month']
+
+    if form['note']:
+        bibtex['note'] = form['note']
+
+    if form['pages']:
+        bibtex['pages'] = form['pages']
+
+    if form['volume']:
+        bibtex['volume'] = form['volume']
+
+    set_pub_bibtex(pub, bibtex)
+
+    flash('A publication has been succesfully added')
+    return redirect(url_for('.profile', id=re.id))
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
@@ -337,7 +511,7 @@ def profile(id):
 
     if (isinstance(user, Researcher)):
         re = True
-        pubs = get_all_publications_for_user(user)
+        pubs = len(user.pub_records.all())
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
         skills = [user.skills]
@@ -348,17 +522,13 @@ def profile(id):
         if ',\n' in user.skills:
             skills = user.skills.split(',\n')
 
-        if (isinstance(current_user, User)) and (current_user.id is not user.id):
-            vrec = get_visit_record(current_user.id, user.id)
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, 
+                            researchers=researchers, interests=interests, skills=skills, types=types, dates=dates)
 
-            if not vrec:
-                vrec = create_visit_record(current_user.id, user.id)
-
-            if update_visit_record(vrec):
-                user = add_view(user)
-
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, researchers=researchers, interests=interests, skills=skills)
-
+@index_views.route('/load/profilepubs/<id>', methods=['GET'])
+def load_profile_pubs(id):
+    re = get_researcher(id)
+    return [record.publication.toDict() for record in re.pub_records.all()]
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply
@@ -453,25 +623,90 @@ def scholarly_update():
 
 @index_views.route('/test', methods=['GET'])
 def test():
-    pubs = get_all_publications()
-    count = 0
-    for n in range(len(pubs)):
-        pub = pubs[n] 
+    # pubs = get_all_publications()
+    # count = 1
+    # for pub in pubs:
+    #     print(count)
+    #     count += 1
+    #     if len(pub.tags.all()) == 0:
+    #         abstract = pub.abstract
+    #         print(abstract)
+    #         request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
+    #         keywords  = prompt(request)["choices"][0]["text"]
+    #         print(keywords)
+    #         keywords = '[' + keywords.split('[')[1]
+    #         keywords = ast.literal_eval(node_or_string=keywords.strip())
+    #         for key in keywords:
+    #             topic = get_topic_by_name(key.title())
+    #             if not topic and len(key) < 60:
+    #                 topic = create_topic(key.title())
+    #                 for top in get_all_topics():
+    #                     if top.name in topic.name:
+    #                         set_topic_parent(topic.name, top.id)
+    #                     if topic.name in top.name:
+    #                         set_topic_parent(top.name, topic.id)
+    #             if topic:
+    #                 added = add_topic_to_pub(pub, topic)
+    #                 if not added:
+    #                     print('\nNOT ADDED\n') 
+    #                     print(pub.title)
+    #                     print(topic.name)
+    #                     print('\n')
+    #         print('\n\n', abstract)
+    #         print(keywords)
+    #         print([tag.topic.name for tag in pub.tags.all()])
+
+    # for pub in get_all_publications(): 
+    #     print('\n', pub.pub_type)
+    #     print(pub.bibtex, '\n') 
+
+    print('\n\nDONE\n\n')
+
+
+    '''
+    conference paper:
+    booktitle, organization, pages
+
+    patent:
+    month, note, publisher
+
+    article:
+    journal, number, pages, publisher
+
+    incollection:
+    booktitle, pages, publisher
+
+    techreport:
+    institution
+
+    phdthesis:
+    author, pub_year, title
+    '''
+
+    # for pub in pubs:
+        # if pub.bibtex and 'Patent' in pub.bibtex:
+        #     set_pub_type(pub, 'patent')
         # if not pub.bibtex:
-        bibtex = search_pub_title(pub)
-        items = []
-        bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
-        bibtex = bibtex[:-3]
-        items.extend([item.strip() for item in bibtex.split(',\n')])
-        items.pop(0)
-        bibtex = {}
-        for item in items:
-            bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
-        bibtex = json.dumps(bibtex)
-        set_pub_bibtex(pub, bibtex)
-        print(pub.bibtex)
-        print(pub.id)
-        print('\n\n')
+        #     print(pub.title, '\n')
+        #     bibtex = search_pub_title(pub)
+        #     if bibtex:
+        #         items = []
+        #         bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
+        #         bibtex = bibtex[:-3]
+        #         items.extend([item.strip() for item in bibtex.split(',\n')])
+        #         items.pop(0)
+        #         bibtex = {}
+        #         for item in items:
+        #             bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
+        #         bibtex = json.dumps(bibtex)
+        #         set_pub_bibtex(pub, bibtex)
+        #         if 'Patent' in pub.bibtex:
+        #             set_pub_type(pub, 'patent')
+        #         print(pub.bibtex)
+        #         print(pub.id)
+        #         print('\n\n')
+        #     else:
+        #         print('\nNot Found\n')
             
     return 'bibtex'
 

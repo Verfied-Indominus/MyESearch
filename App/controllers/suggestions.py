@@ -70,26 +70,23 @@ def get_publication_suggestions(pub):
     for tag in pub.tags:
         topics.extend(get_topic_pubs(tag.topic.id))
     
+    topics = list(set(topics))
+
     pubs = get_ranked_pubs()
-    shuffle(researchers)
-    shuffle(topics)
 
     return researchers, topics, pubs
 
 def get_researcher_pubs(id):
     re = get_researcher(id)
-    # re_pubs = []
-    # for rec in re.pub_records:
-    #     re_pubs.append(rec.publication)   
-    # return re_pubs     
-    return [rec.publication for rec in re.pub_records.all()]
+    records = re.pub_records.all()
+    shuffle(records)
+    return [rec.publication for rec in records[:20]]
 
 def get_topic_pubs(id):
     topic = get_topic(id)
-    top_pubs = []
-    for tag in topic.pub_tags:
-        top_pubs.append(tag.publication)
-    return top_pubs
+    tags = topic.pub_tags.all()
+    shuffle(tags)
+    return [tag.publication for tag in tags[:20]]
 
 def get_ranked_pubs():
     ranked_pubs = []

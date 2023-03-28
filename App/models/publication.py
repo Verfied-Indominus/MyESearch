@@ -1,4 +1,6 @@
 from App.database import db
+import datetime
+from datetime import datetime
 
 class Publication(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -7,18 +9,17 @@ class Publication(db.Model):
     free_access = db.Column(db.Boolean, nullable=False)
     pub_type = db.Column(db.String(30), nullable=False)
     publication_date = db.Column(db.Date, nullable=False)
+    url = db.Column(db.String(400))
+    eprint = db.Column(db.String(400))
+    coauthors = db.Column(db.String(425))
+    bibtex = db.Column(db.String(1000))
     reads = db.Column(db.Integer, nullable=False)
     citations = db.Column(db.Integer, nullable=False)
     downloads = db.Column(db.Integer, nullable=False)
     searches = db.Column(db.Integer, nullable=False)
-    cover = db.Column(db.String(120))
-    url = db.Column(db.String(400)) 
-    eprint = db.Column(db.String(400))
-    coauthors = db.Column(db.String(425))
-    bibtex = db.Column(db.String(1000))
-    tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
-    pub_records = db.relationship("PubRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
-    lib_records = db.relationship("LibraryRecord", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
+    tags = db.relationship("PublicationTag", backref="publication", lazy="joined", cascade="all, delete-orphan")
+    pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", innerjoin=True, cascade="all, delete-orphan")
+    lib_records = db.relationship("LibraryRecord", backref="publication", lazy="joined", cascade="all, delete-orphan")
 
     def __init__(self, title, abstract, free_access, pub_type, publication_date, url, eprint):
         self.title = title
@@ -43,14 +44,14 @@ class Publication(db.Model):
             'abstract': self.abstract,
             'pub_type':self.pub_type,
             'free_access': self.free_access,
-            'publication_date': self.publication_date,
-            'cover': self.cover,
+            'publication_date': datetime.strftime(self.publication_date, '%Y'),
             'url': self.url,
             'eprint': self.eprint,
+            'coauthors': self.coauthors,
             'reads': self.reads,
             'citations': self.citations,
             'downloads': self.downloads,
             'searches': self.searches,
             'coauthors': self.coauthors,
-            'pub_records': self.pub_records
+            'authors': [rec.researcher.toDictPub() for rec in self.pub_records]
         }

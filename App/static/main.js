@@ -3,19 +3,14 @@ let messages;
 let run = false;
 
 function pageLoad(){
-    ol.style.opacity = '0';
-    this.document.body.style.overflowY = 'auto';
-    this.setTimeout(function(){
-        ol.style.visibility = 'hidden';
-        ol.style.display = 'none';
-    }, 200);
+    endLoad();
 }
 
 function getMessages(msg){
     if (msg.length > 0){
         UIkit.notification({
             message: msg,
-            status: 'danger',
+            status: 'primary',
             pos: 'top-center',
             timeout: 5000
         });
@@ -102,9 +97,10 @@ let departments = {
 
 let dpt_section = document.getElementById("department_section");
 let dpt_listing = document.getElementById("department_listing");
-let testing = document.getElementById("testing");
 
 function get_selection(btn){
+    let dpt_section = document.getElementById("department_section");
+    let dpt_listing = document.getElementById("department_listing");
     fac = btn.childNodes[0].innerHTML.trim();
     if (fac === "All"){
         dpt_section.style.display = 'none';
@@ -114,7 +110,7 @@ function get_selection(btn){
         let html = '';
         for (let dpt in departments[fac]){
             html += `
-                <li data-faculty="${fac}" uk-filter-control="filter: [data-department='${departments[fac][dpt]}']; group: data-department"><a href="#"> ${departments[fac][dpt]} </a></li>
+                <li data-faculty="${fac}" uk-filter-control="filter: [data-department='${departments[fac][dpt]}']; group: data-department"><a href=""> ${departments[fac][dpt]} </a></li>
             `;
         }
         dpt_listing.innerHTML = html;
@@ -127,28 +123,36 @@ let re_department = document.getElementById("re_department_select");
 let stu_faculty = document.getElementById("stu_faculty_select");
 let stu_department = document.getElementById("stu_department_select");
 
-re_faculty.onchange = function() {
-    let html = '';
-
-    for (let index in departments[re_faculty.value]){
-        html += `
-            <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
-        `;
+try {
+    re_faculty.onchange = function() {
+        let html = '';
+    
+        for (let index in departments[re_faculty.value]){
+            html += `
+                <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
+            `;
+        }
+    
+        re_department.innerHTML = html;
     }
-
-    re_department.innerHTML = html;
+} catch (error) {
+    console.log(error);
 }
 
-stu_faculty.onchange = function() {
-    let html = '';
-
-    for (let index in departments[stu_faculty.value]){
-        html += `
-            <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
-        `;
+try {
+    stu_faculty.onchange = function() {
+        let html = '';
+    
+        for (let index in departments[stu_faculty.value]){
+            html += `
+                <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
+            `;
+        }
+    
+        stu_department.innerHTML = html;
     }
-
-    stu_department.innerHTML = html;
+} catch (error) {
+    console.log(error);
 }
 
 async function getInterests(){
@@ -299,63 +303,82 @@ async function addToLibrary(user_id, pub_id){
 }
 
 // functions to add to recents and library
-async function addToLibrary(user_id, pub_id){
-    return await fetch(`/addtolibrary/${user_id}/${pub_id}`);
-}
 
 async function addToRecents(user_id, pub_id){
-    return await fetch(`/addtorecents/${user_id}/${pub_id}`);
+    await fetch(`/addtorecents/${user_id}/${pub_id}`);
 }
 
 // function to add read to publication
 async function addRead(id){
-    if (pastDate()){
-        let response = await fetch(`/publication/addread/${id}`);
-        console.log(response);
+    if (pastDate() || analytics('read') || identifier(id)){
+        await fetch(`/publication/addread/${id}`);
     }
 }
 
 // function to add download to publication
 async function addDownload(id){
-    if (pastDate()){
-        let response = await fetch(`/publication/adddownload/${id}`);
-        console.log(response);
+    if (pastDate() || analytics('download') || identifier(id)){
+        await fetch(`/publication/adddownload/${id}`);
     }
 }
 
 // function to add citation to publication
 async function addCitation(id){
-    if (pastDate()){
+    if (pastDate() || analytics('citation') || identifier(id)){
         let response = await fetch(`/publication/addcitation/${id}`);
-        console.log(response);
+        let citation = await response.json();
+        let cite_body = document.getElementById('citation-modal-body');
+        let html = `
+            <h4 class="uk-modal-title">Chicago</h4>
+            <div>${citation['citation'][0]}</div>
+            <h4 class="uk-modal-title">APA</h4>
+            <div>${citation['citation'][1]}</div>
+            <h4 class="uk-modal-title">MLA</h4>
+            <div>${citation['citation'][2]}</div>
+        `;
+        cite_body.innerHTML = html;
+    }
+    else {
+        let response = await fetch(`/publication/getcitation/${id}`);
+        let citation = await response.json();
+        let cite_body = document.getElementById('citation-modal-body');
+        let html = `
+            <h4 class="uk-modal-title">Chicago</h4>
+            <div>${citation['citation'][0]}</div>
+            <h4 class="uk-modal-title">APA</h4>
+            <div>${citation['citation'][1]}</div>
+            <h4 class="uk-modal-title">MLA</h4>
+            <div>${citation['citation'][2]}</div>
+        `;
+        cite_body.innerHTML = html;
     }
 }
 
 // function to add search to publication
 async function addSearchPublication(id){
-    if (pastDate()){
-        let response = await fetch(`/publication/addsearch/${id}`);
-        console.log(response);
+    if (pastDate() || analytics('publicationSearch') || identifier(id)){
+        await fetch(`/publication/addsearch/${id}`);
     }
 }
 
-// function to add view for profile             NOT WORKING!!!
-// async function addView(id){
-//     if (pastDate()){
-//         let response = await fetch(`/profile/addview/${id}`);
-//         console.log(response);
-//     }
-// }
+// function to add view for profile
+async function addView(id){
+    if (pastDate() || analytics('profileView') || identifier(id)){
+        await fetch(`/profile/addview/${id}`);
+    }
+}
+
 
 // function to add search for profile
 async function addSearchResearcher(id){
-    if (pastDate()){
-        let response = await fetch(`/profile/addsearch/${id}`);
-        console.log(response);
+    if (pastDate() || analytics('researcherSearch') || identifier(id)){
+        await fetch(`/profile/addsearch/${id}`);
     }
 }
 
-
+async function test(){
+    await fetch('/test');
+}
 
 // background updater for researcher publications
 async function update(){
@@ -366,10 +389,32 @@ async function update(){
     }
 }
 
+function identifier(id){
+    if (localStorage.getItem('id') == null){
+        localStorage.setItem('id', id);
+        return true;
+    }
+    if (localStorage.getItem('id').includes(id)){
+        return false;
+    }
+    else {
+        localStorage.setItem('id', localStorage.getItem('id').concat(', ', id));
+        return true;
+    }
+}
 
-
-async function test(){
-    await fetch('/test');
+function analytics(term){
+    if (localStorage.getItem('analytics') == 'null' || localStorage.getItem('analytics') == null){
+        localStorage.setItem('analytics', term);
+        return true;
+    }
+    if (localStorage.getItem('analytics').includes(term)){
+        return false;
+    }
+    else {
+        localStorage.setItem('analytics', localStorage.getItem('analytics').concat(', ', term));
+        return true;
+    }
 }
 
 function getDate(){
@@ -383,14 +428,453 @@ function getDate(){
 
 function pastDate(){
     let date = getDate();
-    if (localStorage.getItem('date') == null){
+    if (localStorage.getItem('date') == 'null'){
         localStorage.setItem('date', date);
+        localStorage.setItem('analytics', 'null');
         return true;
     }
-    if (date > localStorage.getItem('date')){
+    else if (date > localStorage.getItem('date')){
+        localStorage.setItem('date', date);
+        localStorage.setItem('analytics', 'null');
         return true;
     }
     else{
         return false;
     }
+}
+
+
+async function loadResearchers(researchers){
+    let ar_ul = document.getElementById('all_researcher_ul');
+    let re_num = document.getElementById('researcher_num');
+
+    re_num.innerHTML = `All Researchers (${researchers.length} Present)`;
+    let html1 = "";
+    for (let x = 0; x < researchers.length; x += 1){
+        window.setTimeout(() => {
+            let re = researchers[x];
+            html1 += `
+                <li data-name="${re['first_name'][0].toUpperCase()}" data-faculty="${re['faculty']}" data-department="${re['department']}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
+                    <div style="cursor: pointer;" onclick="window.location='/profile/${re['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
+                        <div class="uk-margin-small-top uk-margin-small-bottom uk-width-1-1 uk-text-center">
+                            <div class="uk-flex uk-flex-center uk-margin-small-bottom">`;
+                                let html2 = "";
+                                if (re['image_url'] != null){
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="${re['image_url']}" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                else{
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="/static/images/unknown.png" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                html1 += html2;
+                                html1 += `
+                            </div>
+                            <h4 class="uk-margin-auto"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
+                            <div> ${re['position']} </div>
+                            <div> ${re['faculty']} </div>
+                            <div> ${re['department']} </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            if (x % (researchers.length - 1) == 0){
+                ar_ul.innerHTML = html1;
+            }
+        }, 0);
+    } 
+    
+    endLoad();
+}
+
+
+async function loadPublications(publications){
+    let ap_ul = document.getElementById('all_publication_ul');
+    let pub_num = document.getElementById('publication_num');
+    pub_num.innerHTML = `All Publications (${publications.length} Present)`;
+    let html1 = "";
+    for (let x = 0; x < publications.length; x += 1){
+        let pub = publications[x];
+        window.setTimeout(() => {
+            html1 += `
+                <li data-cite="${pub['citations']}" data-year="`; if (pub['publication_date'] <= new Date().getFullYear() - 11){html1 += `${new Date().getFullYear() - 11}`;}else{html1 += `${pub['publication_date']}`;} html1 += `" data-type="${pub['pub_type']}" data-name="${pub['title'][0].toUpperCase()}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
+                    <div style="cursor: pointer;" onclick="window.location='/publication/${pub['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow uk-height-1-1">
+                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${pub['pub_type']}.png" uk-img></div>
+                        <div class="uk-margin-small-left uk-width-expand">
+                            <h4 class="uk-margin-remove"> ${titleCase(pub['title'])} </h4>
+                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${pub['pub_type']} </span>`;
+                                if (pub['publication_date'] != 1){
+                                    html1 += `${pub['publication_date']}`;
+                                }
+                                html1 += `</div>
+                            <div>`;
+                                let coauthors = [];
+                                if (pub['authors'].length < 3){
+                                    for (let re of pub['authors']){
+                                        html1 += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (re['image_url'] != null){
+                                                html1 += `${re['image_url']}`;
+                                            } 
+                                            else {
+                                                html1 += '/static/images/unknown.png';
+                                            }   
+                                        html1 += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                    }
+                                    if (pub['coauthors'] != "" && pub['coauthors'] != null){
+                                        coauthors = pub['coauthors'].split(', ');
+                                        let limit = 3 - pub['authors'].length;
+                                        if (limit < coauthors.length){
+                                            for (let n = 0; n < limit; n += 1){
+                                                html1 += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                            html1 += `+${coauthors.length - limit} More`;
+                                        }
+                                        else {
+                                            for (let n = 0; n < coauthors.length; n += 1){
+                                                html1 += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (let n = 0; n < 3; n += 1){
+                                        html1 += `<a href="/profile/${pub['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (pub['authors'][n]['image_url'] != null){
+                                                html1 += `${pub['authors'][n]['image_url']}`;
+                                            } 
+                                            else {
+                                                html1 += '/static/images/unknown.png';
+                                            }   
+                                        html1 += `');" uk-icon></span> ${pub['authors'][n]['first_name']}  ${pub['authors'][n]['last_name']} </a>`;
+                                    }
+                                    if (pub['authors'].length > 3){
+                                        html1 += `+${(pub['authors'].length + coauthors.length) - 3} More`;
+                                    }
+                                }
+                            html1 += `</div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            if (x % (publications.length - 1) == 0){
+                ap_ul.innerHTML = html1;
+            }
+        }, 0); 
+    }
+    
+    endLoad();
+}
+
+function titleCase(str) {
+    return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+}
+
+async function loadSuggestions(data, id){
+    let tabs = document.getElementById('tabs');
+    let switcher = document.getElementById('switcher');
+    let researchers = data[0];
+    let topics = data[1];
+    let popular = data[2];
+
+    let html = "";
+    if (researchers.length > 1){
+        html += '<li><a href="">More from the authors</a></li>';
+    }
+    if (topics.length > 1){
+        html += '<li><a href="">More from the topics</a></li>';
+    }
+    html += '<li><a href="">Most popular</a></li>';
+    tabs.innerHTML = html;
+
+    html = "";
+    if (researchers.length > 1){
+        html += '<li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">';
+        for (let p of researchers){
+            if (parseInt(p['id']) != parseInt(id)){
+                html += `
+                    <div style="padding: 0 30px">
+                        <div style="cursor: pointer;" onclick="window.location='/publication/${p['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${p['pub_type']}.png" uk-img></div>
+                            <div class="uk-margin-small-left uk-width-expand">
+                                <h4 class="uk-margin-remove"> ${titleCase(p['title'])} </h4>
+                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${p['pub_type']} </span>`;
+                                if (p['publication_date'] != 1){
+                                    html += `${p['publication_date']}`;
+                                }
+                                html += ` </div>
+                                <div>`;
+                                    let coauthors = [];
+                                    if (p['authors'].length < 2){
+                                        for (let re of p['authors']){
+                                            html += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                                if (re['image_url'] != null){
+                                                    html += `${re['image_url']}`;
+                                                } 
+                                                else {
+                                                    html += '/static/images/unknown.png';
+                                                }   
+                                            html += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                        }
+                                        if (p['coauthors'] != "" && p['coauthors'] != null){
+                                            coauthors = p['coauthors'].split(', ');
+                                            let limit = 2 - p['authors'].length;
+                                            if (limit < coauthors.length){
+                                                for (let n = 0; n < limit; n += 1){
+                                                    html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                                }
+                                                html += `+${coauthors.length - limit} More`;
+                                            }
+                                            else {
+                                                for (let n = 0; n < coauthors.length; n += 1){
+                                                    html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        for (let n = 0; n < 2; n += 1){
+                                            html += `<a href="/profile/${p['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                                if (p['authors'][n]['image_url'] != null){
+                                                    html += `${p['authors'][n]['image_url']}`;
+                                                } 
+                                                else {
+                                                    html += '/static/images/unknown.png';
+                                                }   
+                                            html += `');" uk-icon></span> ${p['authors'][n]['first_name']}  ${p['authors'][n]['last_name']} </a>`;
+                                        }
+                                        if (p['authors'].length > 2){
+                                            html += `+${(p['authors'].length + coauthors.length) - 2} More`;
+                                        }
+                                    }    
+                                html += `</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        html += '</li>';
+        switcher.innerHTML += html;
+    }
+
+    html = "";
+    if (topics.length > 1){
+        html += '<li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">';
+        for (let p of topics){
+            if (parseInt(p['id']) != parseInt(id)){
+                html += `
+                    <div style="padding: 0 30px">
+                        <div style="cursor: pointer;" onclick="window.location='/publication/${p['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                            <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${p['pub_type']}.png" uk-img></div>
+                            <div class="uk-margin-small-left uk-width-expand">
+                                <h4 class="uk-margin-remove"> ${titleCase(p['title'])} </h4>
+                                <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${p['pub_type']} </span>`;
+                                if (p['publication_date'] != 1){
+                                    html += `${p['publication_date']}`;
+                                }
+                                html += ` </div>
+                                <div>`;
+                                    let coauthors = [];
+                                    if (p['authors'].length < 2){
+                                        for (let re of p['authors']){
+                                            html += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                                if (re['image_url'] != null){
+                                                    html += `${re['image_url']}`;
+                                                } 
+                                                else {
+                                                    html += '/static/images/unknown.png';
+                                                }   
+                                            html += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                        }
+                                        if (p['coauthors'] != "" && p['coauthors'] != null){
+                                            coauthors = p['coauthors'].split(', ');
+                                            let limit = 2 - p['authors'].length;
+                                            if (limit < coauthors.length){
+                                                for (let n = 0; n < limit; n += 1){
+                                                    html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                                }
+                                                html += `+${coauthors.length - limit} More`;
+                                            }
+                                            else {
+                                                for (let n = 0; n < coauthors.length; n += 1){
+                                                    html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        for (let n = 0; n < 2; n += 1){
+                                            html += `<a href="/profile/${p['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                                if (p['authors'][n]['image_url'] != null){
+                                                    html += `${p['authors'][n]['image_url']}`;
+                                                } 
+                                                else {
+                                                    html += '/static/images/unknown.png';
+                                                }   
+                                            html += `');" uk-icon></span> ${p['authors'][n]['first_name']}  ${p['authors'][n]['last_name']} </a>`;
+                                        }
+                                        if (p['authors'].length > 2){
+                                            html += `+${(p['authors'].length + coauthors.length) - 2} More`;
+                                        }
+                                    }    
+                                html += `</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        html += '</li>';
+        switcher.innerHTML += html;
+    }
+
+    html = "";
+    html += '<li class="uk-grid uk-margin-remove uk-child-width-1-2 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-viewport="offset-bottom: 40;" uk-height-match="target: div > .uk-card">';
+    for (let p of popular){
+        if (parseInt(p['id']) != parseInt(id)){
+            html += `
+                <div style="padding: 0 30px">
+                    <div style="cursor: pointer;" onclick="window.location='/publication/${p['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${p['pub_type']}.png" uk-img></div>
+                        <div class="uk-margin-small-left uk-width-expand">
+                            <h4 class="uk-margin-remove"> ${titleCase(p['title'])} </h4>
+                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${p['pub_type']} </span>`;
+                            if (p['publication_date'] != 1){
+                                html += `${p['publication_date']}`;
+                            }
+                            html += ` </div>
+                            <div>`;
+                                let coauthors = [];
+                                if (p['authors'].length < 2){
+                                    for (let re of p['authors']){
+                                        html += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (re['image_url'] != null){
+                                                html += `${re['image_url']}`;
+                                            } 
+                                            else {
+                                                html += '/static/images/unknown.png';
+                                            }   
+                                        html += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                    }
+                                    if (p['coauthors'] != "" && p['coauthors'] != null){
+                                        coauthors = p['coauthors'].split(', ');
+                                        let limit = 2 - p['authors'].length;
+                                        if (limit < coauthors.length){
+                                            for (let n = 0; n < limit; n += 1){
+                                                html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                            html += `+${coauthors.length - limit} More`;
+                                        }
+                                        else {
+                                            for (let n = 0; n < coauthors.length; n += 1){
+                                                html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (let n = 0; n < 2; n += 1){
+                                        html += `<a href="/profile/${p['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (p['authors'][n]['image_url'] != null){
+                                                html += `${p['authors'][n]['image_url']}`;
+                                            } 
+                                            else {
+                                                html += '/static/images/unknown.png';
+                                            }   
+                                        html += `');" uk-icon></span> ${p['authors'][n]['first_name']}  ${p['authors'][n]['last_name']} </a>`;
+                                    }
+                                    if (p['authors'].length > 2){
+                                        html += `+${(p['authors'].length + coauthors.length) - 2} More`;
+                                    }
+                                }    
+                            html += `</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    html += '</li>';
+    switcher.innerHTML += html;
+
+    endLoad();
+}
+
+async function loadProfilePubs(pubs){
+    let propubs = document.getElementById('profile-pubs');
+    let html = "";
+    if (pubs.length > 0){
+        for (let p of pubs){
+            html += `
+                <div style="padding: 0 30px">
+                    <div style="cursor: pointer;" onclick="window.location='/publication/${p['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
+                        <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="/static/images/publications/${p['pub_type']}.png" uk-img></div>
+                        <div class="uk-margin-small-left uk-width-expand">
+                            <h4 class="uk-margin-remove"> ${titleCase(p['title'])} </h4>
+                            <div class="uk-text-middle uk-margin-small-bottom"><span class="uk-label uk-margin-small-right"> ${p['pub_type']} </span>`;
+                            if (p['publication_date'] != 1){
+                                html += `${p['publication_date']}`;
+                            }
+                            html += ` </div>
+                            <div>`;
+                                let coauthors = [];
+                                if (p['authors'].length < 2){
+                                    for (let re of p['authors']){
+                                        html += `<a href="/profile/${re['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (re['image_url'] != null){
+                                                html += `${re['image_url']}`;
+                                            } 
+                                            else {
+                                                html += '/static/images/unknown.png';
+                                            }   
+                                        html += `');" uk-icon></span> ${re['first_name']}  ${re['last_name']} </a>`;
+                                    }
+                                    if (p['coauthors'] != "" && p['coauthors'] != null){
+                                        coauthors = p['coauthors'].split(', ');
+                                        let limit = 2 - p['authors'].length;
+                                        if (limit < coauthors.length){
+                                            for (let n = 0; n < limit; n += 1){
+                                                html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                            html += `+${coauthors.length - limit} More`;
+                                        }
+                                        else {
+                                            for (let n = 0; n < coauthors.length; n += 1){
+                                                html += `<a href="https://scholar.google.com/scholar?as_vis=1&q=author:+%22${coauthors[n]}%22&hl=en&as_sdt=0,5" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('/static/images/unknown.png');" uk-icon></span> ${coauthors[n]} </a>`;
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (let n = 0; n < 2; n += 1){
+                                        html += `<a href="/profile/${p['authors'][n]['id']}" style="padding: 2px 3px; height: 45px;" class="uk-margin-small-right uk-border-pill uk-background-muted uk-inline uk-text-decoration-none uk-button uk-button-default uk-text-capitalize"><span class="uk-icon uk-icon-image uk-border-circle" style="height: 30px; width: 30px; background-image: url('`;
+                                            if (p['authors'][n]['image_url'] != null){
+                                                html += `${p['authors'][n]['image_url']}`;
+                                            } 
+                                            else {
+                                                html += '/static/images/unknown.png';
+                                            }   
+                                        html += `');" uk-icon></span> ${p['authors'][n]['first_name']}  ${p['authors'][n]['last_name']} </a>`;
+                                    }
+                                    if (p['authors'].length > 2){
+                                        html += `+${(p['authors'].length + coauthors.length) - 2} More`;
+                                    }
+                                }    
+                            html += `</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        propubs.innerHTML += html;
+    }
+
+    endLoad();
+}
+
+function endLoad(){
+    ol.style.opacity = '0';
+    this.document.body.style.overflowY = 'auto';
+    this.setTimeout(function(){
+        ol.style.visibility = 'hidden';
+        ol.style.display = 'none';
+    }, 200);
 }

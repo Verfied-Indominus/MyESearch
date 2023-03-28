@@ -17,7 +17,6 @@ class Researcher(UserMixin, User):
     research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
     sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="dynamic", cascade="all, delete-orphan")
-    visit_records = db.relationship("VisitRecord", foreign_keys="VisitRecord.researcher_id", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity':'Researcher'
@@ -42,4 +41,12 @@ class Researcher(UserMixin, User):
             'skills': self.skills,
             'website_url': self.website_url,
             'introduction': self.introduction
+        }
+
+    def toDictPub(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'image_url': self.image_url
         }
