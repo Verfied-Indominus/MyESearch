@@ -14,6 +14,8 @@ from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
 from App.controllers.pubrecord import delete_pub_record
 from App.controllers.search import parse_search
+from App.controllers.verify import verified
+from App.controller.notification import verified_notif
 from App.controllers.open_ai import prompt, RAIL_KEY, CAESAR_KEY
 from App.controllers.ciphers import doubleCipher, doubleDeCipher
 from werkzeug.utils import secure_filename
@@ -707,4 +709,14 @@ def test():
         #         print('\nNot Found\n')
             
     return 'bibtex'
-    
+
+@index_views.route("/verify/<auth_id>/<new_auth>")
+def verify(auth_id,new_auth):
+    res = verified(auth_id)
+    if res:
+        res = verified_notif(new_auth,auth_id)
+        if res:
+            return 200
+        else:
+            return 300
+    return 300
