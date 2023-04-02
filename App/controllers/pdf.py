@@ -62,49 +62,28 @@ def get_information(file_name):
 
     return keywords, abstract
 
+url = ""
+
 def encrypt_pdf(file, id):
     data = file.read()
-    cipher = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
-    for n in range(0, 16-len(data)%16):
-        data = data + bytes(" ", encoding="utf-8")
-    encryptedFile = cipher.encrypt(data)
-    f = open(f"App/uploads/{id}.pdf", "wb")
-    f.write(encryptedFile)
-    f.close()
-    os.remove(f"App/uploads/{id}.pdf")
+    encryptor = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
+    while len(data) % 16 != 0:
+        data += b'\n'
+    cipher = encryptor.encrypt(data)
+    with open(f"App/uploads/{id}.pdf", "wb") as f:
+        f.write(cipher)
+        f.close()
     url = uploadPDF(id, f"{id}.pdf")
-    print(url)
+    os.remove(f"App/uploads/{id}.pdf")
+    return url
 
-url = ""    
+
 def decrypt_pdf_from_url(url):
     response = requests.get(url)
-    data = response.text
-    data = data[:(len(data)-len(data)%16)-1]
-    # data = data[:int(len(data)/16)*16]
-    cipher = AES.new(key, AES.MODE_CBC, IV=IV)
-    for n in range(1, 17):
-        print(n)
-        print(bytes(str(n), encoding="utf-8"))
-        data = data + str(bytes(str(n), encoding="utf-8"))
-        try:
-            decryptedFile = cipher.decrypt(data)
-            f = open("App/uploads/1.pdf", "wb")
-            f.write(decryptedFile)
-            f.close()
-        except ValueError as v:
-            print(v)
-        
-# encrypt_pdf(file, 1)
-# decrypt_pdf_from_url(url)
-
-message = "12345678901234567"
-with open("test.pdf", "w") as f:
-    cipher = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
-    i=0
-    while (len(message)%16 != 0):
-        message += ' '
-        i += 1
-        print(i)
-    crypt = cipher.encrypt(message)
-    f.write(crypt.decode("CBC-AES128"))
-    f.close()
+    content = response.content
+    decryptor = AES.new(key, AES.MODE_CBC, IV=IV)
+    plainText = decryptor.decrypt(content)
+    with open("App/uploads/response.pdf", "wb") as f:
+        f.write(plainText)
+        f.close()
+    return "App/uploads/response.pdf"

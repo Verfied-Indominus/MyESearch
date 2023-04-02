@@ -14,5 +14,5 @@ def sendEmail(message,subject,receipient,html=None,attachments=None):
         mail.send(msg)
         mail.close()
         return True
-    except e:
+    except Exception as e:
         return False
