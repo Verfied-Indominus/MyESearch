@@ -158,9 +158,10 @@ def topic_page(id):
 @index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
     pub = get_pub_byid(id)
-
+    print("test")
     researchers, topics, pubs = get_publication_suggestions(pub)
-    return [[r.toDict() for r in researchers], [t.toDict() for t in topics], [p.toDict() for p in pubs]]
+    print("got suggestions")
+    return [[r.toDict() for r in researchers if r], [t.toDict() for t in topics if t], [p.toDict() for p in pubs if p]]
 
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -511,7 +512,7 @@ def profile(id):
 
     if (isinstance(user, Researcher)):
         re = True
-        pubs = len(user.pub_records.all())
+        pubs = len(user.pub_records)
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
         skills = [user.skills]
@@ -528,7 +529,16 @@ def profile(id):
 @index_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    return [record.publication.toDict() for record in re.pub_records.all()]
+    print('hit')
+    print(len(re.pub_records))
+    publications = get_all_publications()
+
+    # pub_recs = [pub.pub_records[0] for pub in publications if pub.pub_records[0] in re.pub_records]
+    # print('next method')
+    # print(len(pub_recs))
+
+    pubs = [record.publication for record in re.pub_records]
+    return [pub.toDict() for pub in pubs]
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply

@@ -19,7 +19,7 @@ def get_library_from_user(id):
 
 def get_publications_from_library(library):
     pubs = []
-    for rec in library.first().records:
+    for rec in library[0].records:
         pubs.append(rec.publication)
     return pubs
 

@@ -20,7 +20,7 @@ def get_recents_from_user(id):
 
 def get_publications_from_recents(recents):
     pubs = []
-    for rec in recents.first().records:
+    for rec in recents[0].records:
         pubs.append(rec.publication)
     return pubs
 

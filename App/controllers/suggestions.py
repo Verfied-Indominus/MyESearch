@@ -67,9 +67,10 @@ def get_publication_suggestions(pub):
 
     for rec in pub.pub_records:
         researchers.extend(get_researcher_pubs(rec.researcher.id))
+
     for tag in pub.tags:
         topics.extend(get_topic_pubs(tag.topic.id))
-    
+
     topics = list(set(topics))
 
     pubs = get_ranked_pubs()
