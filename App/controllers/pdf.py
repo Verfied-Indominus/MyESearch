@@ -1,8 +1,16 @@
 import fitz
-from .open_ai import prompt
+import os
+import requests
+from Crypto.Cipher import AES
+# from .open_ai import prompt
+from pyre_base import uploadPDF
 
-# file = "pmohammed_pmohan.pdf"
-file = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
+key = b'/xeej/xb8/x0c/x97/xe9j/xba,W/xcb'
+IV = os.urandom(16)
+
+filename = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
+file = open(filename, 'rb')
+
 def create_doc_image(file_name):
     try:
         new_file = file_name.split(".")[0]
@@ -53,3 +61,50 @@ def get_information(file_name):
     # print(authors)
 
     return keywords, abstract
+
+def encrypt_pdf(file, id):
+    data = file.read()
+    cipher = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
+    for n in range(0, 16-len(data)%16):
+        data = data + bytes(" ", encoding="utf-8")
+    encryptedFile = cipher.encrypt(data)
+    f = open(f"App/uploads/{id}.pdf", "wb")
+    f.write(encryptedFile)
+    f.close()
+    os.remove(f"App/uploads/{id}.pdf")
+    url = uploadPDF(id, f"{id}.pdf")
+    print(url)
+
+url = ""    
+def decrypt_pdf_from_url(url):
+    response = requests.get(url)
+    data = response.text
+    data = data[:(len(data)-len(data)%16)-1]
+    # data = data[:int(len(data)/16)*16]
+    cipher = AES.new(key, AES.MODE_CBC, IV=IV)
+    for n in range(1, 17):
+        print(n)
+        print(bytes(str(n), encoding="utf-8"))
+        data = data + str(bytes(str(n), encoding="utf-8"))
+        try:
+            decryptedFile = cipher.decrypt(data)
+            f = open("App/uploads/1.pdf", "wb")
+            f.write(decryptedFile)
+            f.close()
+        except ValueError as v:
+            print(v)
+        
+# encrypt_pdf(file, 1)
+# decrypt_pdf_from_url(url)
+
+message = "12345678901234567"
+with open("test.pdf", "w") as f:
+    cipher = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
+    i=0
+    while (len(message)%16 != 0):
+        message += ' '
+        i += 1
+        print(i)
+    crypt = cipher.encrypt(message)
+    f.write(crypt.decode("CBC-AES128"))
+    f.close()

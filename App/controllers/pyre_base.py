@@ -40,3 +40,7 @@ def uploadFile(id, file_name):
 # #get url of file
 # storage.child("images/example.jpg").get_url()
 # https://firebasestorage.googleapis.com/v0/b/storage-url.appspot.com/o/images%2Fexample.jpg?alt=media
+
+def uploadPDF(id, file_name):
+    storage.child(f"pdfs/{id}").put(f"App/uploads/{file_name}")
+    return storage.child(f"pdfs/{id}").get_url()
