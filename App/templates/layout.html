@@ -133,23 +133,45 @@
             <!-- Researcher added a new publication and a Peer Researcher posted a new publication -->
             
             <div id="notif_dropdown" class="uk-card uk-card-default uk-width-1-3@m uk-width-1-4@l" uk-drop="mode: click">
+              {% if current_user.is_authenticated %}
+              <div class="uk-height-small uk-flex uk-flex-center uk-flex-middle uk-flex-column">
+                <div class="uk-margin-small">You are not currently logged in! <a href="/login" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Login <span class="uk-margin-auto-left" uk-icon="sign-in"></span></a></div>
+                <div class="uk-margin-small">Don't have an account? <a href="/signup" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Signup <span class="uk-margin-auto-left" uk-icon="plus-circle"></span></a></div>
+              </div>
+              {% else %}
+
+              {% set unread = [] %}
+              {% for rec in current_user.notification_records %}
+                {% if not rec.read %}
+                  {% set __ = unread.append(rec) %}
+                {% endif %}
+              {% endfor %}
+
+              {% if unread|length == 0 %}
+              <div class="uk-text-center uk-margin-small-bottom">
+                <img src="/static/images/noNotifs.png" alt="No New Notifications">
+                No New Notifications
+              </div>
+              {% endif %}
+
               <div class="uk-height-large scroll">
+                <!-- Researcher adds a new publication -->
                 <div class="uk-card-header uk-padding-small">
-                    <div class="uk-grid-small uk-flex-middle" uk-grid>
-                        <div class="uk-width-auto ">
+                  <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto ">
+                      <div class="uk-flex">
+                        <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
+                        <div>
+                          <p class="uk-margin-small-bottom">Mr. Koffka Khan added a New Article.</p>
                           <div class="uk-flex">
-                            <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                            <div> 
-                              <p class="uk-margin-small-bottom">Mr. Koffka Khan added a New Article.</p>
-                              <div class="uk-flex">
-                                <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/article.png" alt="Avatar">
-                                <a>Introduction to Database Administration and PL/SQL Programming</a>
-                              </div>
-                              <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                            </div>
+                            <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/article.png" alt="Avatar">
+                            <a>Introduction to Database Administration and PL/SQL Programming</a>
                           </div>
+                          <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
                         </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
               
               
@@ -245,13 +267,13 @@
                 </div>
 
 
-                <!-- A Researcher added or mentioned you to one of thier publications -->
+                <!-- A Researcher added or mentioned you to one of their publications -->
                 <div class="uk-card-header uk-padding-small">
                   <div class="uk-grid-small uk-flex-middle" uk-grid>
                       <div class="uk-width-auto ">
                         <div class="uk-flex">
                           <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                          <div> 
+                          <div>
                             <p class="uk-margin-small-bottom">Dr. Phaedra Mohammed added you as a co-author in their Conference Paper.</p>
                             <div class="uk-flex">
                               <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/conference paper.png" alt="Avatar">
@@ -266,13 +288,13 @@
               </div>
 
 
-              <!-- Read more option -->
+              <!-- View All option -->
               <div class="uk-card-footer">
                 <div class="uk-flex uk-flex-center"> 
-                  <a href="#" class="uk-button uk-button-text ">Read more</a>
+                  <a href="#" class="uk-button uk-button-text ">View All</a>
                 </div>
               </div>
-
+              {% endif %}
             </div>
 
           </li>

@@ -144,7 +144,7 @@ def author_added(p_id,r_id):
     except Exception:
         return False
 
-def verified_notif(auth_id,res_id):
+def verified_notif(auth_id,res_id): 
     auth = Researcher.query.filter_by(id = auth_id).first()
     researcher = Researcher.query.filter_by(id = res_id).first()
     title = f"Verified"
