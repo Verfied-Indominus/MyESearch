@@ -1,6 +1,6 @@
 from App.models import Researcher
-from scholarly_py import verify_author
-from email import sendEmail
+from .scholarly_py import verify_author
+from .email_py import sendEmail
 from App.database import db
 from flask import request
 import random
@@ -20,9 +20,9 @@ def verify_process(auth_id):
     
     if department_auths != []:
         verifier = random.choice(department_auths)
-        messsage = f"""
+        message = f"""
         Hi {verifier.first_name} {verifier.lastname}, 
-            Is {auth.first_name} {auth.last_name} a vaild researcher in your department?
+            Is {auth.first_name} {auth.last_name} a valid researcher in your department?
 
             Click on the appropriate link to confirm.
             CONFIRM: {request.base_url+ver}
@@ -30,11 +30,11 @@ def verify_process(auth_id):
     Regards,
     MyEsearch
     """
-        sendEmail(message,title)
+        sendEmail(message, title)
         return True
     else:
         verifier = random.choice(faculty_auths)
-        messsage = f"""
+        message = f"""
     Hi {verifier.first_name} {verifier.lastname}, 
         Is {auth.first_name} {auth.last_name} a vaild researcher in your department?
 

@@ -17,9 +17,11 @@ class Publication(db.Model):
     citations = db.Column(db.Integer, nullable=False)
     downloads = db.Column(db.Integer, nullable=False)
     searches = db.Column(db.Integer, nullable=False)
+    encryptedPDF = db.Column(db.String(200))
     tags = db.relationship("PublicationTag", backref="publication", lazy="joined", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", innerjoin=True, cascade="all, delete-orphan")
-    lib_records = db.relationship("LibraryRecord", backref="publication", lazy="joined", cascade="all, delete-orphan")
+    lib_records = db.relationship("LibraryRecord", backref="lib_pub", lazy="joined", cascade="all, delete-orphan")
+    recents_records = db.relationship("LibraryRecord", backref="recents_pub", lazy="joined", cascade="all, delete-orphan")
 
     def __init__(self, title, abstract, free_access, pub_type, publication_date, url, eprint):
         self.title = title

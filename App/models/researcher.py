@@ -14,9 +14,9 @@ class Researcher(UserMixin, User):
     views = db.Column(db.Integer)
     searches = db.Column(db.Integer)
     verified = db.Column(db.Boolean)
-    research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
-    pub_records = db.relationship("PubRecord", backref="researcher", lazy="dynamic", cascade="all, delete-orphan")
-    sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="dynamic", cascade="all, delete-orphan")
+    research_interests = db.relationship("ResearcherTag", backref="researcher", lazy="joined", cascade="all, delete-orphan")
+    pub_records = db.relationship("PubRecord", backref="researcher", lazy="joined", cascade="all, delete-orphan")
+    sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.researcher_id', backref="subject", lazy="joined", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity':'Researcher'
