@@ -5,7 +5,7 @@ from App.database import db
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(300), nullable=False)
     message = db.Column(db.String(500), nullable=True)
     type = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, server_default=func.now())

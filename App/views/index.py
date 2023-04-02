@@ -529,16 +529,8 @@ def profile(id):
 @index_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    print('hit')
-    print(len(re.pub_records))
     publications = get_all_publications()
-
-    # pub_recs = [pub.pub_records[0] for pub in publications if pub.pub_records[0] in re.pub_records]
-    # print('next method')
-    # print(len(pub_recs))
-
-    pubs = [record.publication for record in re.pub_records]
-    return [pub.toDict() for pub in pubs]
+    return [rec.publication.toDict() for rec in re.pub_records]
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply
@@ -721,7 +713,7 @@ def test():
     return 'bibtex'
 
 @index_views.route("/verify/<auth_id>/<new_auth>")
-def verify(auth_id,new_auth):
+def verify(auth_id, new_auth):
     res = verified(auth_id)
     if res:
         res = verified_notif(new_auth,auth_id)
