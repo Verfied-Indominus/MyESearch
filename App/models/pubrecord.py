@@ -14,7 +14,5 @@ class PubRecord(db.Model):
         return {
             'id': self.id,
             'researcher_id': self.researcher_id,
-            'publication_id': self.publication_id,
-            # 'researcher': self.researcher.toDict(),
-            # 'publication': self.publication.toDict()
+            'publication_id': self.publication_id
         }

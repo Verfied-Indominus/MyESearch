@@ -878,3 +878,11 @@ function endLoad(){
         ol.style.display = 'none';
     }, 200);
 }
+
+async function accept_request(s_id, pub_id){
+    fetch(`/accept/${s_id}/${pub_id}`);
+}
+
+async function reject_request(s_id, pub_id){
+    fetch(`/reject/${s_id}/${pub_id}`);
+}

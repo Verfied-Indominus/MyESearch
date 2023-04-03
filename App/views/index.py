@@ -15,7 +15,7 @@ from App.controllers.scholarly_py import *
 from App.controllers.pubrecord import delete_pub_record
 from App.controllers.search import parse_search
 from App.controllers.verify import verified
-from App.controllers.notification import verified_notif
+from App.controllers.notification import verified_notif, accept, reject, follow_back_researcher
 from App.controllers.open_ai import prompt, RAIL_KEY, CAESAR_KEY
 from App.controllers.ciphers import doubleCipher, doubleDeCipher
 from werkzeug.utils import secure_filename
@@ -24,7 +24,6 @@ from datetime import datetime
 from random import shuffle
 import json
 import gmail
-import ast
 
 from App.models.builder import *
 
@@ -73,24 +72,9 @@ def all_publications():
             types.append(pub.pub_type)
     return render_template("results.html", publications=True, now=datetime.utcnow(), types=types)
 
-@index_views.route('/load/publications', methods=['GET'])
-def load_publications():
-    publications = get_all_publications()
-    publications = [pub.toDict() for pub in publications]
-    publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
-    return publications
-
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
     return render_template("results.html", researchers=True, faculties=faculties)
-
-@index_views.route('/load/researchers', methods=['GET'])
-def load_researchers():
-    researchers = get_all_researchers()
-    shuffle(researchers)
-    return [re.toDict() for re in researchers]
-
-search_pubs = []
 
 @index_views.route('/search',methods=['POST'])
 def search():
@@ -127,6 +111,8 @@ def index_page():
     # if (isinstance(current_user, User)):
     #     suggestions = get_home_suggestions(current_user)
 
+    test = json.loads("{}")
+
     return render_template('index.html',topics=topics)
     # return render_template('index.html',topics=topics, suggestions=suggestions)
 
@@ -158,14 +144,6 @@ def topic_page(id):
     
     return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs, topic_researchers=topic_researchers)
 
-@index_views.route('/load/pubsuggestions/<id>', methods=['GET'])
-def load_pub_suggestions(id):
-    pub = get_pub_byid(id)
-    print("test")
-    researchers, topics, pubs = get_publication_suggestions(pub)
-    print("got suggestions")
-    return [[r.toDict() for r in researchers if r], [t.toDict() for t in topics if t], [p.toDict() for p in pubs if p]]
-
 @index_views.route('/login', methods=['GET', 'POST'])
 def login_page():
     remember = False
@@ -188,6 +166,20 @@ def logout():
     else:
         logout_user()
     return redirect(url_for('.index_page'))
+
+@index_views.route('/interests/<selected>', methods=['GET'])
+def parse_interests(selected):
+    selected = json.loads(selected)
+    re_interests.extend(selected['selected'])
+    print(re_interests)
+    return 'Interests Checked'
+
+@index_views.route('/filename', methods=['POST'])
+def filename():
+    img = request.files['files[]']
+    image.append(secure_filename(img.filename))
+    img.save(f"App/uploads/{image[0]}")
+    return image[0]
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():
@@ -338,99 +330,6 @@ def add_publication(id):
         return redirect(url_for('.index_page'))
     return render_template('addpublication.html', id=id, types=types, dates=dates)
 
-@index_views.route('/interests/<selected>', methods=['GET'])
-def parse_interests(selected):
-    selected = json.loads(selected)
-    re_interests.extend(selected['selected'])
-    print(re_interests)
-    return 'Interests Checked'
-
-@index_views.route('/filename', methods=['POST'])
-def filename():
-    img = request.files['files[]']
-    image.append(secure_filename(img.filename))
-    img.save(f"App/uploads/{image[0]}")
-    return image[0]
-
-@index_views.route('/addtolibrary/<user_id>/<pub_id>', methods=['GET'])
-def add_to_library(user_id, pub_id):
-    library = get_library_from_user(user_id)
-    if add_publication_to_library(library, pub_id):
-        return True
-    remove_publication_from_library(library, pub_id)
-    return False
-
-@index_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
-def add_to_recent(user_id, pub_id):
-    recents = get_recents_from_user(user_id)
-    if add_publication_to_recents(recents, pub_id):
-        return True
-    remove_publication_from_recents(recents, pub_id)
-    return False
-
-@index_views.route('/publication/addread/<id>', methods=['GET'])
-def add_read(id):
-    pub = get_pub_byid(id)
-    add_read_to_pub(pub)
-    return 'Added'
-
-@index_views.route('/publication/adddownload/<id>', methods=['GET'])
-def add_download(id):
-    pub = get_pub_byid(id)
-    add_download_to_pub(pub)
-    return 'Added' 
-
-@index_views.route('/publication/addcitation/<id>', methods=['GET'])
-def add_citation(id):
-    pub = get_pub_byid(id)
-    add_citation_to_pub(pub)
-    citation = []
-    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    return {'citation': citation}
-
-@index_views.route('/publication/getcitation/<id>', methods=['GET'])
-def get_citation(id):
-    pub = get_pub_byid(id)
-    citation = []
-    request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
-
-    return {'citation': citation}
-
-@index_views.route('/publication/addsearch/<id>', methods=['GET'])
-def add_search_pub(id):
-    pub = get_pub_byid(id)
-    add_search_to_pub(pub)
-    return 'Added'
-
-@index_views.route('/profile/addview/<id>', methods=['GET'])
-def add_view_re(id):
-    re = get_researcher(id)
-    add_view(re)
-    return 'Added'
-
-@index_views.route('/profile/addsearch/<id>', methods=['GET'])
-def add_search_re(id):
-    re = get_researcher(id)
-    print('\n\n', re, '\n\n')
-    add_search(re)
-    print(re.searches)
-    return 'Added'
-
 @index_views.route('/profile/addpublication', methods=['POST'])
 def add_profile_pub():
     re = current_user
@@ -529,12 +428,6 @@ def profile(id):
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, 
                             researchers=researchers, interests=interests, skills=skills, types=types, dates=dates)
 
-@index_views.route('/load/profilepubs/<id>', methods=['GET'])
-def load_profile_pubs(id):
-    re = get_researcher(id)
-    publications = get_all_publications()
-    return [rec.publication.toDict() for rec in re.pub_records]
-
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply
 # APP_PASSWORD: sibvelfmfcupbche
@@ -553,78 +446,6 @@ def mails():
     mail.send(msg)
     mail.close()
     return "Email sent :)"
-
-@index_views.route('/update', methods=['GET'])
-def scholarly_update():
-    users = get_all_researchers()
-    for n in range(len(users), 0, -1):
-        user = users[n-1]
-        pubs = get_pubs(user.first_name, user.last_name)
-        print(user.first_name, user.last_name)
-        for i in range(len(pubs)):
-            p = get_pub_containing_title(pubs[i]['bib']['title'].strip().lower())
-            if not p:
-                print(pubs[i]['bib']['title'].strip().lower())
-                print(p)
-                pub = fill_pub(pubs[i], user.first_name, user.last_name)
-                if pub:
-                    print('Adding authors')
-                    data = {}
-                    data['title'] = pub['bib']['title'].lower()
-                    data['abstract'] = pub['bib']['abstract']
-                    data['eprint'] = ''
-                    if 'pub_url' in pub:
-                        data['url'] = pub['pub_url']
-                    if 'eprint_url' in pub:
-                        if 'pdf' in pub['eprint_url'][-18:]:
-                            data['free_access'] = True
-                        else:
-                            data['free_access'] = False
-                        data['eprint'] = pub['eprint_url']
-                    else:
-                        if 'pub_url' in pub and 'pdf' in pub['pub_url'][-18:]:
-                            data['free_access'] = True
-                        else:
-                            data['free_access'] = False
-                    if (pub['bib']['pub_type'] == 'inproceedings') or (pub['bib']['pub_type'] == 'proceedings') or (pub['bib']['pub_type'] == 'conference'):
-                        data['pub_type'] = 'conference paper'
-                    else:
-                        data['pub_type'] = pub['bib']['pub_type'].lower()
-                    
-                    if pub['bib']['pub_year'] == 'NA':
-                        data['publication_date'] = datetime.date(datetime.strptime('01/01/0001', '%d/%m/%Y'))
-                    else:
-                        data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
-                    
-                    p = create_pub(data)
-                    if p:
-                        authors = pub['bib']['author'].split(' and ')
-                        temp = []
-                        for author in authors:
-                            temp.append(author.split(', '))
-                        authors = temp
-                        temp = []
-                        for author in authors:
-                            if not (user.first_name in author and user.last_name in author):
-                                author.reverse()
-                                temp.append(' '.join(author))
-                        authors = temp
-                        for re in users:
-                            target = []
-                            for co in authors:
-                                if re.first_name in co and re.last_name in co:
-                                    target.append(authors.index(co))
-                            for t in target:
-                                print(add_publication_to_researcher(re.id, p.id))
-                                authors.remove(authors[t])
-                        authors = ', '.join(authors)
-
-                        add_coauthors(p, authors)
-                        print(add_publication_to_researcher(user.id, p.id))
-                        print(p.id)
-
-    return 'Created'
-
 
 @index_views.route('/test', methods=['GET'])
 def test():
@@ -714,14 +535,3 @@ def test():
         #         print('\nNot Found\n')
             
     return 'bibtex'
-
-@index_views.route("/verify/<auth_id>/<new_auth>")
-def verify(auth_id, new_auth):
-    res = verified(auth_id)
-    if res:
-        res = verified_notif(new_auth,auth_id)
-        if res:
-            return 200
-        else:
-            return 300
-    return 300
