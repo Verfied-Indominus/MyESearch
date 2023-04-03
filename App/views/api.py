@@ -3,14 +3,14 @@ import json
 from random import shuffle
 from flask import Blueprint
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
-from App.controllers.notification import accept, follow_back_researcher, reject, verified_notif
+from App.controllers.notification import accept, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
-
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_pub_byid, get_pub_containing_title
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user, remove_publication_from_recents
 from App.controllers.researcher import add_publication_to_researcher, add_search, add_view, get_all_researchers, get_researcher
 from App.controllers.scholarly_py import fill_pub, get_pubs
 from App.controllers.suggestions import get_publication_suggestions
+from App.controllers.user import get_user
 from App.controllers.verify import verified
 
 api_views = Blueprint('api_views', __name__, template_folder='../templates')
@@ -190,11 +190,36 @@ def scholarly_update():
 
     return 'Created'
 
-@api_views.route("/verify/<auth_id>/<new_auth>")
-def verify(auth_id, new_auth):
+@api_views.route("/verify/notification/<auth_id>/<new_auth_id>", methods=['GET'])
+def verify_notif(auth_id, new_auth_id):
+    auth = get_researcher(new_auth_id)
+    verifier = get_researcher(auth_id)
+    verify_author_notif(auth, verifier)
     res = verified(auth_id)
     if res:
-        res = verified_notif(new_auth,auth_id)
+        res = verified_notif(new_auth_id, auth_id)
+        if res:
+            return 200
+        else:
+            return 300
+    return 300
+
+@api_views.route('/clear/notifications/<user_id>', methods=['GET'])
+def clear_notifs(user_id):
+    user = get_user(user_id)
+    delete_all_notif_recs(user)
+    return 'Cleared'
+
+@api_views.route('/setread/<notif_rec_id>', methods=['GET'])
+def setread(notif_rec_id):
+    set_notif_rec_read(notif_rec_id)
+    return 'Read'
+
+@api_views.route("/verify/<auth_id>/<new_auth_id>", methods=['GET'])
+def verify(auth_id, new_auth_id):
+    res = verified(auth_id)
+    if res:
+        res = verified_notif(new_auth_id, auth_id)
         if res:
             return 200
         else:

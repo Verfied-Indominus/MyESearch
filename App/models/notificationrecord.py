@@ -11,3 +11,6 @@ class NotificationRecord(db.Model):
         self.user_id = user_id
         self.notification_id = notification_id
         self.read = False
+
+    def setRead(self):
+        self.read = True

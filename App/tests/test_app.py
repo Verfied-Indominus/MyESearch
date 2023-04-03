@@ -12,7 +12,6 @@ from App.controllers.publication import *
 from App.controllers.student import *
 from App.controllers.topic import *
 from App.controllers.notification import *
-from App.controllers.visitrecords import *
 
 from wsgi import app
 

@@ -26,7 +26,7 @@ import json
 import gmail
 
 from App.models.builder import *
-
+from sqlalchemy.sql import func
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
@@ -110,8 +110,6 @@ def index_page():
     # suggestions = []
     # if (isinstance(current_user, User)):
     #     suggestions = get_home_suggestions(current_user)
-
-    test = json.loads("{}")
 
     return render_template('index.html',topics=topics)
     # return render_template('index.html',topics=topics, suggestions=suggestions)

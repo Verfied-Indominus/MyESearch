@@ -128,7 +128,7 @@
       {% if current_user.is_authenticated %}
         {% for rec in current_user.notification_records %}
           {% if not rec.read %}
-            {% set __ = unread.append(rec.notification) %}
+            {% set __ = unread.append(rec) %}
           {% endif %}
         {% endfor %}
       {% endif %}
@@ -152,14 +152,19 @@
                 {% if unread|length == 0 %}
                   <div class="uk-text-center uk-margin-medium-bottom">
                     <img class="uk-width-2-3" src="/static/images/noNotifs.png" alt="No New Notifications">
-                    <h4 class="uk-margin-remove-top">No New Notifications</h4>
+                    <h4 class="uk-margin-remove-top">No Unread Notifications</h4>
                   </div>
                 {% else %}
 
                   <div class="uk-height-large scroll">
-                    {% for notif in unread %}
-                      {% set title = notif.title|to_dict %}
-                      {% set message = notif.message|to_dict %}
+                    {% for rec in unread %}
+                      <script>
+                        set_read({{rec.id}});
+                      </script>
+
+                      {% set title = rec.notification.title|to_dict %}
+                      {% set message = rec.notification.message|to_dict %}
+                      {% set notif = rec.notification %}
 
                       {% if notif.type == 1 %}
                         <!-- Researcher adds a new publication -->
@@ -169,12 +174,12 @@
                               <div class="uk-flex">
                                 <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                 <div>
-                                  <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added a New {{message['pub_type']}}.</p>
+                                  <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added a New {{message['pub_type']|title}}.</p>
                                   <div class="uk-flex">
                                     <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                     <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a>
                                   </div>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>April 01, 2023    1:00 PM</span></p>
+                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                 </div>
                               </div>
                             </div>
@@ -182,127 +187,337 @@
                         </div>
                       {% endif %}
                     
-                      <!-- Follower(person) requested access to a publication -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                                <div> 
-                                  <p class="uk-margin-small-bottom">Sam Smith Requested Access to your Book.</p>
-                                  <div class="uk-flex">
-                                    <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/book.png" alt="Avatar">
-                                    <a>Introduction to Object Oriented Programming</a> 
-                                  </div>
-                                    <button onclick="accept_request({{message['s_id']}}, {{message['pub_id']}});" class="uk-margin-small-top uk-button uk-button-small uk-button-primary uk-border-pill">Accept</button> 
+                      {% if notif.type == 2 %}
+                        <!-- Follower(person) requested access to a publication -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom">{{title['name']}} Requested Access to your {{message['pub_type']|title}}.</p>
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                      <a href="/publication/{{message['pub_id']}}">{{message['title']}}</a> 
+                                    </div>
+                                    <div>{{message['message']}}</div>
+                                    <a href="#student-contact" onclick="accept_request({{message['s_id']}}, {{message['pub_id']}});" class="uk-margin-small-top uk-button uk-button-small uk-button-primary uk-border-pill" uk-toggle>Accept</a> 
+                                    <div id="student-contact" uk-modal>
+                                      <div class="uk-modal-dialog">
+                                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                                        <div class="uk-modal-header">
+                                          <h2 class="uk-modal-title">Contact This Student</h2>
+                                        </div>
+                                        <div class="uk-modal-body">
+                                          <p>{{message['contact']}}</p>
+                                        </div>
+                                        <div class="uk-modal-footer">
+                                          You may use the above email address to contact the student and inform them of the necessary procedure.
+                                        </div>
+                                      </div>
+                                    </div>
                                     <button onclick="reject_request({{message['s_id']}}, {{message['pub_id']}});" class="uk-margin-small-top uk-button uk-button-small uk-button-danger uk-border-pill">Decline</button>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-
-                      <!-- Peer Verification -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                                <div> 
-                                  <p class="uk-margin-small-bottom"> Dr. Paul Smith needs to be Verified as a UWI Researcher.</p>
-                                    <button class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
-                                    <button class="uk-button uk-button-small uk-button-danger uk-border-pill">Dismiss</button>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-
-
-
-                      <!-- Publication was added under a Specific Topic -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/article.png" alt="Avatar">
-                                <div> 
-                                  <p class="uk-margin-small-bottom">
-                                  <a>Technology for Industrical Plantations</a> was added to Computer Science.</p>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-
-
-                      <!-- Researcher gain a new follower -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                                <div> 
-                                  <p class="uk-margin-small-bottom">Sanjiv Ramlal started following you.</p>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                      
-
-
-                      <!-- Researcher gain a new  Researcher follower -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                                <div> 
-                                  <p class="uk-margin-small-bottom">Shareeda Mohammed started following you.
-                                  <button class="uk-button uk-margin-small-top uk-button-small uk-button-primary uk-border-pill">Follow Back</button> 
-                                  </p>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-
-
-                      <!-- A Researcher added or mentioned you to one of their publications -->
-                      <div class="uk-card-header uk-padding-small">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto ">
-                              <div class="uk-flex">
-                                <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/unknown.png" alt="Avatar">
-                                <div>
-                                  <p class="uk-margin-small-bottom">Dr. Phaedra Mohammed added you as a co-author in their Conference Paper.</p>
-                                  <div class="uk-flex">
-                                    <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/conference paper.png" alt="Avatar">
-                                    <a>Object Oriented 2 Programming</a> 
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                   </div>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><time datetime="2016-04-01T19:00">April 01, 2023    1:00 PM</time></p>
                                 </div>
                               </div>
-                            </div>
+                          </div>
                         </div>
-                      </div>
+                      {% endif %}
+
+                      {% if notif.type == 3 %}
+                        <!-- Peer Verification -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div>
+                                    <p class="uk-margin-small-bottom">{{title['name']}} needs to be Verified as a UWI Researcher.</p>
+                                    <button onclick="verify_author({{current_user.id}}, {{title['researcher_id']}});" class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
+                                    <button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="uk-button uk-button-small uk-button-danger uk-border-pill">Dismiss</button>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 4 %}
+                        <!-- Publication was added under a Specific Topic -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom">
+                                    <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 5 %}
+                        <!-- Researcher gain a new follower -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 6 %}
+                        <!-- Researcher gain a new  Researcher follower -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom">{{title['name']}} started following you.
+                                    <button onclick="followback({{current_user.id}}, {{title['researcher_id']}}); this.innerHTML='Following'" class="uk-button uk-margin-small-top uk-button-small uk-button-primary uk-border-pill">Follow Back</button> 
+                                    </p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 7 %}
+                        <!-- Researcher follows back the Researcher follower -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 8 %}
+                        <!-- A Researcher added or mentioned you to one of their publications -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div>
+                                    <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added you as a co-author in their {{message['pub_type']|title}}.</p>
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a> 
+                                    </div>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
                     {% endfor %}
                   </div>
+                {% endif %} 
 
+                <!-- View All option -->
+                <div class="uk-card-footer">
+                  <div class="uk-flex uk-flex-center"> 
+                    <a href="#all-notifs" class="uk-button uk-button-text" uk-toggle>View All</a>
+                  </div>
+                </div>
 
-                  <!-- View All option -->
-                  <div class="uk-card-footer">
-                    <div class="uk-flex uk-flex-center"> 
-                      <a href="#" class="uk-button uk-button-text ">View All</a>
+                <div id="all-notifs" uk-modal>
+                  <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header uk-flex">
+                      <h2 class="uk-modal-title">All Notifications</h2>
+                      <a onclick="clear_notifications({{current_user.id}});">Clear All</a>
+                    </div>
+                    <div id="all-notifs-body" class="uk-modal-body uk-height-large scroll">
+                      {% if current_user.notification_records|lenght > 0 %}
+                        {% for rec in current_user.notification_records %}
+                          {% set title = rec.notification.title|to_dict %}
+                          {% set message = rec.notification.message|to_dict %}
+                          {% set notif = rec.notification %}
+    
+                          {% if notif.type == 1 %}
+                            <!-- Researcher adds a new publication -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-auto ">
+                                  <div class="uk-flex">
+                                    <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                    <div>
+                                      <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added a New {{message['pub_type']|title}}.</p>
+                                      <div class="uk-flex">
+                                        <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                        <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a>
+                                      </div>
+                                      <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        
+                          {% if notif.type == 2 %}
+                            <!-- Follower(person) requested access to a publication -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom">{{title['name']}} Requested Access to your {{message['pub_type']|title}}.</p>
+                                        <div class="uk-flex">
+                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                          <a href="/publication/{{message['pub_id']}}">{{message['title']}}</a> 
+                                        </div>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 3 %}
+                            <!-- Peer Verification -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div>
+                                        <p class="uk-margin-small-bottom">{{title['name']}} needs to be Verified as a UWI Researcher.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 4 %}
+                            <!-- Publication was added under a Specific Topic -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom">
+                                        <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 5 %}
+                            <!-- Researcher gain a new follower -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 6 %}
+                            <!-- Researcher gain a new  Researcher follower -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 7 %}
+                            <!-- Researcher follows back the Researcher follower -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 8 %}
+                            <!-- A Researcher added or mentioned you to one of their publications -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div>
+                                        <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added you as a co-author in their {{message['pub_type']|title}}.</p>
+                                        <div class="uk-flex">
+                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a> 
+                                        </div>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% else %}
+                        <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
+                        <h4 class="uk-margin-remove-top">No Notifications Present</h4>
+                      {% endif %}
                     </div>
                   </div>
-                {% endif %}                                         
+                </div>
+                                                        
               {% endif %}
             </div>
 

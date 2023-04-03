@@ -88,7 +88,7 @@ def request_access(s_id,r_id,pub_id,message):
         return False
 
 def verify_author_notif(re, verifier):
-    notif_title = json.dumps({"name": f"{re.title} {re.first_name} {re.last_name}", "image_url": f"{re.image_url}"})
+    notif_title = json.dumps({"researcher_id": f"{re.id}", "name": f"{re.title} {re.first_name} {re.last_name}", "image_url": f"{re.image_url}"})
     notif = create_notification(notif_title, "{}", 3)
     try:
         record = NotificationRecord(verifier.id, notif.id)
@@ -235,3 +235,14 @@ def verified_notif(auth_id, res_id):
         return True
     except Exception:
         return False
+
+def set_notif_rec_read(notif_rec_id):
+    notif_rec = NotificationRecord.query.filter_by(id=notif_rec_id).first()
+    notif_rec.setRead()
+    db.session.commit()
+
+def delete_all_notif_recs(user):
+    for rec in user.notification_records:
+        db.session.delete(rec)
+        db.session.commit()
+    return True
