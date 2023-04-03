@@ -900,6 +900,9 @@ async function followback(researcher_id, subscriber_id){
 }
 
 async function clear_notifications(user_id){
+    console.log(user_id);
+    console.log(user_id==undefined);
+    console.log(user_id=='undefined');
     let notifs_body = document.getElementById('all-notifs-body');
     notifs_body.innerHTML = `
         <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
