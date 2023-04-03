@@ -69,7 +69,7 @@ def request_access(s_id,r_id,pub_id,message):
                 Name: {student.first_name} {student.last_name}
                 Email: {student.email} """
     notif_title = json.dumps({"image_url": f"{student.image_url}", "name": f"{student.first_name} {student.last_name}"})
-    notif_message = json.dumps({"pub_type": f"{pub.pub_type}", "pub_title": f"{pub.title}", "contact": contact}, "r_id": f"{r_id}", "s_id": f"{s_id}", "pub_id": f"{pub_id}")
+    notif_message = json.dumps({"pub_type": f"{pub.pub_type}", "pub_title": f"{pub.title}", "contact": contact, "r_id": f"{r_id}", "s_id": f"{s_id}", "pub_id": f"{pub_id}"})
     notif = create_notification(notif_title, notif_message, 2)
     try:
         record = NotificationRecord(r_id, notif.id)

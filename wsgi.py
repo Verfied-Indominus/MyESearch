@@ -1,4 +1,4 @@
-import click, pytest, sys
+import click, pytest, sys, json
 from flask import Flask
 from flask.cli import AppGroup
 
@@ -14,6 +14,11 @@ from App.models import User, Student, Researcher
 
 app = create_app()
 migrate = get_migrate(app)
+
+
+@app.template_filter('to_dict')
+def to_dict(my_string):
+    return json.loads(my_string)
 
 
 '''

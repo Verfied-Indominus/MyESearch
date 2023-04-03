@@ -119,13 +119,16 @@ def index_page():
         'Materials Science',
         'Medicine',
         'Neuroscience',
-        'Quantum Computing',
+        'Quantum Computing', 
         'Robotics'
     ]
-    suggestions = []
-    if (isinstance(current_user, User)):
-        suggestions = get_home_suggestions(current_user)
-    return render_template('index.html',topics=topics, suggestions=suggestions)
+
+    # suggestions = []
+    # if (isinstance(current_user, User)):
+    #     suggestions = get_home_suggestions(current_user)
+
+    return render_template('index.html',topics=topics)
+    # return render_template('index.html',topics=topics, suggestions=suggestions)
 
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
