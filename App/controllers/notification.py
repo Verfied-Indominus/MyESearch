@@ -49,6 +49,9 @@ def delete_notification(id):
 #     6 - Researcher follows another researcher
 #     7 - Researcher follows back the previous researcher
 #     8 - Researcher adds another researcher to publication
+#     9 - Researcher accepted access request
+#    10 - Researcher rejected access request
+#    11 - Researcher has been verified
 
 def notify_subscribers_author(r_id,pub_id):
     researcher = Researcher.query.filter_by(id = r_id).first()
@@ -184,16 +187,16 @@ def author_added(p_id, r_id):
         return True
     except Exception:
         return False
-
-def reject(s_id,pub_id):
+    
+def accept(s_id,pub_id):
     pub = Publication.query.filter_by(id = pub_id).first()
-    title = f"Rejected Request for: '{pub.title}'"
-    message = f"This notification is to notify you that the request to access '{pub.title}' has been rejected. "
-    student = Student.query.filter_by(id = s_id).first()
+    title = f"Accept Request for: '{pub.title}'"
+    message = f"This notification is to notify you that the request to access '{pub.title}' has been granted. The Researcher may contact you via email."
+    notif_title = json.dumps({})
+    notif_message = json.dumps({"pub_id": f"{pub.id}", "pub_type": f"{pub.pub_type}", "pub_title": f"{pub.title}"})
+    student = Student.query.filter_by(id=s_id).first()
+    notif = create_notification(notif_title, notif_message, 9)
     try:
-        notif = Notification(title, message)
-        db.session.add(notif)
-        db.sesion.commit()
         record = NotificationRecord(s_id, notif.id)
         db.session.add(record)
         db.sesion.commit()
@@ -202,15 +205,15 @@ def reject(s_id,pub_id):
     except Exception:
         return False
 
-def accept(s_id,pub_id):
+def reject(s_id,pub_id):
     pub = Publication.query.filter_by(id = pub_id).first()
-    title = f"Accept Request for: '{pub.title}'"
-    message = f"This notification is to notify you that the request to access '{pub.title}' has been granted. "
-    student = Student.query.filter_by(id=s_id).first()
+    title = f"Rejected Request for: '{pub.title}'"
+    message = f"This notification is to notify you that the request to access '{pub.title}' has been rejected."
+    notif_title = json.dumps({})
+    notif_message = json.dumps({"pub_id": f"{pub.id}", "pub_type": f"{pub.pub_type}", "pub_title": f"{pub.title}"})
+    student = Student.query.filter_by(id = s_id).first()
+    notif = create_notification(notif_title, notif_message, 10)
     try:
-        notif = Notification(title, message)
-        db.session.add(notif)
-        db.sesion.commit()
         record = NotificationRecord(s_id, notif.id)
         db.session.add(record)
         db.sesion.commit()
@@ -221,13 +224,12 @@ def accept(s_id,pub_id):
 
 def verified_notif(auth_id, res_id): 
     auth = Researcher.query.filter_by(id = auth_id).first()
-    researcher = Researcher.query.filter_by(id = res_id).first()
+    re = Researcher.query.filter_by(id = res_id).first()
     title = f"Verified"
-    message = f"You have been verified by {researcher.first_name} {researcher.last_name}."
+    message = f"You have been verified by {re.first_name} {re.last_name}."
+    notif_title = json.dumps({"researcher_id": f"{re.id}", "name": f"{re.title} {re.first_name} {re.last_name}", "image_url": f"{re.image_url}"})
+    notif = create_notification(notif_title, "{}", 11)
     try:
-        notif = Notification(title, message)
-        db.session.add(notif)
-        db.sesion.commit()
         record = NotificationRecord(auth_id, notif.id)
         db.session.add(record)
         db.sesion.commit()

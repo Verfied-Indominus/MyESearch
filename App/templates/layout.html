@@ -177,7 +177,7 @@
                                   <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added a New {{message['pub_type']|title}}.</p>
                                   <div class="uk-flex">
                                     <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                    <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a>
+                                    <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a>
                                   </div>
                                   <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                 </div>
@@ -253,7 +253,8 @@
                                   <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
                                   <div> 
                                     <p class="uk-margin-small-bottom">
-                                    <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
+                                      <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.
+                                    </p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                   </div>
                                 </div>
@@ -326,8 +327,65 @@
                                     <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added you as a co-author in their {{message['pub_type']|title}}.</p>
                                     <div class="uk-flex">
                                       <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a> 
+                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                     </div>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 9 %}
+                        <!-- A Researcher accepted request to access publication -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <div>
+                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                    </div>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 10 %}
+                        <!-- A Researcher rejected request to access publication -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <div>
+                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                    </div>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      {% if notif.type == 11 %}
+                        <!-- Another researcher has verified your account -->
+                        <div class="uk-card-header uk-padding-small">
+                          <div class="uk-grid-small uk-flex-middle" uk-grid>
+                              <div class="uk-width-auto ">
+                                <div class="uk-flex">
+                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <div> 
+                                    <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                   </div>
                                 </div>
@@ -376,7 +434,7 @@
                                       <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added a New {{message['pub_type']|title}}.</p>
                                       <div class="uk-flex">
                                         <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                        <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a>
+                                        <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a>
                                       </div>
                                       <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                     </div>
@@ -504,7 +562,7 @@
                                         <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> added you as a co-author in their {{message['pub_type']|title}}.</p>
                                         <div class="uk-flex">
                                           <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']}}</a> 
+                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                         </div>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                       </div>
@@ -513,6 +571,64 @@
                               </div>
                             </div>
                           {% endif %}
+
+                          {% if notif.type == 9 %}
+                            <!-- A Researcher accepted request to access publication -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <div>
+                                        <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
+                                        <div class="uk-flex">
+                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                        </div>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 10 %}
+                            <!-- A Researcher rejected request to access publication -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <div>
+                                        <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
+                                        <div class="uk-flex">
+                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
+                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                        </div>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+    
+                          {% if notif.type == 11 %}
+                            <!-- Another researcher has verified your account -->
+                            <div class="uk-card-header uk-padding-small">
+                              <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                  <div class="uk-width-auto ">
+                                    <div class="uk-flex">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <div> 
+                                        <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          {% endif %}
+
                         {% endfor %}
                       {% else %}
                         <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
