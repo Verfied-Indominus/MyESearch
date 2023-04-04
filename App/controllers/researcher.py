@@ -11,18 +11,15 @@ def get_all_researchers():
 def add_publication_to_researcher(re_id, pub_id):
     return add_pub_record(re_id, pub_id)
     
-def add_interests_to_researcher(interests, re_id):
-    for inte in interests:
-        topic = get_topic_by_name(inte)
-        if not topic:
-            return False
+def add_interests_to_researcher(topics, re_id):
+    for topic in topics:
         tag = ResearcherTag(re_id, topic.id)
         db.session.add(tag)
     db.session.commit()
     return True
 
-def delete_researcher_tags(user):
-    for tag in user.research_interests:
+def delete_researcher_tags(re):
+    for tag in re.research_interests:
         db.session.delete(tag)
         db.session.commit()
     return True

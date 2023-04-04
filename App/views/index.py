@@ -41,7 +41,80 @@ faculties = [
         'Sport'
 ]
 
-departments = [ 
+departments = {
+    'Engineering': [
+        'Chemical Engineering',
+        'Civil & Environmental Engineering',
+        'Mechanical & Manufacturing Engineering',
+        'Geomatics Engineering & Land Management',
+        'Engineering Institute',
+        'Electrical & Computer Engineering',
+        'Mechanical and Manufacturing Enterprise Research',
+    ],
+    'Food & Agriculture': [
+        'Agricultural Economics and Extension',
+        'Food Production',
+        'Publications and Communications Unit',
+        'University Farms',
+        'Geography'
+    ],
+    'Humanities & Education': [
+        'School of Education',
+        'Centre for Language Learning',
+        'Creative and Festival Arts',
+        'History',
+        'Literary, Cultural and Communication Studies',
+        'Modern Languages and Linguistics',
+        'The Archaeology Centre',
+        'The Centre for Language Learning',
+        "The Family Development and Children's Research Centre (FDCRC)",
+        'The Film Programme'
+    ],
+    'Law': [
+        'Faculty of Law'
+    ],
+    'Medical Sciences': [
+        'Schools of Medicine',
+        'Schools of Optometry',
+        'Schools of Dentistry',
+        'Schools of Nursing',
+        'Schools of Pharmacy',
+        'Schools of Veterinary Medicine', 
+        'Caribbean Centre for Health Systems Research and Development',
+        'Centre for Medical Sciences Education',
+    ],
+    'Science & Technology': [
+        'Chemistry',
+        'Physics',
+        'Life Sciences',
+        'Mathematics & Statistics',
+        'Computing & Information Technology',
+        'Cocoa Research Centre',
+        'Seismic Research Unit',
+        'The National Herbarium'
+    ],
+    'Social Sciences': [
+        'Behavioural Sciences',
+        'Economics',
+        'Management Studies',
+        'Political Science',
+        'Arthur Lok Jack Graduate School for Business',
+        'Caribbean Centre for Money and Finance',
+        'Centre for Criminology and Criminal Justice',
+        'Institute for Gender and Development Studies',
+        'Institute of International Relations',
+        'Entrepreneurship Unit',
+        'Health Economics Unit',
+        'Sir Arthur Lewis Institute of Social & Economic Studies',
+        'Sustainable Economic Development Unit',
+        'Business Development Unit',
+    ],
+    'Sport': [
+        'St. Augustine Academy of Sport'
+    ],
+}
+
+departments2 = [ 
         'Chemical Engineering',
         'Civil & Environmental Engineering',
         'Mechanical & Manufacturing Engineering',
@@ -181,7 +254,7 @@ def signup_page():
     reForm = ResearcherSignUpForm()
     baseForm.institution.choices = institutions
     baseForm.faculty.choices = faculties
-    baseForm.department.choices = departments
+    baseForm.department.choices = departments2
     
     reForm.start_date.choices = dates
 
@@ -417,11 +490,14 @@ def profile(id):
         if ',\n' in user.skills:
             skills = user.skills.split(',\n')
 
-    if (isinstance(current_user, User)):
+    all_topics = get_all_topics()
+    all_topics.sort(key=lambda top: top.name)
+
+    if isinstance(current_user, User):
         if (current_user.id == id):
             return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                                    recents=recents, researchers=researchers, interests=interests, skills=skills, types=types, 
-                                   dates=dates, faculties=faculties, departments=departments)
+                                   dates=dates, faculties=faculties, departments=departments[user.faculty], all_topics=all_topics)
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                            recents=recents, researchers=researchers, interests=interests, skills=skills)
@@ -430,34 +506,51 @@ def profile(id):
 def edit_profile(id):
     form = request.form
 
-    # builder = (
-    #     ResearcherBuilder()
-    #     .existing_researcher(get_researcher(id))
-    # )
+    re = get_researcher(id)
+    builder = (
+        ResearcherBuilder()
+        .existing_researcher(re)
+    )
 
-    # if image:
-    #     image_url = uploadFile(id, image[0])
-    #     remove(f"App/uploads/{image[0]}")
-    #     builder.image_url(image_url)
+    if image:
+        image_url = uploadFile(id, image[0])
+        remove(f"App/uploads/{image[0]}")
+        builder.image_url(image_url)
 
-    # if 'title' in form:
-    #     positions = form.getlist('position')
-    #     positions = ', '.join(positions)
-    #     builder = (
-    #         builder
-    #         .title(form['title'])
-    #         .first_name(form['first_name'])
-    #         .middle_name(form['middle_name'])
-    #         .last_name(form['last_name'])
-    #         .position(positions)
-    #         .faculty(form['faculty'])
-    #         .department(form['department'])
-    #         .email(form['email'])
-    #         .start_year(form['start_year'])
-    #     )
-    
+    if 'title' in form:
+        positions = form.getlist('position')
+        positions = ', '.join(positions)
+        builder = (
+            builder
+            .title(form['title'])
+            .first_name(form['first_name'])
+            .middle_name(form['middle_name'])
+            .last_name(form['last_name'])
+            .position(positions)
+            .faculty(form['faculty'])
+            .department(form['department'])
+            .email(form['email'])
+            .start_year(form['start_year'])
+        )
 
-    return 'yes'
+    if 'introduction' in form:
+        topics = []
+        delete_researcher_tags(re)
+        interests = form['research_interests'].split('\r\n')
+        for interest in interests:
+            topic = get_topic_by_name(interest)
+            topics.append(topic)
+        add_interests_to_researcher(topics, id)
+            
+        builder = (
+            builder
+            .introduction(form['introduction'])
+            .qualifications(form['qualifications'])
+            .certifications(form['certifications'])
+            .skills(form['skills'])
+        )
+
+    builder.build()
     return redirect(f'/profile/{id}')
 
 # EMAIL : myesearch.noreply@gmail.com

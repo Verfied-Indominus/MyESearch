@@ -70,6 +70,12 @@ def set_topic_parent(name, id):
     except:
         return None
 
+def update_topic(id, name):
+    topic = get_topic_id(id)
+    topic.name = name
+    db.session.commit()
+    return topic
+
 def delete_topic(name):
     try:
         topic = get_topic_by_name(name)

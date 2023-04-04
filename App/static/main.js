@@ -190,7 +190,7 @@ function get_selection(btn){
     }
 }
 
-window.addEventListener("DOMContentLoaded", (event) => {
+window.addEventListener("DOMContentLoaded", () => {
     let re_faculty = document.getElementById("re_faculty_select");
     let re_department = document.getElementById("re_department_select");
 
@@ -199,6 +199,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     let pro_faculty = document.getElementById("profile_faculty_select");
     let pro_department = document.getElementById("profile_department_select");
+
+    let int_sel = document.getElementById('interests_select');
+    let int_tarea = document.getElementById('interests_textarea');
+    let int_tarea_hidden = document.getElementById('interests_textarea_hidden');
 
     try {
         re_faculty.onchange = function() {
@@ -247,7 +251,40 @@ window.addEventListener("DOMContentLoaded", (event) => {
     } catch (error) {
         console.log(error);
     }
+
+    try{
+        int_sel.onchange = function() {
+            let text = int_tarea.value;
+            let interest = int_sel.value;
+            if (!(text.includes(interest+"\n")) && !(text.includes(interest)) && text != ""){
+                int_tarea.value = text + "\n" + interest;
+            }
+            else {
+                int_tarea.value = interest;
+            }
+            int_tarea_hidden.value = int_tarea.value;
+        }
+    } catch (error){
+        console.log(error);
+    }
+
 });
+
+function removeLast(){
+    let int_tarea = document.getElementById('interests_textarea');
+    let int_tarea_hidden = document.getElementById('interests_textarea_hidden');
+
+    let arr = int_tarea.value.split(/\r?\n/);
+    arr.pop();
+    if (arr.length > 0){
+        text = arr.join("\n");
+    }
+    else {
+        text = "";
+    }
+    int_tarea.value = text;
+    int_tarea_hidden.value = text;
+}
 
 async function getInterests(){
     let x = 0;

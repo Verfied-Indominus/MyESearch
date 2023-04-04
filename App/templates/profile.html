@@ -31,7 +31,7 @@
                         <div class="uk-modal-dialog uk-width-1-2 uk-margin-auto-vertical">
                             <button class="uk-modal-close-default" type="button" uk-close></button>
                             <div class="uk-modal-header">
-                                <h2 class="uk-modal-title">Edit Personal Info</h2>
+                                <h2 class="uk-modal-title">Edit Personal Information</h2>
                             </div>
                             <div class="uk-modal-body uk-height-large scroll">
                                 <form id="personal-info-form" class="uk-padding uk-padding-remove-vertical" action="/edit/profile/{{user.id}}" method="post">
@@ -94,39 +94,20 @@
                                         </div>
                                     </div>
 
-                                    {% set faculties = [
-                                        'Engineering',
-                                        'Food & Agriculture',
-                                        'Humanities & Education',
-                                        'Law',
-                                        'Medical Sciences',
-                                        'Science & Technology',
-                                        'Social Sciences',
-                                        'Sport'
-                                ] %}
                                     <div class="uk-margin">
                                         <label class="uk-form-label">Faculty</label>
                                         <select class="uk-select" name="faculty" id="profile_faculty_select">
                                             {% for faculty in faculties %}
-                                                <option value="{{faculty}}">{{faculty}}</option>
+                                                <option value="{{faculty}}" {% if faculty == user.faculty %}selected{% endif %}>{{faculty}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
 
-                                    {% set departments = [
-                                        'Chemical Engineering',
-                                        'Civil & Environmental Engineering',
-                                        'Mechanical & Manufacturing Engineering',
-                                        'Geomatics Engineering & Land Management',
-                                        'Engineering Institute',
-                                        'Electrical & Computer Engineering',
-                                        'Mechanical and Manufacturing Enterprise Research'
-                                    ] %}
                                     <div class="uk-margin">
                                         <label class="uk-form-label">Department</label>
                                         <select class="uk-select" name="department" id="profile_department_select">
                                             {% for department in departments %}
-                                                <option value="{{department}}">{{department}}</option>
+                                                <option value="{{department}}" {% if department == user.department %}selected{% endif %}>{{department}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -136,12 +117,11 @@
                                         <input class="uk-input" type="email" name="email" value="{{user.email}}">
                                     </div>
 
-                                    {% set dates = ['2023', '2022', '2021'] %}
                                     <div class="uk-margin">
                                         <label class="uk-form-label">Year Started at Institution</label>
                                         <select name="start_year" class="uk-select">
                                             {% for date in dates %}
-                                                <option value="{{date}}">{{date}}</option>
+                                                <option value="{{date}}" {% if date|string == user.start_year %}selected{% endif %}>{{date}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -204,11 +184,76 @@
         <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
             {% if re %}
                 <div class="uk-card uk-card-default uk-margin uk-inline">
-                    <div class="uk-position-top-right uk-margin-small-top uk-margin-small-right"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a class="uk-icon-button" uk-icon="pencil"></a></div></div>
+
+                    <!-- Editing Academic Info Section -->
+                    
+                        <div class="uk-position-top-right uk-margin-small-top uk-margin-small-right"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#edit-academic-modal" class="uk-icon-button" uk-icon="pencil" uk-toggle></a></div></div>
+
+                        <div id="edit-academic-modal" class="uk-flex-top" uk-modal>
+                            <div class="uk-modal-dialog uk-width-1-2 uk-margin-auto-vertical">
+                                <button class="uk-modal-close-default" type="button" uk-close></button>
+                                <div class="uk-modal-header">
+                                    <h2 class="uk-modal-title">Edit Academic Information</h2>
+                                </div>
+                                <div class="uk-modal-body uk-height-large scroll">
+                                    <form id="academic-info-form" class="uk-padding uk-padding-remove-vertical" action="/edit/profile/{{user.id}}" method="post">
+
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Introduction (max. 500 chars.)</label>
+                                            <textarea class="uk-textarea" name="introduction" rows="5" maxlength="500">{{user.introduction}}</textarea>
+                                        </div>
+
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Academic Qualifications (insert each addition in a new line)</label>
+                                            <textarea class="uk-textarea" name="qualifications" rows="5" maxlength="300">{{user.qualifications}}</textarea>
+                                        </div>
+
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Other Certifications (insert each addition in a new line)</label>
+                                            <textarea class="uk-textarea" name="certifications" rows="5" maxlength="300">{{user.certifications}}</textarea>
+                                        </div>
+
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Research Interests (select interest to add to textarea below)</label>
+                                            <select id="interests_select" class="uk-select">
+                                                {% for topic in all_topics %}
+                                                    <option value="{{topic.name}}">{{topic.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        {% set research_interests = [] %}
+                                        {% for int in interests %}
+                                            {% set __ = research_interests.append(int.name) %}
+                                        {% endfor %}
+                                        {% set research_interests =  '\n'.join(research_interests) %}
+                                        <div class="uk-margin">
+                                            <textarea id="interests_textarea_hidden" class="uk-textarea" name="research_interests" rows="5" hidden>{{research_interests}}</textarea>
+                                            <textarea id="interests_textarea" class="uk-textarea" name="research_interests" rows="5" disabled>{{research_interests}}</textarea>
+                                            <a onclick="removeLast();" class="uk-button uk-button-text">Remove Last</a>
+                                        </div>
+
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Skills/Expertise (insert each addition in a new line)</label>
+                                            <textarea class="uk-textarea" name="skills" rows="5" maxlength="300">{{user.skills}}</textarea>
+                                        </div>
+
+                                        <button id="academic-info-submit" type="submit" hidden></button> 
+                                    </form>
+                                </div>
+                                <div class="uk-modal-footer uk-text-right">
+                                    <button onclick="document.getElementById('academic-info-form').reset();" class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                    <button onclick="document.getElementById('academic-info-submit').click();" class="uk-button uk-button-primary" type="button">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- End of editing academic info section -->
+
                     <div class="uk-padding">
                         <div class="uk-margin">
                             <h3 class="uk-text-bold">Introduction</h3>
-                            <div class="uk-margin-auto"> {{user.introduction}} </div>
+                            <div class="uk-margin-auto"> {%if user.introduction %}{{user.introduction}}{% else %}None{% endif %} </div>
                         </div>
                         <hr>
                         <div id="re_info" class="uk-grid uk-grid-small uk-child-width-expand" uk-grid uk-height-match="target: > div > .uk-card; row: false;">
