@@ -6,8 +6,9 @@ from App.controllers.library import add_publication_to_library, get_library_from
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_pub_byid, get_pub_containing_title
+from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user, remove_publication_from_recents
-from App.controllers.researcher import add_publication_to_researcher, add_search, add_view, get_all_researchers, get_researcher
+from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher
 from App.controllers.scholarly_py import fill_pub, get_pubs
 from App.controllers.suggestions import get_publication_suggestions
 from App.controllers.user import get_user
@@ -180,12 +181,12 @@ def scholarly_update():
                                 if re.first_name in co and re.last_name in co:
                                     target.append(authors.index(co))
                             for t in target:
-                                print(add_publication_to_researcher(re.id, p.id))
+                                print(add_pub_record(re.id, p.id))
                                 authors.remove(authors[t])
                         authors = ', '.join(authors)
 
                         add_coauthors(p, authors)
-                        print(add_publication_to_researcher(user.id, p.id))
+                        print(add_pub_record(user.id, p.id))
                         print(p.id)
 
     return 'Created'
