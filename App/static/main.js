@@ -95,6 +95,79 @@ let departments = {
     ],
 }
 
+let departments2 = {
+    'Engineering': [
+        'Chemical Engineering',
+        'Civil & Environmental Engineering',
+        'Mechanical & Manufacturing Engineering',
+        'Geomatics Engineering & Land Management',
+        'Engineering Institute',
+        'Electrical & Computer Engineering',
+        'Mechanical and Manufacturing Enterprise Research',
+    ],
+    'Food & Agriculture': [
+        'Agricultural Economics and Extension',
+        'Food Production',
+        'Publications and Communications Unit',
+        'University Farms',
+        'Geography'
+    ],
+    'Humanities & Education': [
+        'School of Education',
+        'Centre for Language Learning',
+        'Creative and Festival Arts',
+        'History',
+        'Literary, Cultural and Communication Studies',
+        'Modern Languages and Linguistics',
+        'The Archaeology Centre',
+        'The Centre for Language Learning',
+        "The Family Development and Children's Research Centre (FDCRC)",
+        'The Film Programme'
+    ],
+    'Law': [
+        'Faculty of Law'
+    ],
+    'Medical Sciences': [
+        'Schools of Medicine',
+        'Schools of Optometry',
+        'Schools of Dentistry',
+        'Schools of Nursing',
+        'Schools of Pharmacy',
+        'Schools of Veterinary Medicine', 
+        'Caribbean Centre for Health Systems Research and Development',
+        'Centre for Medical Sciences Education',
+    ],
+    'Science & Technology': [
+        'Chemistry',
+        'Physics',
+        'Life Sciences',
+        'Mathematics & Statistics',
+        'Computing & Information Technology',
+        'Cocoa Research Centre',
+        'Seismic Research Unit',
+        'The National Herbarium'
+    ],
+    'Social Sciences': [
+        'Behavioural Sciences',
+        'Economics',
+        'Management Studies',
+        'Political Science',
+        'Arthur Lok Jack Graduate School for Business',
+        'Caribbean Centre for Money and Finance',
+        'Centre for Criminology and Criminal Justice',
+        'Institute for Gender and Development Studies',
+        'Institute of International Relations',
+        'Entrepreneurship Unit',
+        'Health Economics Unit',
+        'Sir Arthur Lewis Institute of Social & Economic Studies',
+        'Sustainable Economic Development Unit',
+        'Business Development Unit',
+    ],
+    'Sport': [
+        'St. Augustine Academy of Sport'
+    ],
+}
+
 let dpt_section = document.getElementById("department_section");
 let dpt_listing = document.getElementById("department_listing");
 
@@ -117,43 +190,64 @@ function get_selection(btn){
     }
 }
 
-let re_faculty = document.getElementById("re_faculty_select");
-let re_department = document.getElementById("re_department_select");
+window.addEventListener("DOMContentLoaded", (event) => {
+    let re_faculty = document.getElementById("re_faculty_select");
+    let re_department = document.getElementById("re_department_select");
 
-let stu_faculty = document.getElementById("stu_faculty_select");
-let stu_department = document.getElementById("stu_department_select");
+    let stu_faculty = document.getElementById("stu_faculty_select");
+    let stu_department = document.getElementById("stu_department_select");
 
-try {
-    re_faculty.onchange = function() {
-        let html = '';
-    
-        for (let index in departments[re_faculty.value]){
-            html += `
-                <option value="${departments[re_faculty.value][index]}">${departments[re_faculty.value][index]}</option>
-            `;
+    let pro_faculty = document.getElementById("profile_faculty_select");
+    let pro_department = document.getElementById("profile_department_select");
+
+    try {
+        re_faculty.onchange = function() {
+            let html = '';
+        
+            for (let index in departments2[re_faculty.value]){
+                html += `
+                    <option value="${departments2[re_faculty.value][index]}">${departments2[re_faculty.value][index]}</option>
+                `;
+            }
+        
+            re_department.innerHTML = html;
         }
-    
-        re_department.innerHTML = html;
+    } catch (error) {
+        console.log(error);
     }
-} catch (error) {
-    console.log(error);
-}
 
-try {
-    stu_faculty.onchange = function() {
-        let html = '';
-    
-        for (let index in departments[stu_faculty.value]){
-            html += `
-                <option value="${departments[stu_faculty.value][index]}">${departments[stu_faculty.value][index]}</option>
-            `;
+    try {
+        stu_faculty.onchange = function() {
+            let html = '';
+        
+            for (let index in departments2[stu_faculty.value]){
+                html += `
+                    <option value="${departments2[stu_faculty.value][index]}">${departments2[stu_faculty.value][index]}</option>
+                `;
+            }
+        
+            stu_department.innerHTML = html;
         }
-    
-        stu_department.innerHTML = html;
+    } catch (error) {
+        console.log(error);
     }
-} catch (error) {
-    console.log(error);
-}
+
+    try {
+        pro_faculty.onchange = function() {
+            let html = '';
+        
+            for (let index in departments2[pro_faculty.value]){
+                html += `
+                    <option value="${departments2[pro_faculty.value][index]}">${departments2[pro_faculty.value][index]}</option>
+                `;
+            }
+        
+            pro_department.innerHTML = html;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 async function getInterests(){
     let x = 0;
@@ -175,8 +269,10 @@ async function addResearchInterests(selected){
 
 let re_bar = document.getElementById('js-researcher-progressbar');
 let stu_bar = document.getElementById('js-student-progressbar');
+let pro_bar = document.getElementById('js-profile-progressbar')
 let re_img = document.getElementById('researcher-img-name');
 let stu_img = document.getElementById('student-img-name');
+let pro_img = document.getElementById('profile-img-name');
 
 UIkit.upload('#researcher-upload', {
 
@@ -284,6 +380,61 @@ UIkit.upload('#student-upload', {
         }, 1000);
 
         stu_img.innerHTML = `Image Uploaded: ${arguments[0].responseText}`;
+    }
+
+});
+
+UIkit.upload('#profile-upload', {
+
+    url: '/filename',
+    multiple: false,
+
+    beforeSend: function () {
+        console.log('beforeSend', arguments);
+    },
+    beforeAll: function () {
+        console.log('beforeAll', arguments);
+    },
+    load: function () {
+        console.log('load', arguments);
+    },
+    error: function () {
+        console.log('error', arguments);
+    },
+    complete: function () {
+        console.log('complete', arguments);
+    },
+
+    loadStart: function (e) {
+        console.log('loadStart', arguments);
+
+        pro_bar.removeAttribute('hidden');
+        pro_bar.max = e.total;
+        pro_bar.value = e.loaded;
+    },
+
+    progress: function (e) {
+        console.log('progress', arguments);
+
+        pro_bar.max = e.total;
+        pro_bar.value = e.loaded;
+    },
+
+    loadEnd: function (e) {
+        console.log('loadEnd', arguments);
+
+        pro_bar.max = e.total;
+        pro_bar.value = e.loaded;
+    },
+
+    completeAll: function () {
+        console.log('completeAll', arguments);
+
+        setTimeout(function () {
+            pro_bar.setAttribute('hidden', 'hidden');
+        }, 1000);
+
+        pro_img.innerHTML = `Image Uploaded: ${arguments[0].responseText}`;
     }
 
 });

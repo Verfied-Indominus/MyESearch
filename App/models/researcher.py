@@ -4,7 +4,7 @@ from flask_login import UserMixin
 
 class Researcher(UserMixin, User):
     title = db.Column(db.String(8))
-    position = db.Column(db.String(32))
+    position = db.Column(db.String(100))
     start_year = db.Column(db.String(8))
     qualifications = db.Column(db.String(300))
     certifications = db.Column(db.String(300))

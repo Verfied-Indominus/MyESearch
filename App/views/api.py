@@ -108,16 +108,16 @@ def add_view_re(id):
 @api_views.route('/profile/addsearch/<id>', methods=['GET'])
 def add_search_re(id):
     re = get_researcher(id)
-    print('\n\n', re, '\n\n')
     add_search(re)
-    print(re.searches)
     return 'Added'
 
 @api_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
     publications = get_all_publications()
-    return [rec.publication.toDict() for rec in re.pub_records]
+    pubs = [rec.publication.toDict() for rec in re.pub_records]
+    pubs.sort(key=lambda pub: pub['publication_date'], reverse=True)
+    return pubs
 
 @api_views.route('/update', methods=['GET'])
 def scholarly_update():
@@ -190,11 +190,19 @@ def scholarly_update():
 
     return 'Created'
 
-@api_views.route("/verify/notification/<auth_id>/<new_auth_id>", methods=['GET'])
-def verify_notif(auth_id, new_auth_id):
-    auth = get_researcher(new_auth_id)
-    verifier = get_researcher(auth_id)
-    verify_author_notif(auth, verifier)
+@api_views.route('/clear/notifications/<user_id>', methods=['GET'])
+def clear_notifs(user_id):
+    user = get_user(user_id)
+    delete_all_notif_recs(user)
+    return 'Cleared'
+
+@api_views.route('/setread/<notif_rec_id>', methods=['GET'])
+def setread(notif_rec_id):
+    set_notif_rec_read(notif_rec_id) 
+    return 'Read'
+
+@api_views.route("/verify/<auth_id>/<new_auth_id>", methods=['GET'])
+def verify(auth_id, new_auth_id):
     res = verified(auth_id)
     if res:
         res = verified_notif(new_auth_id, auth_id)
@@ -204,19 +212,11 @@ def verify_notif(auth_id, new_auth_id):
             return 300
     return 300
 
-@api_views.route('/clear/notifications/<user_id>', methods=['GET'])
-def clear_notifs(user_id):
-    user = get_user(user_id)
-    delete_all_notif_recs(user)
-    return 'Cleared'
-
-@api_views.route('/setread/<notif_rec_id>', methods=['GET'])
-def setread(notif_rec_id):
-    set_notif_rec_read(notif_rec_id)
-    return 'Read'
-
-@api_views.route("/verify/<auth_id>/<new_auth_id>", methods=['GET'])
-def verify(auth_id, new_auth_id):
+@api_views.route("/verify/notification/<auth_id>/<new_auth_id>", methods=['GET'])
+def verify_notif(auth_id, new_auth_id):
+    auth = get_researcher(new_auth_id)
+    verifier = get_researcher(auth_id)
+    verify_author_notif(auth, verifier)
     res = verified(auth_id)
     if res:
         res = verified_notif(new_auth_id, auth_id)

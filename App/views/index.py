@@ -4,7 +4,7 @@ from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
-from App.controllers.user import get_user, get_user_by_email, get_user_by_name
+from App.controllers.user import get_user, get_user_by_email
 from App.controllers.publication import *
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
@@ -12,16 +12,10 @@ from App.controllers.library import *
 from App.controllers.recents import *
 from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
-from App.controllers.pubrecord import delete_pub_record
 from App.controllers.search import parse_search
-from App.controllers.verify import verified
-from App.controllers.notification import verified_notif, accept, reject, follow_back_researcher
-from App.controllers.open_ai import prompt, RAIL_KEY, CAESAR_KEY
-from App.controllers.ciphers import doubleCipher, doubleDeCipher
 from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
-from random import shuffle
 import json
 import gmail
 
@@ -47,7 +41,7 @@ faculties = [
         'Sport'
 ]
 
-departments = [
+departments = [ 
         'Chemical Engineering',
         'Civil & Environmental Engineering',
         'Mechanical & Manufacturing Engineering',
@@ -423,8 +417,48 @@ def profile(id):
         if ',\n' in user.skills:
             skills = user.skills.split(',\n')
 
-    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, recents=recents, 
-                            researchers=researchers, interests=interests, skills=skills, types=types, dates=dates)
+    if (isinstance(current_user, User)):
+        if (current_user.id == id):
+            return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
+                                   recents=recents, researchers=researchers, interests=interests, skills=skills, types=types, 
+                                   dates=dates, faculties=faculties, departments=departments)
+
+    return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
+                           recents=recents, researchers=researchers, interests=interests, skills=skills)
+
+@index_views.route('/edit/profile/<id>', methods=['POST'])
+def edit_profile(id):
+    form = request.form
+
+    # builder = (
+    #     ResearcherBuilder()
+    #     .existing_researcher(get_researcher(id))
+    # )
+
+    # if image:
+    #     image_url = uploadFile(id, image[0])
+    #     remove(f"App/uploads/{image[0]}")
+    #     builder.image_url(image_url)
+
+    # if 'title' in form:
+    #     positions = form.getlist('position')
+    #     positions = ', '.join(positions)
+    #     builder = (
+    #         builder
+    #         .title(form['title'])
+    #         .first_name(form['first_name'])
+    #         .middle_name(form['middle_name'])
+    #         .last_name(form['last_name'])
+    #         .position(positions)
+    #         .faculty(form['faculty'])
+    #         .department(form['department'])
+    #         .email(form['email'])
+    #         .start_year(form['start_year'])
+    #     )
+    
+
+    return 'yes'
+    return redirect(f'/profile/{id}')
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply

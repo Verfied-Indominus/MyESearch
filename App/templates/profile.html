@@ -21,12 +21,148 @@
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
         <div class="uk-card uk-light uk-background-primary uk-width-1-3 uk-padding-remove uk-flex uk-flex-center" style="color: white">
-            <div class="uk-margin-medium-top uk-margin-medium-bottom">
-                <div class="uk-flex uk-flex-center">
+            <div class="uk-margin-medium-bottom uk-inline">
+
+                <!-- Edit Personal Info Section -->
+                
+                    <div class="uk-position-top-right uk-margin-small-right uk-margin-small-top"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Personal Info </span><a href="#edit-personal-modal" class="uk-icon-button uk-light" uk-icon="pencil" uk-toggle></a></div></div>
+                
+                    <div id="edit-personal-modal" class="uk-flex-top" uk-modal>
+                        <div class="uk-modal-dialog uk-width-1-2 uk-margin-auto-vertical">
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                            <div class="uk-modal-header">
+                                <h2 class="uk-modal-title">Edit Personal Info</h2>
+                            </div>
+                            <div class="uk-modal-body uk-height-large scroll">
+                                <form id="personal-info-form" class="uk-padding uk-padding-remove-vertical" action="/edit/profile/{{user.id}}" method="post">
+
+                                    <div class="uk-margin">
+                                        <label for="image" class="uk-form-label">Replace Image(Headshot)</label>
+                                        <div id="profile-upload" class="uk-placeholder uk-text-center uk-width-auto uk-margin-remove-top">
+                                            <span uk-icon="icon: cloud-upload"></span>
+                                            <span class="uk-text-middle">Upload images by dropping them here or</span>
+                                            <div uk-form-custom>
+                                                <input type="file" name="image">
+                                                <span class="uk-link">selecting one</span>
+                                            </div>
+                                            <progress id="js-profile-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+                                            <p id="profile-img-name"></p>
+                                        </div>
+                                    </div>
+
+                                    {% set titles = ['Mr.', 'Ms.', 'Mrs.', 'Prof.', 'Dr.'] %}
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Title</label>
+                                        
+                                        <div class="uk-flex">
+                                            {% for title in titles %}
+                                            <div class="uk-width-1-5">
+                                                <input type="radio" class="uk-radio" name="title" value="{{title}}" {% if title == user.title %}checked{% endif %}>
+                                                {{title}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="uk-margin uk-grid uk-child-width-1-3" uk-grid>
+                                        <div>
+                                            <label class="uk-form-label">First Name</label>
+                                            <input class="uk-input" type="text" name="first_name" value="{{user.first_name}}">
+                                        </div>
+
+                                        <div>
+                                            <label class="uk-form-label">Middle Name(s)</label>
+                                            <input class="uk-input" type="text" name="middle_name" value="{% if user.middle_name %}{{user.middle_name}}{% endif %}">
+                                        </div>
+
+                                        <div>
+                                            <label class="uk-form-label">Last Name</label>
+                                            <input class="uk-input" type="text" name="last_name" value="{{user.last_name}}">
+                                        </div>
+                                    </div>
+
+                                    {% set positions = ['Tutor', 'Part-Time Lecturer', 'Full-Time Lecturer', 'Instructor', 'Teaching Assistant', 'Research Assistant', 'Associate Professor', 'Professor', 'Head of Department'] %}
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Position</label>
+                                        <div class="uk-flex uk-flex-wrap">
+                                            {% for position in positions %}
+                                            <div class="uk-width-auto uk-margin-small-right">
+                                                <input type="checkbox" class="uk-checkbox" name="position" value="{{position}}" {% if position in user.position %}checked{% endif %}>
+                                                {{position}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    {% set faculties = [
+                                        'Engineering',
+                                        'Food & Agriculture',
+                                        'Humanities & Education',
+                                        'Law',
+                                        'Medical Sciences',
+                                        'Science & Technology',
+                                        'Social Sciences',
+                                        'Sport'
+                                ] %}
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Faculty</label>
+                                        <select class="uk-select" name="faculty" id="profile_faculty_select">
+                                            {% for faculty in faculties %}
+                                                <option value="{{faculty}}">{{faculty}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    {% set departments = [
+                                        'Chemical Engineering',
+                                        'Civil & Environmental Engineering',
+                                        'Mechanical & Manufacturing Engineering',
+                                        'Geomatics Engineering & Land Management',
+                                        'Engineering Institute',
+                                        'Electrical & Computer Engineering',
+                                        'Mechanical and Manufacturing Enterprise Research'
+                                    ] %}
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Department</label>
+                                        <select class="uk-select" name="department" id="profile_department_select">
+                                            {% for department in departments %}
+                                                <option value="{{department}}">{{department}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Email</label>
+                                        <input class="uk-input" type="email" name="email" value="{{user.email}}">
+                                    </div>
+
+                                    {% set dates = ['2023', '2022', '2021'] %}
+                                    <div class="uk-margin">
+                                        <label class="uk-form-label">Year Started at Institution</label>
+                                        <select name="start_year" class="uk-select">
+                                            {% for date in dates %}
+                                                <option value="{{date}}">{{date}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <button id="personal-info-submit" type="submit" hidden></button>
+                                </form>
+                            </div>
+                            <div class="uk-modal-footer uk-text-right">
+                                <button onclick="document.getElementById('personal-info-form').reset();" class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                <button onclick="document.getElementById('personal-info-submit').click();" class="uk-button uk-button-primary" type="button">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- End of editing section -->
+
+                <div class="uk-flex uk-flex-center uk-margin-medium-top">
                     <div class="uk-border-circle uk-background-cover" data-src="{% if user.image_url %} {{user.image_url}} {% else %} /static/images/unknown.png {% endif %}" alt="" style="width: 250px; height: 250px;" uk-img></div>
                 </div>
                 <div class="uk-padding">
-                    <h2> {% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
+                    <h2>{% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
                     <div class="uk-text-default">
                         <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
                         <h3>About</h3>
@@ -67,7 +203,8 @@
         </div>
         <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
             {% if re %}
-                <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-card uk-card-default uk-margin uk-inline">
+                    <div class="uk-position-top-right uk-margin-small-top uk-margin-small-right"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a class="uk-icon-button" uk-icon="pencil"></a></div></div>
                     <div class="uk-padding">
                         <div class="uk-margin">
                             <h3 class="uk-text-bold">Introduction</h3>
