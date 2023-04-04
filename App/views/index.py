@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
+from App.controllers.pdf import get_information
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
@@ -245,6 +246,11 @@ def filename():
     image.append(secure_filename(img.filename))
     img.save(f"App/uploads/{image[0]}")
     return image[0]
+
+@index_views.route('/extract', methods=['GET'])
+def extract():
+    keywords, abstract, title = get_information(f"App/uploads/{image[0]}")
+    return [keywords, abstract, title]
 
 @index_views.route('/signup', methods=['GET', 'POST'])
 def signup_page():

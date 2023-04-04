@@ -306,10 +306,12 @@ async function addResearchInterests(selected){
 
 let re_bar = document.getElementById('js-researcher-progressbar');
 let stu_bar = document.getElementById('js-student-progressbar');
-let pro_bar = document.getElementById('js-profile-progressbar')
+let pro_bar = document.getElementById('js-profile-progressbar');
+let pub_bar = document.getElementById('js-publication-progressbar');
 let re_img = document.getElementById('researcher-img-name');
 let stu_img = document.getElementById('student-img-name');
 let pro_img = document.getElementById('profile-img-name');
+let pub_name = document.getElementById('publication-name');
 
 UIkit.upload('#researcher-upload', {
 
@@ -472,6 +474,61 @@ UIkit.upload('#profile-upload', {
         }, 1000);
 
         pro_img.innerHTML = `Image Uploaded: ${arguments[0].responseText}`;
+    }
+
+});
+
+UIkit.upload('#publication-upload', {
+
+    url: '/filename',
+    multiple: false,
+
+    beforeSend: function () {
+        console.log('beforeSend', arguments);
+    },
+    beforeAll: function () {
+        console.log('beforeAll', arguments);
+    },
+    load: function () {
+        console.log('load', arguments);
+    },
+    error: function () {
+        console.log('error', arguments);
+    },
+    complete: function () {
+        console.log('complete', arguments);
+    },
+
+    loadStart: function (e) {
+        console.log('loadStart', arguments);
+
+        pub_bar.removeAttribute('hidden');
+        pub_bar.max = e.total;
+        pub_bar.value = e.loaded;
+    },
+
+    progress: function (e) {
+        console.log('progress', arguments);
+
+        pub_bar.max = e.total;
+        pub_bar.value = e.loaded;
+    },
+
+    loadEnd: function (e) {
+        console.log('loadEnd', arguments);
+
+        pub_bar.max = e.total;
+        pub_bar.value = e.loaded;
+    },
+
+    completeAll: function () {
+        console.log('completeAll', arguments);
+
+        setTimeout(function () {
+            pub_bar.setAttribute('hidden', 'hidden');
+        }, 1000);
+
+        pub_name.innerHTML = `File Uploaded: ${arguments[0].responseText}`;
     }
 
 });

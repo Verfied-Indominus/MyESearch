@@ -9,7 +9,7 @@ from .pyre_base import uploadPDF
 key = b'/xeej/xb8/x0c/x97/xe9j/xba,W/xcb'
 IV = os.urandom(16)
 
-# filename = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
+filename = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
 # file = open(filename, 'rb')
 
 def create_doc_image(file_name):
@@ -30,7 +30,6 @@ def get_information(file_name):
     stop_words = ["keywords","abstract"]
     stop_word_loc = {"keywords": "","abstract": ""}
     contents = {}
-    # file = f"documents/{file_name}"
     file_open = fitz.open(file_name)
     for word in stop_words:
 
@@ -46,7 +45,6 @@ def get_information(file_name):
         request = f"Extract the entire Abstract section from the following text'{contents['abstract']}'"
         abstract  = prompt(request)["choices"][0]["text"]
         abstract = abstract.replace(abstract[:10], '')
-        print(abstract)
         
     if stop_word_loc["keywords"] is not None:
         contents["keywords"] = file_open[stop_word_loc["keywords"]].get_text()
@@ -58,11 +56,10 @@ def get_information(file_name):
         for key in key_list:
             keywords.append(key.strip(' ').strip('"').strip("'"))
 
-    # request = f"Extract the authors from the following text '{file_open}'"
-    # authors  = prompt(request)["choices"][0]["text"]
-    # print(authors)
+    request = f"Extract the title of the following publication '{file_open}'"
+    title  = prompt(request)["choices"][0]["text"]
 
-    return keywords, abstract
+    return keywords, abstract, title
 
 def encrypt_pdf(file, id):
     data = file.read()

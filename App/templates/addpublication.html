@@ -17,23 +17,57 @@
             <form action="/addpublication/{{id}}" method="post" class="uk-padding-small uk-padding-remove-vertical uk-height-large uk-form-stacked uk-margin uk-margin-auto uk-margin-large-bottom uk-width-4-5 scroll">
                 
                 <div class="uk-margin">
+                    <label for="pdf" class="uk-form-label">Upload PDF (optional)</label>
+                    <div id="publication-upload" class="uk-placeholder uk-text-center uk-width-auto uk-margin-remove-top">
+                        <span uk-icon="icon: cloud-upload"></span>
+                        <span class="uk-text-middle">Upload PDF by dropping it here or</span>
+                        <div uk-form-custom>
+                            <input type="file" name="pdf">
+                            <span class="uk-link">selecting one</span>
+                        </div>
+                        <progress id="js-publication-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+                        <p id="publication-name"></p>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label for="checkbox">Automatically extract some info from PDF</label>
+                    <input class="uk-checkbox" type="checkbox" name="checkbox" id="checkbox">
+                </div>
+                <script>
+                    chkbox = document.getElementById('checkbox');
+                    chkbox.addEventListener("change", (event) => {
+                        if (event.currentTarget.checked){
+                            fetch('/extract').then((response) => response.json()).then((data) => {
+                                let title = document.getElementById("pdf_title");
+                                let abstract = document.getElementById("pdf_abstract");
+                                let keywords = document.getElementById("pdf_keywords");
+                                title.value = data[2];
+                                abstract.innerHTML = data[1];
+                                keywords.innerHTML = data[0];
+                            });
+                        }
+                    });
+                </script>
+                
+                <div class="uk-margin">
                     <label for="title" class="uk-form-label"><span class="required">*</span> Title</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
-                        <input class="uk-input" name="title" type="text" required>
+                        <input class="uk-input" name="title" id="pdf_title" type="text" required>
                     </div>
                 </div>
 
                 <div class="uk-margin">
                     <label for="abstract" class="uk-form-label">Abstract</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
-                        <textarea class="uk-width-1-1 uk-textarea" name="abstract" rows="8"></textarea>
+                        <textarea class="uk-width-1-1 uk-textarea" id="pdf_abstract" name="abstract" rows="8"></textarea>
                     </div>
                 </div>
 
                 <div class="uk-margin">
                     <label for="abstract" class="uk-form-label"><span class="required">*</span> Keywords</label>
                     <div class="uk-inline uk-form-controls uk-width-expand">
-                        <textarea class="uk-width-1-1 uk-textarea" name="keywords" rows="3" placeholder="Enter comma-separated keywords" required></textarea>
+                        <textarea class="uk-width-1-1 uk-textarea" name="keywords" id="pdf_keywords" rows="3" placeholder="Enter comma-separated keywords" required></textarea>
                     </div>
                 </div>
 
