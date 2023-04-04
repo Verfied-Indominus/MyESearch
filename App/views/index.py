@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from App.controllers.pdf import get_information
@@ -340,8 +341,8 @@ def signup_page():
 
 @index_views.route('/addpublication/<id>', methods=['GET', 'POST'])
 def add_publication(id):
-    re = get_researcher(id)
-    if not re:
+    res = get_researcher(id)
+    if not res:
         flash("The specified User ID does not exist or is not a Researcher's")
         flash('Researchers may also add publications in their profile')
         return redirect(url_for('.index_page'))
@@ -362,11 +363,25 @@ def add_publication(id):
             data['free_access'] = False
 
         pub = create_pub(data)
-        add_pub_record(re.id, pub.id)
+        add_pub_record(res.id, pub.id)
+
+        coauthors = re.split('\s*,\s*', form['coauthors'])
+        users = get_all_researchers()
+        for res in users:
+            target = []
+            for co in coauthors:
+                if res.first_name.lower() in co.lower() and res.last_name.lower() in co.lower():
+                    target.append(coauthors.index(co))
+            for t in target:
+                add_pub_record(res.id, pub.id)
+                coauthors.remove(coauthors[t])
+        authors = ', '.join(coauthors)
+
+        add_coauthors(pub, authors)
 
         bibtex = {}
 
-        bibtex['author'] = f"{re.first_name} {re.last_name}, "
+        bibtex['author'] = f"{res.first_name} {res.last_name}, "
         bibtex['author'] += form['coauthors']
 
         if form['journal']:
@@ -421,6 +436,20 @@ def add_profile_pub():
 
     pub = create_pub(data)
     add_pub_record(re.id, pub.id)
+
+    coauthors = re.split('\s*,\s*', form['coauthors'])
+    users = get_all_researchers()
+    for res in users:
+        target = []
+        for co in coauthors:
+            if res.first_name.lower() in co.lower() and res.last_name.lower() in co.lower():
+                target.append(coauthors.index(co))
+        for t in target:
+            add_pub_record(res.id, pub.id)
+            coauthors.remove(coauthors[t])
+    authors = ', '.join(coauthors)
+
+    add_coauthors(pub, authors)
 
     bibtex = {}
 

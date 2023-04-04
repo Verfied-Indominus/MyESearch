@@ -8,9 +8,6 @@ from App.controllers.pubrecord import add_pub_record
 def get_all_researchers():
     return Researcher.query.all()
 
-def add_publication_to_researcher(re_id, pub_id):
-    return add_pub_record(re_id, pub_id)
-    
 def add_interests_to_researcher(topics, re_id):
     for topic in topics:
         tag = ResearcherTag(re_id, topic.id)
