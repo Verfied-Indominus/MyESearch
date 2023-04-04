@@ -250,6 +250,7 @@ def filename():
 @index_views.route('/extract', methods=['GET'])
 def extract():
     keywords, abstract, title = get_information(f"App/uploads/{image[0]}")
+    print([keywords, abstract, title])
     return [keywords, abstract, title]
 
 @index_views.route('/signup', methods=['GET', 'POST'])
@@ -500,7 +501,7 @@ def profile(id):
     all_topics.sort(key=lambda top: top.name)
 
     if isinstance(current_user, User):
-        if (current_user.id == id):
+        if (int(current_user.id)==int(id)):
             return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                                    recents=recents, researchers=researchers, interests=interests, skills=skills, types=types, 
                                    dates=dates, faculties=faculties, departments=departments[user.faculty], all_topics=all_topics)

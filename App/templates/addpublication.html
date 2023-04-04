@@ -34,17 +34,37 @@
                     <label for="checkbox">Automatically extract some info from PDF</label>
                     <input class="uk-checkbox" type="checkbox" name="checkbox" id="checkbox">
                 </div>
+
+                <a id="load-toggler" href="#loader" uk-toggle hidden></a>
+
+                <div id="loader" uk-modal>
+                    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                        <div id="loader-modal-body" class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-height-small">
+                            <div class="uk-margin-small-bottom" uk-spinner></div>
+                            <div>Loading Publication Information</div>
+                        </div>
+                    </div>
+                </div>
+
                 <script>
-                    chkbox = document.getElementById('checkbox');
+                    let chkbox = document.getElementById('checkbox');
+                    let loader = document.getElementById('loader');
+                    let toggler = document.getElementById('load-toggler');
                     chkbox.addEventListener("change", (event) => {
                         if (event.currentTarget.checked){
+                            toggler.click();
                             fetch('/extract').then((response) => response.json()).then((data) => {
                                 let title = document.getElementById("pdf_title");
                                 let abstract = document.getElementById("pdf_abstract");
                                 let keywords = document.getElementById("pdf_keywords");
+                                console.log(data);
                                 title.value = data[2];
                                 abstract.innerHTML = data[1];
+                                abstract.value = data[1];
                                 keywords.innerHTML = data[0];
+                                keywords.value = data[0];
+                                toggler.click();
                             });
                         }
                     });
