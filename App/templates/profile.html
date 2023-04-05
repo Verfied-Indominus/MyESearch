@@ -634,6 +634,7 @@
 
                                                 {% for pub in library %}
                                                     <div style="padding: 0 30px">
+                                                        <a onclick="removeFromLibrary({{current_user.id}}, {{pub.id}})" class="uk-icon-link" uk-icon="trash"></a>
                                                         <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                             <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                                             <div class="uk-margin-small-left uk-width-expand">
