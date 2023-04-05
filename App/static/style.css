@@ -849,11 +849,10 @@ body{
 
 
 #add_pro_pub{
-  position: absolute; 
   right: 40px; 
-  top: 60px; 
-  color: #1e87f0; 
-  z-index: 999;
-  height: 45px;
-  width: 45px;
+  top: 50px;    
+}
+
+#add_pro_pub > div > a{
+  color: #1e87f0;
 }

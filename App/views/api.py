@@ -5,7 +5,7 @@ from flask import Blueprint
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
-from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_pub_byid, get_pub_containing_title
+from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title
 from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user, remove_publication_from_recents
 from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher
@@ -31,9 +31,34 @@ def load_researchers():
 
 @api_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
+    publications = get_all_publications_json()
     pub = get_pub_byid(id)
+    
     researchers, topics, pubs = get_publication_suggestions(pub)
-    return [[r.toDict() for r in researchers if r], [t.toDict() for t in topics if t], [p.toDict() for p in pubs if p]]
+    print('got suggestions')
+    
+    # print('allpubs')
+    # for a in researchers:
+    #     print(a.toDictQuick())
+    #     for rec in a.pub_records:
+    #         print(rec.researcher.toDictPub())
+    
+    # print('\n\nDone\n\n')
+    # for a in topics:
+    #     print(a.toDictQuick())
+    #     for rec in a.pub_records:
+    #         print(rec.researcher.toDictPub())
+
+    # print('\n\nDone\n\n')
+    pubs = [p.toDict() for p in pubs]
+    print('pubs') 
+    
+    topics = [t.toDict() for t in topics] 
+    print('topics')
+
+    researchers = [r.toDict() for r in researchers]
+    print('researchers')
+    return [researchers, topics, pubs]
 
 @api_views.route('/addtolibrary/<user_id>/<pub_id>', methods=['GET'])
 def add_to_library(user_id, pub_id):

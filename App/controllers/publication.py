@@ -75,6 +75,9 @@ def get_all_publications_for_user(user):
 def get_all_publications():
     return Publication.query.all()
 
+def get_all_publications_json():
+    return [p.toDict() for p in Publication.query.all()]
+
 def get_pub_containing_title(title):
     pub = Publication.query.filter(Publication.title.contains(title)).first()
     if not pub:

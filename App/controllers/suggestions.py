@@ -1,9 +1,11 @@
+from App.controllers.publication import get_all_publications
 from App.controllers.researcher import get_researcher
-from App.controllers.topic import get_topic
+from App.controllers.topic import get_all_topics, get_topic
 from App.models.researcher import Researcher
 from App.models.publication import Publication
 from random import shuffle
 
+global all_publications, all_topics
 
 # Need to figure out what pubs will be shown and where
 # 1st. on home page:
@@ -62,42 +64,50 @@ def get_publication_suggestions(pub):
     researchers = []
     topics = []
 
+    global all_publications, all_topics
+    all_publications = get_all_publications()
+    all_topics = get_all_topics()
+
     if not pub:
         return researchers, topics, pubs
-
+    
     for rec in pub.pub_records:
         researchers.extend(get_researcher_pubs(rec.researcher.id))
-
     for tag in pub.tags:
-        topics.extend(get_topic_pubs(tag.topic.id))
-
+        top_id = tag.topic.id
+        tops = get_topic_pubs(top_id)
+        topics.extend(tops)
     topics = list(set(topics))
-
     pubs = get_ranked_pubs()
 
     return researchers, topics, pubs
 
 def get_researcher_pubs(id):
     re = get_researcher(id)
-    records = re.pub_records.all()
+    records = re.pub_records
     shuffle(records)
     return [rec.publication for rec in records[:20]]
 
 def get_topic_pubs(id):
     topic = get_topic(id)
-    tags = topic.pub_tags.all()
+    tags = topic.pub_tags
     shuffle(tags)
     return [tag.publication for tag in tags[:20]]
 
 def get_ranked_pubs():
     ranked_pubs = []
-    reads = Publication.query.order_by(Publication.reads.desc()).limit(10)
-    citations = Publication.query.order_by(Publication.citations.desc()).limit(10)
-    searches = Publication.query.order_by(Publication.searches.desc()).limit(10)
 
-    ranked_pubs.extend(reads)
-    ranked_pubs.extend([citation for citation in citations if citation not in ranked_pubs])
-    ranked_pubs.extend([search for search in searches if search not in ranked_pubs])
+    global all_publications
 
+    all_publications.sort(key=lambda pub: pub.reads, reverse=True)
+    ranked_pubs.extend(all_publications[:10])
+
+    all_publications.sort(key=lambda pub: pub.citations, reverse=True)
+    ranked_pubs.extend(all_publications[:10])
+
+    all_publications.sort(key=lambda pub: pub.searches, reverse=True)
+    ranked_pubs.extend(all_publications[:10])
+
+    ranked_pubs = list(set(ranked_pubs))
     return ranked_pubs
     

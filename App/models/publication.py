@@ -18,7 +18,7 @@ class Publication(db.Model):
     downloads = db.Column(db.Integer, nullable=False)
     searches = db.Column(db.Integer, nullable=False)
     encryptedPDF = db.Column(db.String(200))
-    tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
+    tags = db.relationship("PublicationTag", backref="publication", lazy="subquery", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", innerjoin=True, cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="lib_pub", lazy="dynamic", cascade="all, delete-orphan")
     recents_records = db.relationship("LibraryRecord", backref="recents_pub", lazy="dynamic", cascade="all, delete-orphan")
@@ -56,4 +56,23 @@ class Publication(db.Model):
             'searches': self.searches,
             'coauthors': self.coauthors,
             'authors': [rec.researcher.toDictPub() for rec in self.pub_records]
+        }
+    
+    def toDictQuick(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'abstract': self.abstract,
+            'pub_type':self.pub_type,
+            'free_access': self.free_access,
+            'publication_date': datetime.strftime(self.publication_date, '%Y'),
+            'url': self.url,
+            'eprint': self.eprint,
+            'coauthors': self.coauthors,
+            'reads': self.reads,
+            'citations': self.citations,
+            'downloads': self.downloads,
+            'searches': self.searches,
+            'coauthors': self.coauthors,
+            # 'authors': [rec.researcher.toDictPub() for rec in self.pub_records]
         }

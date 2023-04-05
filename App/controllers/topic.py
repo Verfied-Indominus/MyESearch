@@ -23,7 +23,7 @@ def create_topic_with_parent(name, parent_id):
     return topic
 
 def get_topic(id):
-    return Topic.query.filter_by(id=id).first()
+    return Topic.query.get(id)
 
 def get_topic_by_name(name):
     return Topic.query.filter_by(name=name).first()

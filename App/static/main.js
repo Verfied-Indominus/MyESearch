@@ -777,10 +777,11 @@ async function loadResearchers(researchers){
                                 html1 += html2;
                                 html1 += `
                             </div>
-                            <h4 class="uk-margin-auto"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
+                            <h4 class="uk-margin-auto uk-margin-small-top"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
                             <div> ${re['position']} </div>
                             <div> ${re['faculty']} </div>
                             <div> ${re['department']} </div>
+                            <button class="uk-button uk-button-primary uk-light uk-border-rounded uk-margin-small-top">Follow</button>
                         </div>
                     </div>
                 </li>
