@@ -24,7 +24,7 @@
                 </div>
             
                 <div class="uk-margin-medium-top">
-                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
+                    <div onclick="{% if current_user.is_authenticated %}addToLibrary(this, {{current_user.id}}, {{pub.id}});{% else %}window.location.href='/login';{% endif %}" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
                         Add to Library
                     </div>
 

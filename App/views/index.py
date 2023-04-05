@@ -526,14 +526,17 @@ def profile(id):
         if ',\n' in user.skills:
             skills = user.skills.split(',\n')
 
-    all_topics = get_all_topics()
-    all_topics.sort(key=lambda top: top.name)
-
-    if isinstance(current_user, User):
+        all_topics = get_all_topics()
+        all_topics.sort(key=lambda top: top.name)
+        
         if (int(current_user.id)==int(id)):
             return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                                    recents=recents, researchers=researchers, interests=interests, skills=skills, types=types, 
                                    dates=dates, faculties=faculties, departments=departments[user.faculty], all_topics=all_topics)
+
+    if isinstance(current_user, Student) and (int(current_user.id)==int(id)):
+        return render_template('profile.html', user=user, re=re, library=library, recents=recents, topics=topics, 
+                               researchers=researchers, faculties=faculties, departments=departments[user.faculty])
 
     return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                            recents=recents, researchers=researchers, interests=interests, skills=skills)
@@ -542,32 +545,44 @@ def profile(id):
 def edit_profile(id):
     form = request.form
 
-    re = get_researcher(id)
-    builder = (
-        ResearcherBuilder()
-        .existing_researcher(re)
-    )
+    re = None
+    user = get_user(id)
+    if isinstance(user, Researcher):
+        re = user
+        builder = (
+            ResearcherBuilder()
+            .existing_researcher(re)
+        )
+        positions = form.getlist('position')
+        positions = ', '.join(positions)
+    else:
+        builder = (
+            StudentBuilder()
+            .existing_student(user)
+        )
+
+    if 'title' in form:
+        builder = (
+            builder
+            .first_name(form['first_name'])
+            .middle_name(form['middle_name'])
+            .last_name(form['last_name'])
+            .faculty(form['faculty'])
+            .department(form['department'])
+            .email(form['email'])
+        )
+        if re:
+            builder = (
+                builder
+                .title(form['title'])
+                .position(positions)
+                .start_year(form['start_year'])
+            )
 
     if image:
         image_url = uploadFile(id, image[0])
         remove(f"App/uploads/{image[0]}")
         builder.image_url(image_url)
-
-    if 'title' in form:
-        positions = form.getlist('position')
-        positions = ', '.join(positions)
-        builder = (
-            builder
-            .title(form['title'])
-            .first_name(form['first_name'])
-            .middle_name(form['middle_name'])
-            .last_name(form['last_name'])
-            .position(positions)
-            .faculty(form['faculty'])
-            .department(form['department'])
-            .email(form['email'])
-            .start_year(form['start_year'])
-        )
 
     if 'introduction' in form:
         topics = []

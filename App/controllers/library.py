@@ -1,7 +1,6 @@
 from App.models import Library, LibraryRecord
 from App.controllers.user import get_user
 from App.database import db
-from sqlalchemy import delete
 
 def create_library(user_id):
     library = Library(user_id)
@@ -24,7 +23,7 @@ def get_publications_from_library(library):
     return pubs
 
 def add_publication_to_library(library, pub_id):
-    for record in library.records:
+    for record in library[0].records:
         if record.publication_id == pub_id:
             return False
     new_record = LibraryRecord(id, pub_id)
@@ -33,7 +32,7 @@ def add_publication_to_library(library, pub_id):
     return True
 
 def remove_publication_from_library(library, pub_id):
-    for record in library.records:
+    for record in library[0].records:
         if record.publication_id == pub_id:
             pub = record.publication
     if not pub:
@@ -43,4 +42,4 @@ def remove_publication_from_library(library, pub_id):
     return True
 
 def clear_library(library):
-    LibraryRecord.query.filter_by(library_id=library.id).delete()
+    LibraryRecord.query.filter_by(library_id=library[0].id).delete()

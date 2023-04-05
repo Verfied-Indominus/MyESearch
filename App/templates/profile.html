@@ -7,13 +7,12 @@
 {% block content %}
 <script type="text/javascript" src="/static/main.js"></script>
 <script>      
-    this.document.body.style.overflowY = 'hidden';
-    function pageLoad(){null}
-    fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
-
-        loadProfilePubs(pubs);
-    });
     {% if re and user.id != current_user.id %}
+        this.document.body.style.overflowY = 'hidden';
+        function pageLoad(){null}
+        fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
+            loadProfilePubs(pubs);
+        });
         addView({{user.id}});    
     {% endif %}
 </script>
@@ -50,19 +49,21 @@
                                         </div>
                                     </div>
 
-                                    {% set titles = ['Mr.', 'Ms.', 'Mrs.', 'Prof.', 'Dr.'] %}
-                                    <div class="uk-margin">
-                                        <label class="uk-form-label">Title</label>
-                                        
-                                        <div class="uk-flex">
-                                            {% for title in titles %}
-                                            <div class="uk-width-1-5">
-                                                <input type="radio" class="uk-radio" name="title" value="{{title}}" {% if title == user.title %}checked{% endif %}>
-                                                {{title}}
+                                    {% if re %}
+                                        {% set titles = ['Mr.', 'Ms.', 'Mrs.', 'Prof.', 'Dr.'] %}
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Title</label>
+                                            
+                                            <div class="uk-flex">
+                                                {% for title in titles %}
+                                                <div class="uk-width-1-5">
+                                                    <input type="radio" class="uk-radio" name="title" value="{{title}}" {% if title == user.title %}checked{% endif %}>
+                                                    {{title}}
+                                                </div>
+                                                {% endfor %}
                                             </div>
-                                            {% endfor %}
                                         </div>
-                                    </div>
+                                    {% endif %}
 
                                     <div class="uk-margin uk-grid uk-child-width-1-3" uk-grid>
                                         <div>
@@ -81,18 +82,20 @@
                                         </div>
                                     </div>
 
-                                    {% set positions = ['Tutor', 'Part-Time Lecturer', 'Full-Time Lecturer', 'Instructor', 'Teaching Assistant', 'Research Assistant', 'Associate Professor', 'Professor', 'Head of Department'] %}
-                                    <div class="uk-margin">
-                                        <label class="uk-form-label">Position</label>
-                                        <div class="uk-flex uk-flex-wrap">
-                                            {% for position in positions %}
-                                            <div class="uk-width-auto uk-margin-small-right">
-                                                <input type="checkbox" class="uk-checkbox" name="position" value="{{position}}" {% if position in user.position %}checked{% endif %}>
-                                                {{position}}
+                                    {% if re %}
+                                        {% set positions = ['Tutor', 'Part-Time Lecturer', 'Full-Time Lecturer', 'Instructor', 'Teaching Assistant', 'Research Assistant', 'Associate Professor', 'Professor', 'Head of Department'] %}
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Position</label>
+                                            <div class="uk-flex uk-flex-wrap">
+                                                {% for position in positions %}
+                                                <div class="uk-width-auto uk-margin-small-right">
+                                                    <input type="checkbox" class="uk-checkbox" name="position" value="{{position}}" {% if position in user.position %}checked{% endif %}>
+                                                    {{position}}
+                                                </div>
+                                                {% endfor %}
                                             </div>
-                                            {% endfor %}
                                         </div>
-                                    </div>
+                                    {% endif %}
 
                                     <div class="uk-margin">
                                         <label class="uk-form-label">Faculty</label>
@@ -117,14 +120,16 @@
                                         <input class="uk-input" type="email" name="email" value="{{user.email}}">
                                     </div>
 
-                                    <div class="uk-margin">
-                                        <label class="uk-form-label">Year Started at Institution</label>
-                                        <select name="start_year" class="uk-select">
-                                            {% for date in dates %}
-                                                <option value="{{date}}" {% if date|string == user.start_year %}selected{% endif %}>{{date}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    {% if re %}
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label">Year Started at Institution</label>
+                                            <select name="start_year" class="uk-select">
+                                                {% for date in dates %}
+                                                    <option value="{{date}}" {% if date|string == user.start_year %}selected{% endif %}>{{date}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    {% endif %}
 
                                     <button id="personal-info-submit" type="submit" hidden></button>
                                 </form>
@@ -186,7 +191,7 @@
                 <div class="uk-card uk-card-default uk-margin uk-inline uk-width-expand">
 
                     <!-- Editing Academic Info Section -->
-                    {% if current_user.id == user.id %}
+                    {% if re and current_user.id == user.id %}
                         <div class="uk-position-top-right uk-margin-small-top uk-margin-small-right"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#edit-academic-modal" class="uk-icon-button" uk-icon="pencil" uk-toggle></a></div></div>
 
                         <div id="edit-academic-modal" class="uk-flex-top" uk-modal>
@@ -373,8 +378,8 @@
             {% endif %}
                     <div class="uk-width-1-1">
                         <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
-                            <div class="uk-padding uk-inline">
-                                {% if current_user.id == user.id %}
+                            <div class="uk-padding uk-inline uk-width-expand">
+                                {% if re and current_user.id == user.id %}
                                     
                                     <div id="pub-modal" class="uk-padding-small uk-flex-top" uk-modal tabindex="9998">
                                         <div class="uk-modal-dialog uk-width-3-5 uk-margin-auto-vertical">
@@ -591,7 +596,7 @@
                                         <li class="uk-button yellow-background"><a style="color: white;" href="">Recently Read</a></li>
                                     {% endif %}
                                 </ul>  
-                                {% if current_user.id == user.id %}  
+                                {% if re and current_user.id == user.id %}  
                                     <div id="add_pro_pub" class="uk-position-top-right uk-width-auto"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#pub-modal" class="uk-icon-button" uk-icon="plus" uk-toggle></a></div></div>                        
                                 {% endif %}
 

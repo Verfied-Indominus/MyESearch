@@ -600,15 +600,18 @@ async function addResearchInterests(selected){
 let follow = document.getElementById('follow-pub'); //follow button in publication page
 let follow_sub = document.getElementById('follow-sub'); // follow button in researcher profile page
 
-async function addToLibrary(user_id, pub_id){
+// let unfollowhtml = `Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span>`;
+// let followhtml = `Following<span class="uk-margin-small-left" uk-icon="check"></span>`;
+// if (response){
+//     follow.innerHTML = followhtml;
+// } else {
+//     follow.innerHTML = unfollowhtml;
+// }
+
+async function addToLibrary(btn, user_id, pub_id){
     let response = await fetch(`/addtolibrary/${user_id}/${pub_id}`);
-    let unfollowhtml = `Follow<span class="uk-margin-small-left" uk-icon="plus-circle"></span>`;
-    let followhtml = `Following<span class="uk-margin-small-left" uk-icon="check"></span>`;
-    if (response){
-        follow.innerHTML = followhtml;
-    } else {
-        follow.innerHTML = unfollowhtml;
-    }
+    let text = await response.json();
+    btn.innerHTML = text;
 }
 
 // functions to add to recents and library

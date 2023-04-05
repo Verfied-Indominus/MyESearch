@@ -34,40 +34,22 @@ def load_pub_suggestions(id):
     pub = get_pub_byid(id)
     
     publications = get_all_publications_json() 
-    
+
     researchers, topics, pubs = get_publication_suggestions(pub)
-    print('got suggestions')
-    
-    # print('allpubs')
-    # for a in researchers:
-    #     print(a.toDictQuick())
-    #     for rec in a.pub_records:
-    #         print(rec.researcher.toDictPub())
-    
-    # print('\n\nDone\n\n')
-    # for a in topics:
-    #     print(a.toDictQuick())
-    #     for rec in a.pub_records:
-    #         print(rec.researcher.toDictPub())
 
-    # print('\n\nDone\n\n')
     pubs = [p.toDict() for p in pubs]
-    print('pubs') 
-    
     topics = [t.toDict() for t in topics] 
-    print('topics')
-
     researchers = [r.toDict() for r in researchers]
-    print('researchers')
+
     return [researchers, topics, pubs]
 
 @api_views.route('/addtolibrary/<user_id>/<pub_id>', methods=['GET'])
 def add_to_library(user_id, pub_id):
     library = get_library_from_user(user_id)
     if add_publication_to_library(library, pub_id):
-        return True
+        return 'In Library'
     remove_publication_from_library(library, pub_id)
-    return False
+    return 'Add to Library'
 
 @api_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
 def add_to_recent(user_id, pub_id):
@@ -141,7 +123,7 @@ def add_search_re(id):
 @api_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    publications = get_all_publications()
+    publications = get_all_publications_json()
     pubs = [rec.publication.toDict() for rec in re.pub_records]
     pubs.sort(key=lambda pub: pub['publication_date'], reverse=True)
     return pubs
