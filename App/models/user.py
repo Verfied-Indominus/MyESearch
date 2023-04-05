@@ -13,11 +13,11 @@ class User(db.Model):
     faculty = db.Column(db.String(120), nullable=False)
     department = db.Column(db.String(120), nullable=False)
     type = db.Column(db.String)
-    library = db.relationship("Library", backref="lib_user", lazy="joined", overlaps="recents_user, library")
-    recents = db.relationship("Library", backref="recents_user", lazy="joined", overlaps="lib_user, library")
-    researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy="joined", cascade="all, delete-orphan")
-    topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy="joined", cascade="all, delete-orphan")
-    notification_records = db.relationship("NotificationRecord", backref="user", lazy="joined", cascade="all, delete-orphan")
+    library = db.relationship("Library", backref="lib_user", lazy="dynamic", overlaps="recents_user, library")
+    recents = db.relationship("Library", backref="recents_user", lazy="dynamic", overlaps="lib_user, library")
+    researcher_sub_records = db.relationship("ResearcherSubRecord", foreign_keys='ResearcherSubRecord.user_id', backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
+    topic_sub_records = db.relationship("TopicSubRecord", backref="subscriber", lazy="dynamic", cascade="all, delete-orphan")
+    notification_records = db.relationship("NotificationRecord", backref="user", lazy="dynamic", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity':'User',

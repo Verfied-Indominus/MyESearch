@@ -417,8 +417,8 @@
                       </div>
                     </div>
                     <div id="all-notifs-body" class="uk-modal-body uk-height-large uk-text-center scroll">
-                      {% if current_user.notification_records|length > 0 %}
-                        {% for rec in current_user.notification_records %}
+                      {% if current_user.notification_records.all()|length > 0 %}
+                        {% for rec in current_user.notification_records.all() %}
                           {% set title = rec.notification.title|to_dict %}
                           {% set message = rec.notification.message|to_dict %}
                           {% set notif = rec.notification %}

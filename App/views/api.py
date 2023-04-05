@@ -18,9 +18,9 @@ api_views = Blueprint('api_views', __name__, template_folder='../templates')
 
 @api_views.route('/load/publications', methods=['GET'])
 def load_publications():
-    publications = get_all_publications()
-    publications = [pub.toDict() for pub in publications]
+    publications = get_all_publications_json() 
     publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
+    print(publications)
     return publications
 
 @api_views.route('/load/researchers', methods=['GET'])
@@ -31,8 +31,9 @@ def load_researchers():
 
 @api_views.route('/load/pubsuggestions/<id>', methods=['GET'])
 def load_pub_suggestions(id):
-    publications = get_all_publications_json()
     pub = get_pub_byid(id)
+    
+    publications = get_all_publications_json() 
     
     researchers, topics, pubs = get_publication_suggestions(pub)
     print('got suggestions')

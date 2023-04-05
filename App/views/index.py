@@ -515,7 +515,7 @@ def profile(id):
 
     if (isinstance(user, Researcher)):
         re = True
-        pubs = len(user.pub_records)
+        pubs = len(user.pub_records.all())
         subs = len(user.sub_records.all())
         interests = get_research_topics(user)
         skills = [user.skills]

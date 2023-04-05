@@ -84,13 +84,13 @@ def get_publication_suggestions(pub):
 
 def get_researcher_pubs(id):
     re = get_researcher(id)
-    records = re.pub_records
+    records = re.pub_records.all()
     shuffle(records)
     return [rec.publication for rec in records[:20]]
 
 def get_topic_pubs(id):
     topic = get_topic(id)
-    tags = topic.pub_tags
+    tags = topic.pub_tags.all()
     shuffle(tags)
     return [tag.publication for tag in tags[:20]]
 

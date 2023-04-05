@@ -24,7 +24,7 @@
             <div class="uk-margin-medium-bottom uk-inline">
 
                 <!-- Edit Personal Info Section -->
-                
+                {% if current_user.id == user.id %}
                     <div class="uk-position-top-right uk-margin-small-right uk-margin-small-top"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Personal Info </span><a href="#edit-personal-modal" class="uk-icon-button uk-light" uk-icon="pencil" uk-toggle></a></div></div>
                 
                     <div id="edit-personal-modal" class="uk-flex-top" uk-modal>
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-
+                {% endif %}
                 <!-- End of editing section -->
 
                 <div class="uk-flex uk-flex-center uk-margin-medium-top">
@@ -183,10 +183,10 @@
         </div>
         <div class="uk-width-expand uk-padding-remove-left uk-margin-medium-left">
             {% if re %}
-                <div class="uk-card uk-card-default uk-margin uk-inline">
+                <div class="uk-card uk-card-default uk-margin uk-inline uk-width-expand">
 
                     <!-- Editing Academic Info Section -->
-                    
+                    {% if current_user.id == user.id %}
                         <div class="uk-position-top-right uk-margin-small-top uk-margin-small-right"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#edit-academic-modal" class="uk-icon-button" uk-icon="pencil" uk-toggle></a></div></div>
 
                         <div id="edit-academic-modal" class="uk-flex-top" uk-modal>
@@ -247,7 +247,7 @@
                                 </div>
                             </div>
                         </div>
-
+                    {% endif %}
                     <!-- End of editing academic info section -->
 
                     <div class="uk-padding">
@@ -375,8 +375,6 @@
                         <div class="uk-card uk-card-default" uk-height-viewport="offset-top: true; offset-bottom: 20;">
                             <div class="uk-padding uk-inline">
                                 {% if current_user.id == user.id %}
-                                    <!-- <span class="uk-transition-toggle uk-inline" tabindex="0"><span class="uk-transition-fade uk-position-left">Add New Publication </span><a id="add_pro_pub" href="#pub-modal" class="uk-icon-button" uk-icon="plus" uk-toggle></a></span> -->
-                                    <!-- Convert this ^ to the bottom one -->
                                     
                                     <div id="pub-modal" class="uk-padding-small uk-flex-top" uk-modal tabindex="9998">
                                         <div class="uk-modal-dialog uk-width-3-5 uk-margin-auto-vertical">
@@ -592,9 +590,11 @@
                                         <li class="uk-button uk-button-primary"><a style="color: white;" href="">My Library</a></li>
                                         <li class="uk-button yellow-background"><a style="color: white;" href="">Recently Read</a></li>
                                     {% endif %}
-                                </ul>    
-                                <div id="add_pro_pub" class="uk-position-top-right uk-width-auto"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#pub-modal" class="uk-icon-button" uk-icon="plus" uk-toggle></a></div></div>                        
-                                
+                                </ul>  
+                                {% if current_user.id == user.id %}  
+                                    <div id="add_pro_pub" class="uk-position-top-right uk-width-auto"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span class="uk-width-auto uk-transition-fade">Edit Academic Info </span><a href="#pub-modal" class="uk-icon-button" uk-icon="plus" uk-toggle></a></div></div>                        
+                                {% endif %}
+
                                 <ul class="uk-switcher">
                                     {% if re %}
                                     <li>
