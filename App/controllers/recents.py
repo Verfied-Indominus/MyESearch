@@ -19,29 +19,36 @@ def get_recents_from_user(id):
 
 def get_publications_from_recents(recents):
     pubs = []
-    for rec in recents[0].records:
-        pubs.append(rec.recents_pub)
-    pubs.sort(key=lambda pub: pub.id, reverse=True)
+    records = recents[0].records
+    records.sort(key=lambda rec: rec.id, reverse=True)
+    for rec in records:
+        pubs.append(rec.recents_pub) 
     return pubs
 
 def add_publication_to_recents(recents, pub_id):
-    for record in recents.records:
+    for record in recents[0].records:
         if record.publication_id == pub_id:
-            return False
-    new_record = RecentsRecord(id, pub_id)
+            remove_publication_from_recents(recents, pub_id)
+    if len(recents[0].records) == 20:
+        records = recents[0].records
+        records.sort(key=lambda rec: rec.id, reverse=True)
+        rec = records[-1]
+        db.session.delete(rec)
+        db.session.commit()
+    new_record = RecentsRecord(recents[0].id, pub_id)
     db.session.add(new_record)
     db.session.commit()
     return True
 
 def remove_publication_from_recents(recents, pub_id):
-    for record in recents.records:
+    for record in recents[0].records:
         if record.publication_id == pub_id:
-            pub = record.recents_pub
-    if not pub:
+            rec = record
+    if not rec:
         return False
-    db.session.delete(pub)
+    db.session.delete(rec)
     db.session.commit()
     return True
 
 def clear_recents(recents):
-    RecentsRecord.query.filter_by(recents_id=recents.id).delete()
+    RecentsRecord.query.filter_by(recents_id=recents[0].id).delete()

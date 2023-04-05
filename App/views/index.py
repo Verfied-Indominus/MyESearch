@@ -15,7 +15,7 @@ from App.controllers.recents import *
 from App.controllers.auth import login_user, logout_user
 from App.controllers.scholarly_py import *
 from App.controllers.search import parse_search
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename 
 from os import remove
 from datetime import datetime
 import json
@@ -140,7 +140,7 @@ def all_publications():
         if pub.pub_type not in types:
             types.append(pub.pub_type)
     return render_template("results.html", publications=True, now=datetime.utcnow(), types=types)
-
+ 
 @index_views.route('/all/researchers',methods=['GET'])
 def all_researchers():
     return render_template("results.html", researchers=True, faculties=faculties)

@@ -34,10 +34,10 @@ def add_publication_to_library(library, pub_id):
 def remove_publication_from_library(library, pub_id):
     for record in library[0].records:
         if record.publication_id == pub_id:
-            pub = record.lib_pub
-    if not pub:
+            rec = record
+    if not rec:
         return False
-    db.session.delete(pub)
+    db.session.delete(rec)
     db.session.commit()
     return True
 

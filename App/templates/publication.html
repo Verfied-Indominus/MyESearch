@@ -13,6 +13,9 @@
         
         loadSuggestions(data, {{pub.id}});
     });
+    {% if current_user.is_authenticated %}
+        addToRecents({{current_user.id}}, {{pub.id}});
+    {% endif %}
 </script>
 
 <div class="uk-padding">

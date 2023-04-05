@@ -60,10 +60,8 @@ def remove_from_library(user_id, pub_id):
 @api_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
 def add_to_recent(user_id, pub_id):
     recents = get_recents_from_user(user_id)
-    if add_publication_to_recents(recents, int(pub_id)):
-        return True
-    remove_publication_from_recents(recents, int(pub_id))
-    return False
+    add_publication_to_recents(recents, int(pub_id))
+    return 'Added'
 
 @api_views.route('/publication/addread/<id>', methods=['GET'])
 def add_read(id):
@@ -129,9 +127,13 @@ def add_search_re(id):
 @api_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    publications = get_all_publications_json()
+    print('\ngot re\n')
+    publications = get_all_publications()
+    print('\ngot all pubs\n')
     pubs = [rec.publication.toDict() for rec in re.pub_records]
+    print('\ngot dict versions\n')
     pubs.sort(key=lambda pub: pub['publication_date'], reverse=True)
+    print('\ngot them sorted\n')
     return pubs
 
 @api_views.route('/update', methods=['GET'])
