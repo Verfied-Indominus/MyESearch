@@ -51,6 +51,12 @@ def add_to_library(user_id, pub_id):
     remove_publication_from_library(library, int(pub_id))
     return {'text': 'Add to Library'}
 
+@api_views.route('/removefromlibrary/<user_id>/<pub_id>', methods=['GET'])
+def remove_from_library(user_id, pub_id):
+    library = get_library_from_user(user_id)
+    remove_publication_from_library(library, int(pub_id))
+    return 'Removed'
+
 @api_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
 def add_to_recent(user_id, pub_id):
     recents = get_recents_from_user(user_id)

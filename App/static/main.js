@@ -614,6 +614,10 @@ async function addToLibrary(btn, user_id, pub_id){
     btn.innerHTML = text['text'];
 }
 
+async function removeFromLibrary(user_id, pub_id){
+    await fetch(`/removefromlibrary/${user_id}/${pub_id}`);
+}
+
 // functions to add to recents and library
 
 async function addToRecents(user_id, pub_id){

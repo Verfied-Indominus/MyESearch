@@ -21,6 +21,7 @@ def get_publications_from_recents(recents):
     pubs = []
     for rec in recents[0].records:
         pubs.append(rec.recents_pub)
+    pubs.sort(key=lambda pub: pub.id, reverse=True)
     return pubs
 
 def add_publication_to_recents(recents, pub_id):
