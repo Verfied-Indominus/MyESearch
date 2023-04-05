@@ -185,7 +185,27 @@
                             {% endif %}
                         {% endif %}
                     </div>
+                    {% if current_user.is_authenticated %}
 
+                        {% set ns = namespace(following=false) %}
+                        {% if re %}
+                            {% for rec in user.sub_records.all() %}
+                                {% if rec.subscriber.id == current_user.id %}
+                                    {% set ns.following = true %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if current_user.id != user.id %}
+                            <div class="uk-margin-medium-top uk-text-center">
+                                <a onclick="reSubscribe(this, {{current_user.id}}, {{user.id}});" class="uk-button uk-button-primary uk-margin-auto-horizontal uk-light uk-border-rounded">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</a>          
+                            </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="uk-margin-medium-top uk-text-center">
+                        <a href="/login" class="uk-button uk-button-primary uk-margin-auto-horizontal uk-light uk-border-rounded">Subscribe</a>          
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

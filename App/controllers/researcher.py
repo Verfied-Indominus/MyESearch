@@ -1,4 +1,4 @@
-from App.controllers.user import get_user
+from App.controllers.researchersubs import create_sub, remove_sub
 from App.database import db
 from App.models import Researcher 
 from App.models import ResearcherTag
@@ -25,14 +25,16 @@ def get_researcher(id):
 def get_researcher_by_email(email):
     return Researcher.query.filter_by(email=email).first()
 
-# def follow_researcher(sub_id, re_id):
-#     if not create_sub(sub_id, re_id):
+def reSubscribe(sub_id, re_id):
+    return create_sub(sub_id, re_id)
 
+def reUnsubscribe(sub_id, re_id):
+    return remove_sub(sub_id, re_id)
 
 def get_subscribed_researchers(user):
     researchers = []
     for rec in user.researcher_sub_records:
-        researchers.append(rec.researcher)
+        researchers.append(rec.subject)
     return researchers
 
 def delete_researcher(id):

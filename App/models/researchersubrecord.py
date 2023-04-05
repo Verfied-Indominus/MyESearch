@@ -9,3 +9,10 @@ class ResearcherSubRecord(db.Model):
     def __init__(self, user_id, researcher_id):
         self.user_id = user_id
         self.researcher_id = researcher_id
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'researcher_id': self.researcher_id
+        }

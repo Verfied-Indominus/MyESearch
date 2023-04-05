@@ -19,7 +19,7 @@ class Publication(db.Model):
     searches = db.Column(db.Integer, nullable=False)
     encryptedPDF = db.Column(db.String(200))
     tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
-    pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", cascade="all, delete-orphan")
+    pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", innerjoin=True, cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="lib_pub", lazy="dynamic", cascade="all, delete-orphan")
     recents_records = db.relationship("RecentsRecord", backref="recents_pub", lazy="dynamic", cascade="all, delete-orphan")
 

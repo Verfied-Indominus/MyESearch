@@ -2,11 +2,14 @@ from App.models import TopicSubRecord
 from . import user, topic,notification,publication
 from App.database import db
 
-def create_sub(tid,uid):
+def create_sub(uid, tid): 
     try:
         use = user.get_user(uid)
         top = topic.get_topic_id(tid)
         if top is None or use is None:
+            return False
+        sub = TopicSubRecord.query.filter_by(user_id=uid, topic_id=tid).first()
+        if sub:
             return False
         new_top_sub = TopicSubRecord(uid, tid)
         db.session.add(new_top_sub)
@@ -29,12 +32,8 @@ def delete_sub_id(sid):
     except:
         return False
         
-def delete_sub(tid,uid):
+def remove_sub(uid, tid):
     try:
-        use = user.get_user(uid)
-        top = topic.get_topic_id(tid)
-        if top is None or use is None:
-            return False
         sub  = TopicSubRecord.query.filter_by(user_id = uid,topic_id=tid).first()
         db.session.delete(sub)
         db.session.commit()

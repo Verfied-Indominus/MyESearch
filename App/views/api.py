@@ -7,10 +7,11 @@ from App.controllers.notification import accept, delete_all_notif_recs, follow_b
 from App.controllers.open_ai import prompt
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title
 from App.controllers.pubrecord import add_pub_record
-from App.controllers.recents import add_publication_to_recents, get_recents_from_user, remove_publication_from_recents
-from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher
+from App.controllers.recents import add_publication_to_recents, get_recents_from_user
+from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher, reSubscribe, reUnsubscribe
 from App.controllers.scholarly_py import fill_pub, get_pubs
 from App.controllers.suggestions import get_publication_suggestions
+from App.controllers.topic import topSubscribe, topUnsubscribe
 from App.controllers.user import get_user
 from App.controllers.verify import verified
 
@@ -127,13 +128,9 @@ def add_search_re(id):
 @api_views.route('/load/profilepubs/<id>', methods=['GET'])
 def load_profile_pubs(id):
     re = get_researcher(id)
-    print('\ngot re\n')
     publications = get_all_publications()
-    print('\ngot all pubs\n')
     pubs = [rec.publication.toDict() for rec in re.pub_records]
-    print('\ngot dict versions\n')
     pubs.sort(key=lambda pub: pub['publication_date'], reverse=True)
-    print('\ngot them sorted\n')
     return pubs
 
 @api_views.route('/update', methods=['GET'])
@@ -253,10 +250,19 @@ def reject_request(s_id, pub_id):
         reject(s_id, pub_id)
         return 'Rejected'
 
-@api_views.route('/follow/<sub_id>/<re_id>', methods=['GET'])
-def follow(sub_id, re_id):
-    follow_researcher(sub_id, re_id)
-    
+@api_views.route('/subscribe/researcher/<sub_id>/<re_id>', methods=['GET'])
+def re_follow(sub_id, re_id):
+    if not reSubscribe(sub_id, re_id):
+        reUnsubscribe(sub_id, re_id)
+        return {'text': 'Subscribe'}
+    return {'text': 'Subscribed'}
+
+@api_views.route('/subscribe/topic/<sub_id>/<top_id>', methods=['GET'])
+def top_follow(sub_id, top_id):
+    if not topSubscribe(sub_id, top_id):
+        topUnsubscribe(sub_id, top_id)
+        return {'text': 'Subscribe'}
+    return {'text': 'Subscribed'}
 
 @api_views.route('/followback/<re_id>/<sub_id>', methods=['GET'])
 def follow_back(re_id, sub_id):

@@ -1,3 +1,4 @@
+from App.controllers.topicsub import create_sub, remove_sub
 from App.database import db
 from App.models import Topic
 from sqlalchemy.exc import IntegrityError
@@ -48,10 +49,16 @@ def get_signup_topics():
 def get_topics(limiter):
     return [topic.toDict() for topic in Topic.query.limit(limiter)]
 
+def topSubscribe(sub_id, top_id):
+    return create_sub(sub_id, top_id)
+
+def topUnsubscribe(sub_id, top_id):
+    return remove_sub(sub_id, top_id)
+
 def get_subscribed_topics(user):
     topics = []
-    for rec in user.topic_sub_records:
-        topics.append(rec.topic)
+    for rec in user.topic_sub_records.all():
+        topics.append(rec.subject)
     return topics
 
 def get_research_topics(researcher):

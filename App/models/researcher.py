@@ -40,7 +40,8 @@ class Researcher(UserMixin, User):
             'certifications': self.certifications,
             'skills': self.skills,
             'website_url': self.website_url,
-            'introduction': self.introduction
+            'introduction': self.introduction,
+            'subs': [rec.toDict() for rec in self.sub_records.all()]
         }
 
     def toDictPub(self):

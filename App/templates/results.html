@@ -8,18 +8,37 @@
 {% autoescape off %}
 
     {% if topic_page %}
-        <div style="min-height: 30vh;" class="uk-background-muted uk-padding">
-            <h3 class="uk-margin-small-bottom uk-text-bold">{{topic_.name}}</h3>
+        <div class="uk-background-default uk-padding">
+            <div class="uk-flex">
+                <h3 class="uk-margin-small-bottom uk-text-bold">{{topic_.name}}</h3>
+
+                {% if current_user.is_authenticated %}
+                    {% set ns = namespace(following=false) %}
+                    {% for rec in topic_.sub_records.all() %}
+                        {% if rec.subscriber.id == current_user.id %}
+                            {% set ns.following = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <a onclick="topSubscribe(this, {{current_user.id}}, {{topic_.id}})" class="uk-margin-medium-left uk-button uk-button-danger uk-border-pill">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</a>
+                {% else %}
+                    <a href="/login" class="uk-margin-medium-left uk-button uk-button-danger uk-border-pill">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</a>
+                {% endif %}
+            </div>
+            
 
             {% if topic_.subtopics|length %}
                 <h4 class="uk-margin-small-bottom">Subtopics</h4>
                 <hr>
                 <div style="overflow-x: scroll; white-space: nowrap;" class="uk-flex">
                     {% for top in topic_.subtopics %}
-                        <a href="/topic/{{top.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-background-default uk-border-pill"> {{top.name}} </a>
+                        <a href="/topic/{{top.id}}" style="padding: 0 10px;" class="uk-text-capitalize uk-margin-small-right uk-button uk-button-default uk-border-pill"> {{top.name}} </a>
                     {% endfor %}
                 </div>
             {% endif %}
+        </div>
+        <div style="min-height: 30vh;" class="uk-background-muted uk-padding">
+            
 
             {% if not topic_.researcher_tags.all()|length and not topic_pubs|length and not topic_researchers|length %}
                 <div class="uk-margin-medium-top uk-width-1-1 uk-flex uk-flex-center uk-flex-middle uk-flex-column uk-flex-stretch uk-text-center">
@@ -336,7 +355,7 @@
             this.document.body.style.overflowY = 'hidden';
             function pageLoad(){null}
             fetch('/load/researchers').then((response) => response.json()).then((researchers) => {
-                loadResearchers(researchers);
+                loadResearchers({{current_user.id}}, researchers);
             });
         </script>
         <div class="uk-background-muted uk-width-1-1" uk-filter="target: .js-filter;">
@@ -373,7 +392,7 @@
                 </span>
             </div>
             
-            <ul id="all_researcher_ul" class="js-filter uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-4 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid uk-height-match="target: .uk-card"></ul>
+            <ul id="all_researcher_ul" class="js-filter uk-grid uk-margin-remove-top uk-margin-remove-left uk-child-width-1-4 scroll uk-padding uk-padding-remove-horizontal uk-padding-remove-top" uk-grid></ul>
         </div>
     {% endif %}
 

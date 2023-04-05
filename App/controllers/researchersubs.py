@@ -8,6 +8,9 @@ def create_sub(uid, re_id):
         sub = user.get_user(uid)
         if re is None or uid is None:
             return False
+        sub = ResearcherSubRecord.query.filter_by(user_id=uid, researcher_id=re_id).first()
+        if sub:
+            return False;
         new_re_sub = ResearcherSubRecord(uid, re_id)
         db.session.add(new_re_sub)
         db.session.commit()
@@ -32,7 +35,7 @@ def get_subs(re_id):
     except:
         return None
 
-def remove_sub(re_id,uid):
+def remove_sub(uid, re_id):
     try:
         query = ResearcherSubRecord.query.filter_by(researcher_id=re_id,user_id=uid).first()
         db.session.delete(query)
