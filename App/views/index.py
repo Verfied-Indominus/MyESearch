@@ -6,7 +6,7 @@ from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
-from App.controllers.user import get_user, get_user_by_email
+from App.controllers.user import get_all_users, get_user, get_user_by_email
 from App.controllers.publication import *
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
@@ -661,6 +661,7 @@ def test():
     # for pub in get_all_publications(): 
     #     print('\n', pub.pub_type)
     #     print(pub.bibtex, '\n') 
+
 
     print('\n\nDONE\n\n')
 

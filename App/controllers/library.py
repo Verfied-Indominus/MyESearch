@@ -19,14 +19,14 @@ def get_library_from_user(id):
 def get_publications_from_library(library):
     pubs = []
     for rec in library[0].records:
-        pubs.append(rec.publication)
+        pubs.append(rec.lib_pub)
     return pubs
 
 def add_publication_to_library(library, pub_id):
     for record in library[0].records:
         if record.publication_id == pub_id:
             return False
-    new_record = LibraryRecord(id, pub_id)
+    new_record = LibraryRecord(library[0].id, pub_id)
     db.session.add(new_record)
     db.session.commit()
     return True
@@ -34,7 +34,7 @@ def add_publication_to_library(library, pub_id):
 def remove_publication_from_library(library, pub_id):
     for record in library[0].records:
         if record.publication_id == pub_id:
-            pub = record.publication
+            pub = record.lib_pub
     if not pub:
         return False
     db.session.delete(pub)
@@ -43,3 +43,4 @@ def remove_publication_from_library(library, pub_id):
 
 def clear_library(library):
     LibraryRecord.query.filter_by(library_id=library[0].id).delete()
+    db.session.commit()

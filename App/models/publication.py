@@ -21,7 +21,7 @@ class Publication(db.Model):
     tags = db.relationship("PublicationTag", backref="publication", lazy="dynamic", cascade="all, delete-orphan")
     pub_records = db.relationship("PubRecord", backref="publication", lazy="joined", cascade="all, delete-orphan")
     lib_records = db.relationship("LibraryRecord", backref="lib_pub", lazy="dynamic", cascade="all, delete-orphan")
-    recents_records = db.relationship("LibraryRecord", backref="recents_pub", lazy="dynamic", cascade="all, delete-orphan")
+    recents_records = db.relationship("RecentsRecord", backref="recents_pub", lazy="dynamic", cascade="all, delete-orphan")
 
     def __init__(self, title, abstract, free_access, pub_type, publication_date, url, eprint):
         self.title = title

@@ -46,17 +46,17 @@ def load_pub_suggestions(id):
 @api_views.route('/addtolibrary/<user_id>/<pub_id>', methods=['GET'])
 def add_to_library(user_id, pub_id):
     library = get_library_from_user(user_id)
-    if add_publication_to_library(library, pub_id):
-        return 'In Library'
-    remove_publication_from_library(library, pub_id)
-    return 'Add to Library'
+    if add_publication_to_library(library, int(pub_id)):
+        return {'text': 'In Library'}
+    remove_publication_from_library(library, int(pub_id))
+    return {'text': 'Add to Library'}
 
 @api_views.route('/addtorecents/<user_id>/<pub_id>', methods=['GET'])
 def add_to_recent(user_id, pub_id):
     recents = get_recents_from_user(user_id)
-    if add_publication_to_recents(recents, pub_id):
+    if add_publication_to_recents(recents, int(pub_id)):
         return True
-    remove_publication_from_recents(recents, pub_id)
+    remove_publication_from_recents(recents, int(pub_id))
     return False
 
 @api_views.route('/publication/addread/<id>', methods=['GET'])

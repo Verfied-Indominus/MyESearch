@@ -611,7 +611,7 @@ let follow_sub = document.getElementById('follow-sub'); // follow button in rese
 async function addToLibrary(btn, user_id, pub_id){
     let response = await fetch(`/addtolibrary/${user_id}/${pub_id}`);
     let text = await response.json();
-    btn.innerHTML = text;
+    btn.innerHTML = text['text'];
 }
 
 // functions to add to recents and library

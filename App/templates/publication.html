@@ -22,12 +22,25 @@
                 <div class="uk-margin uk-flex uk-flex-center">
                     <div class=" uk-background-cover uk-box-shadow-large" data-src="{% if not pub.cover %} /static/images/publications2/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" style="width: 280px; height: 380px;" uk-img></div>
                 </div>
-            
+                
+                {% set ns = namespace(following=false) %}
+                {% if current_user.is_authenticated %}
+                    {% for rec in current_user.library[0].records %}
+                        {% if rec.lib_pub.id == pub.id %}
+                            {% set ns.following = true %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
                 <div class="uk-margin-medium-top">
                     <div onclick="{% if current_user.is_authenticated %}addToLibrary(this, {{current_user.id}}, {{pub.id}});{% else %}window.location.href='/login';{% endif %}" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
-                        Add to Library
+                        {% if not ns.following %}
+                            Add to Library
+                        {% else %}
+                            In Library
+                        {% endif %}
                     </div>
-
+                
                     <div uk-toggle="target: #citation-modal" onclick="addCitation({{pub.id}});" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
                         Cite
                     </div>
