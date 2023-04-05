@@ -1,8 +1,8 @@
 from App.models import ResearcherSubRecord
 from App.database import db
-from . import researcher, user,publication,notification
+from . import researcher, user
 
-def create_sub(re_id, uid):
+def create_sub(uid, re_id):
     try:
         re = researcher.get_researcher(re_id)
         sub = user.get_user(uid)
@@ -41,14 +41,14 @@ def remove_sub(re_id,uid):
     except:
         return False
 
-def researcher_notification(re_id,pid):
-    try:
-        re = researcher.get_researcher(re_id)
-        subs = get_subs(re_id=re_id)
-        pub = publication.get_pub_byid(id=pid)
-        title = f"New publication from: {re.first_name} {re.last_name}"
-        message = f"New publication added: {pub.title}"
-        notification.notify_subscribers(re,title,message)
-        return True
-    except:
-        return False
+# def researcher_notification(re_id,pid):
+#     try:
+#         re = researcher.get_researcher(re_id)
+#         subs = get_subs(re_id)
+#         pub = publication.get_pub_byid(pid)
+#         title = f"New publication from: {re.first_name} {re.last_name}"
+#         message = f"New publication added: {pub.title}"
+#         notification.notify_subscribers(re,title,message)
+#         return True
+#     except:
+#         return False

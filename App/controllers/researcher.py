@@ -1,9 +1,7 @@
+from App.controllers.user import get_user
 from App.database import db
 from App.models import Researcher 
 from App.models import ResearcherTag
-from App.models import PubRecord
-from App.controllers import get_topic_by_name
-from App.controllers.pubrecord import add_pub_record
 
 def get_all_researchers():
     return Researcher.query.all()
@@ -27,8 +25,9 @@ def get_researcher(id):
 def get_researcher_by_email(email):
     return Researcher.query.filter_by(email=email).first()
 
-def get_researcher_by_name(first_name, last_name):
-    return
+# def follow_researcher(sub_id, re_id):
+#     if not create_sub(sub_id, re_id):
+
 
 def get_subscribed_researchers(user):
     researchers = []

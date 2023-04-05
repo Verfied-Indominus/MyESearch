@@ -253,6 +253,11 @@ def reject_request(s_id, pub_id):
         reject(s_id, pub_id)
         return 'Rejected'
 
+@api_views.route('/follow/<sub_id>/<re_id>', methods=['GET'])
+def follow(sub_id, re_id):
+    follow_researcher(sub_id, re_id)
+    
+
 @api_views.route('/followback/<re_id>/<sub_id>', methods=['GET'])
 def follow_back(re_id, sub_id):
     follow_back_researcher(re_id, sub_id)

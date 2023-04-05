@@ -7,20 +7,23 @@
 {% block content %}
 <script type="text/javascript" src="/static/main.js"></script>
 <script>      
-    {% if re and user.id != current_user.id %}
+    {% if re %}
         this.document.body.style.overflowY = 'hidden';
         function pageLoad(){null}
         fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
             loadProfilePubs(pubs);
         });
-        addView({{user.id}});    
+        {% if user.id != current_user.id %}
+            addView({{user.id}});
+        {% endif %}    
     {% endif %}
+    
 </script>
 
 <div class="uk-padding">
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
         <div class="uk-card uk-light uk-background-primary uk-width-1-3 uk-padding-remove uk-flex uk-flex-center" style="color: white">
-            <div class="uk-margin-medium-bottom uk-inline">
+            <div class="uk-margin-medium-bottom uk-inline uk-width-expand">
 
                 <!-- Edit Personal Info Section -->
                 {% if current_user.id == user.id %}
@@ -633,10 +636,10 @@
                                             {% else %}
 
                                                 {% for pub in library %}
-                                                <div style="height: fit-content;" class="uk-inline uk-padding-remove-left">
+                                                <div style="height: fit-content;" class="uk-inline {% if re %}uk-width-1-2{% else %}uk-width-1-1{% endif %} uk-padding-remove-left">
                                                     <a style="height: 20px; margin: auto 0;" onclick="this.parentNode.style.display='none'; removeFromLibrary({{current_user.id}}, {{pub.id}});" class="uk-icon-link uk-position-left" uk-icon="trash"></a>
-                                                    <div style="padding: 0 30px">
-                                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline uk-width-expand hvr-grow-shadow">
+                                                    <div class="uk-width-1-1" style="padding: 0 30px">
+                                                        <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline uk-width-1-1 hvr-grow-shadow">
                                                             <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                                             <div class="uk-margin-small-left uk-width-expand">
                                                                 <h4 class="uk-margin-remove"> {{pub.title|title}} </h4>
@@ -694,7 +697,7 @@
                                             {% else %}
 
                                                 {% for pub in recents %}
-                                                    <div style="padding: 0 30px">
+                                                    <div style="padding: 0 30px" class="{% if re %}uk-width-1-2{% else %}uk-width-1-1{% endif %}">
                                                         <div style="cursor: pointer;" onclick="window.location='/publication/{{pub.id}}'" class="uk-card uk-card-default uk-padding-small uk-flex uk-inline hvr-grow-shadow">
                                                             <div style="height: 140px; width: 100px;" class="uk-background-contain" data-src="{% if not pub.cover %} /static/images/publications/{{pub.pub_type}}.png {% else %} {{pub.cover}} {% endif %}" uk-img></div>
                                                             <div class="uk-margin-small-left uk-width-expand">

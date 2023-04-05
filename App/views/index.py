@@ -200,6 +200,8 @@ def topic_page(id):
         flash('Topic does not exist or is inaccessible')
         return redirect(url_for('.index_page')) 
 
+    pubs = get_all_publications()
+    
     topic_pubs = []
     topic_researchers = []
     for tag in topic_.pub_tags:
