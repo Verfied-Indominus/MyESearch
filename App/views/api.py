@@ -137,7 +137,7 @@ def load_profile_pubs(id):
 def scholarly_update():
     users = get_all_researchers()
     print(len(users)) 
-    for n in range(len(users), 0, -1): 
+    for n in range(2, 0, -1): 
         user = users[n-1]
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
@@ -148,7 +148,7 @@ def scholarly_update():
                 pub = fill_pub(pubs[i], user.first_name, user.last_name)
                 if pub:
                     data = {}
-                    data['title'] = pub['bib']['title'].lower()
+                    data['title'] = pub['bib']['title'].lower() 
                     data['abstract'] = pub['bib']['abstract']
                     data['eprint'] = ''
                     if 'pub_url' in pub:

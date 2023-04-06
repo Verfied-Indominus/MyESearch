@@ -56,7 +56,7 @@ def get_pub_byid(id):
 
 def delete_pub(id):
     try:
-        pub = get_pub_byid(id)
+        pub = get_pub_byid(id) 
         db.session.delete(pub)
         db.session.commit()
         return True

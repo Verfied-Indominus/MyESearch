@@ -416,7 +416,7 @@
                         <a class="uk-button uk-button-text" onclick="clear_notifications({{current_user.id}});">Clear All <span uk-icon="trash"></span></a>
                       </div>
                     </div>
-                    <div id="all-notifs-body" class="uk-modal-body uk-height-large uk-text-center scroll">
+                    <div id="all-notifs-body" class="uk-modal-body uk-height-large scroll">
                       {% if current_user.notification_records.all()|length > 0 %}
                         {% for rec in current_user.notification_records.all() %}
                           {% set title = rec.notification.title|to_dict %}
@@ -631,8 +631,10 @@
 
                         {% endfor %}
                       {% else %}
-                        <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
-                        <h4 class="uk-margin-remove-top">No Notifications Present</h4>
+                        <div class="uk-margin-auto uk-text-center">
+                          <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
+                          <h4 class="uk-margin-remove-top">No Notifications Present</h4>
+                        </div>
                       {% endif %}
                     </div>
                   </div>

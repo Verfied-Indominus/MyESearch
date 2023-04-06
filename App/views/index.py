@@ -827,7 +827,7 @@ def test():
     # for pub in pubs:
     #     print(count)
     #     count += 1
-    #     if len(pub.tags.all()) == 0:
+    #     if len(pub.tags.all()) == 0: 
     #         abstract = pub.abstract
     #         print(abstract)
     #         request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
