@@ -1,3 +1,4 @@
+from App.controllers.notification import notify_subscribers_topic
 from App.models import Publication, PublicationTag
 from App.database import db
 from sqlalchemy.exc import IntegrityError
@@ -86,6 +87,7 @@ def add_topic_to_pub(pub, topic):
         pubtag = PublicationTag(pub.id, topic.id)
         db.session.add(pubtag)
         db.session.commit()
+        notify_subscribers_topic(topic.id,pub.id) 
         return True
     except IntegrityError:
         db.session.rollback()

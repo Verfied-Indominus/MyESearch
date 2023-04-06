@@ -13,9 +13,13 @@
         fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
             loadProfilePubs(pubs);
         });
-        {% if user.id != current_user.id %}
+        {% if current_user.is_authenticated %}
+            {% if user.id != current_user.id %}
+                addView({{user.id}});
+            {% endif %} 
+        {% else %}   
             addView({{user.id}});
-        {% endif %}    
+        {% endif %}
     {% endif %}
     
 </script>
@@ -26,7 +30,7 @@
             <div class="uk-margin-medium-bottom uk-inline uk-width-expand">
 
                 <!-- Edit Personal Info Section -->
-                {% if current_user.id == user.id %}
+                {% if current_user.is_authenticated and current_user.id == user.id %}
                     <div class="uk-position-top-right uk-margin-small-right uk-margin-small-top"><div class="uk-inline all-black-text uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><span style="color: white;" class="uk-width-auto uk-transition-fade">Edit Personal Info </span><a href="#edit-personal-modal" class="uk-icon-button uk-light" uk-icon="pencil" uk-toggle></a></div></div>
                 
                     <div id="edit-personal-modal" class="uk-flex-top" uk-modal>

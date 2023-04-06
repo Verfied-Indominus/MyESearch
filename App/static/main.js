@@ -1208,33 +1208,30 @@ function endLoad(){
 }
 
 async function verify_author(verifier_id, auth_id){
-    fetch(`/verify/notification/${verifier_id}/${auth_id}`);
+    await fetch(`/verify/notification/${verifier_id}/${auth_id}`);
 } 
 
-async function set_read(notif_rec_id){
-    fetch(`/setread/${notif_rec_id}`);
-}
+// async function set_read(notif_rec_id){
+//     await fetch(`/setread/${notif_rec_id}`);
+// }
 
 async function accept_request(s_id, pub_id){
-    fetch(`/accept/${s_id}/${pub_id}`);
+    await fetch(`/accept/${s_id}/${pub_id}`);
 }
 
 async function reject_request(s_id, pub_id){
-    fetch(`/reject/${s_id}/${pub_id}`);
+    await fetch(`/reject/${s_id}/${pub_id}`);
 }
 
 async function followback(researcher_id, subscriber_id){
-    fetch(`/followback/${researcher_id}/${subscriber_id}`);
+    await fetch(`/followback/${researcher_id}/${subscriber_id}`);
 }
 
 async function clear_notifications(user_id){
-    console.log(user_id);
-    console.log(user_id==undefined);
-    console.log(user_id=='undefined');
     let notifs_body = document.getElementById('all-notifs-body');
     notifs_body.innerHTML = `
         <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
         <h4 class="uk-margin-remove-top">No Notifications Present</h4>
     `;
-    fetch(`/clear/notifications/${user_id}`);
+    await fetch(`/clear/notifications/${user_id}`);
 }

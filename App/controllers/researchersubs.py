@@ -1,5 +1,7 @@
+from App.controllers.notification import researcher_subscription_notif, student_subscription_notif
 from App.models import ResearcherSubRecord
 from App.database import db
+from App.models.researcher import Researcher
 from . import researcher, user
 
 def create_sub(uid, re_id):
@@ -8,12 +10,16 @@ def create_sub(uid, re_id):
         sub = user.get_user(uid)
         if re is None or uid is None:
             return False
-        sub = ResearcherSubRecord.query.filter_by(user_id=uid, researcher_id=re_id).first()
-        if sub:
+        subrec = ResearcherSubRecord.query.filter_by(user_id=uid, researcher_id=re_id).first()
+        if subrec:
             return False;
         new_re_sub = ResearcherSubRecord(uid, re_id)
         db.session.add(new_re_sub)
         db.session.commit()
+        if isinstance(sub, Researcher):
+            researcher_subscription_notif(re_id=re_id, sub_id=sub.id)
+        else:
+            student_subscription_notif(r_id=re_id, s_id=uid)
         return True
     except:
         return False

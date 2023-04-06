@@ -1,13 +1,14 @@
 import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
+from App.controllers.notification import author_added_notif, request_access
 from App.controllers.pdf import get_information
 from App.controllers.pubrecord import add_pub_record
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
 from App.controllers.pyre_base import uploadFile
-from App.controllers.user import get_all_users, get_user, get_user_by_email
+from App.controllers.user import get_user, get_user_by_email
 from App.controllers.publication import *
 from App.controllers.researcher import *
 from App.controllers.suggestions import *
@@ -23,7 +24,6 @@ import json
 import gmail
 
 from App.models.builder import *
-from sqlalchemy.sql import func
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
@@ -390,6 +390,7 @@ def add_publication(id):
         authors = ', '.join(coauthors)
 
         add_coauthors(pub, authors)
+        author_added_notif(p_id=pub.id, r_id=res.id)
 
         bibtex = {}
 
@@ -476,6 +477,7 @@ def add_profile_pub():
     authors = ', '.join(coauthors)
 
     add_coauthors(pub, authors)
+    author_added_notif(p_id=pub.id, r_id=res.id)
 
     bibtex = {}
 
@@ -647,6 +649,14 @@ def edit_profile(id):
     builder.build()
     flash('Profile updated')
     return redirect(f'/profile/{id}')
+
+@index_views.route('/request/<s_id>/<pub_id>', methods=['POST'])
+def request_text(s_id, pub_id):
+    form = request.form
+    pub = get_pub_byid(pub_id)
+    for rec in pub.pub_records:
+        request_access(s_id, rec.researcher.id, pub_id, form['message'])
+    return redirect(f'/publication/{pub_id}')
 
 # EMAIL : myesearch.noreply@gmail.com
 # PASSWORD: admin@noreply

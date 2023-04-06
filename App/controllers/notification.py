@@ -168,7 +168,7 @@ def follow_back_researcher(re_id, sub_id):
     except Exception:
         return False
     
-def author_added(p_id, r_id):
+def author_added_notif(p_id, r_id):
     authors = PubRecord.query.filter_by(publication_id = p_id).all()
     pub = Publication.query.filter_by(id = p_id)
     re = Researcher.query.filter_by(id = r_id).first()

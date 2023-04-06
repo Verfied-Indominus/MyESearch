@@ -159,7 +159,7 @@
                   <div class="uk-height-large scroll">
                     {% for rec in unread %}
                       <script>
-                        set_read({{rec.id}});
+                        fetch(`/setread/{{rec.id}}`);
                       </script>
 
                       {% set title = rec.notification.title|to_dict %}
@@ -253,7 +253,7 @@
                                   <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
                                   <div> 
                                     <p class="uk-margin-small-bottom">
-                                      <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.
+                                      <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.
                                     </p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                   </div>
@@ -491,7 +491,7 @@
                                       <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
                                       <div> 
                                         <p class="uk-margin-small-bottom">
-                                        <a href="/publication/{{title['pub_id']}}">{{title['pub_title']}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
+                                        <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                       </div>
                                     </div>
@@ -628,6 +628,8 @@
                               </div>
                             </div>
                           {% endif %}
+
+                          <hr>
 
                         {% endfor %}
                       {% else %}

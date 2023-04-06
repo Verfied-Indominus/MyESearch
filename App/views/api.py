@@ -135,10 +135,10 @@ def load_profile_pubs(id):
 
 @api_views.route('/update', methods=['GET'])
 def scholarly_update():
-    users = get_all_researchers()
-    print(len(users)) 
-    for n in range(2, 0, -1): 
-        user = users[n-1]
+    for n in range(3, 0, -1): 
+        user = get_user(n-1)
+        print(n)
+
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
         for i in range(len(pubs)):
@@ -189,7 +189,7 @@ def scholarly_update():
                                 author.reverse()
                                 temp.append(' '.join(author))
                         authors = temp
-                        for re in users:
+                        for re in get_all_researchers():
                             target = []
                             for co in authors:
                                 if re.first_name in co and re.last_name in co:

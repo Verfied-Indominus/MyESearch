@@ -58,13 +58,42 @@
                         </div>
                     </div>
                     {% if not pub.free_access %}
-                    <div class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" >
-                        Request Text 
-                    </div>
+                        {% if current_user.is_authenticated %}
+                            <a href="#request-modal" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" uk-toggle>
+                                Request Text 
+                            </a>
+
+                            <div id="request-modal" uk-modal>
+                                <div class="uk-modal-dialog">
+                                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                                    <div class="uk-modal-header">
+                                        <h2 class="uk-modal-title">Message</h2>
+                                        <p>You may send a personalized message to the author(s)</p>
+                                    </div>
+                                    <div class="uk-modal-body">
+                                        <form action="/request/{{current_user.id}}/{{pub.id}}" method="post">
+                                            <div class="uk-margin">
+                                                <label for="message" class="uk-form-label">Message (max. 500 chars.)</label>
+                                                <textarea name="message" rows="5" class="uk-textarea" maxlength="500"></textarea>
+                                            </div>
+    
+                                            <input id="msg-submit" type="submit" value="" hidden>
+                                        </form>
+                                    </div>
+                                    <div class="uk-modal-footer uk-text-right">
+                                        <button onclick="document.getElementById('msg-submit').click();" class="uk-button uk-button-primary" type="button">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <a href="/login" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary">
+                                Request Text 
+                            </a>
+                        {% endif %}
                     {% else %}
-                    <a href="{{pub.eprint}}" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" download>
-                        Download 
-                    </a>
+                        <a href="{{pub.eprint}}" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" download>
+                            Download 
+                        </a>
                     {% endif %}
                 </div>           
             </div>
