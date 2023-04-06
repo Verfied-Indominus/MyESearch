@@ -193,7 +193,7 @@
                 <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a href="/login" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span></div></div>
                 {% endif %}
                 <div class="uk-padding all-white-text">
-                    <h2 class="uk-margin-small-top">{% if re %} {{user.title}} {% endif %} {{user.first_name}} {{user.middle_name}} {{ user.last_name }}</h2>
+                    <h2 class="uk-margin-small-top">{% if re %} {{user.title}} {% endif %} {{user.first_name}} {% if user.middle_name %}{{user.middle_name}}{% endif %} {{ user.last_name }}</h2>
                     <div class="uk-text-default">
                         <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
                         <h3>About</h3>
@@ -434,7 +434,7 @@
                                                 <legend class="uk-legend uk-text-small uk-text-light uk-text-italic"><span class="required">*</span> indicates a required field</legend>
                                             </div>
                                             <div class="uk-modal-body">
-                                                <form id="pubForm" action="/profile/addpublication" method="post" class="uk-margin-auto uk-padding-small uk-padding-remove-vertical uk-height-large uk-form-stacked uk-width-4-5 scroll">
+                                                <form id="pubForm" action="/profile/addpublication" enctype="multipart/form-data" method="post" class="uk-margin-auto uk-padding-small uk-padding-remove-vertical uk-height-large uk-form-stacked uk-width-4-5 scroll">
                 
                                                     <div class="uk-margin">
                                                         <label for="pdf" class="uk-form-label">Upload PDF (optional)</label>

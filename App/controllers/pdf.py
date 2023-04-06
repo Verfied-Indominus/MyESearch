@@ -78,6 +78,8 @@ def encrypt_pdf(file, id):
 def decrypt_pdf_from_url(url):
     response = requests.get(url)
     content = response.content
+    while len(content) % 16 != 0:
+        content += b'\n' 
     decryptor = AES.new(key, AES.MODE_CBC, IV=IV)
     plainText = decryptor.decrypt(content)
     i = random.randint(0, 100)

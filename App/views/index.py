@@ -7,7 +7,7 @@ from App.controllers.pubrecord import add_pub_record
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
-from App.controllers.pyre_base import uploadFile
+from App.controllers.pyre_base import uploadFile, uploadPDF
 from App.controllers.user import get_user, get_user_by_email
 from App.controllers.publication import *
 from App.controllers.researcher import *
@@ -30,6 +30,7 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 dates = list(reversed([i for i in range(1970, 2024)]))
 institutions = ['The University of The West Indies']
 
+global image 
 image = []
 re_interests = []
 
@@ -248,6 +249,7 @@ def parse_interests(selected):
 @index_views.route('/filename', methods=['POST'])
 def filename():
     img = request.files['files[]']
+    global image
     image.append(secure_filename(img.filename))
     img.save(f"App/uploads/{image[0]}")
     return image[0]
@@ -426,6 +428,10 @@ def add_publication(id):
 def add_profile_pub():
     res = current_user
     form = request.form
+    global image
+    filename = image[0]
+    image = []
+
     data = {
         'title': form['title'].lower(),
         'abstract': form['abstract'],
@@ -443,6 +449,8 @@ def add_profile_pub():
     print(pub.toDict())
     print(res)
     add_pub_record(res.id, pub.id)
+
+    set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
 
     keywords = re.split('\s*,\s', form['coauthors'])
     for key in keywords:
@@ -523,6 +531,7 @@ def profile(id):
     interests = []
 
     user = get_user(id)
+    print(user.toDict())
 
     if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
         flash('User does not exist or is inaccessible')

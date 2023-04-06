@@ -2,10 +2,11 @@ import ast
 from datetime import datetime
 import json
 from random import shuffle
-from flask import Blueprint
+from flask import Blueprint, send_from_directory
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
+from App.controllers.pdf import decrypt_pdf_from_url
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title, set_pub_bibtex, set_pub_type
 from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user
@@ -349,3 +350,9 @@ def top_follow(sub_id, top_id):
 def follow_back(re_id, sub_id):
     follow_back_researcher(re_id, sub_id)
     return "Followed"
+
+@api_views.route('/getPDF/<pub_id>', methods=['GET'])
+def get_encrypted_pdf(pub_id):
+    pub = get_pub_byid(pub_id)
+    filename = decrypt_pdf_from_url(pub.encryptedPDF)
+    return send_from_directory('App/uploads', filename, as_attachment=True)

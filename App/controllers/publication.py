@@ -116,3 +116,11 @@ def set_pub_bibtex(pub, bibtex):
 def set_pub_type(pub, pub_type):
     pub.pub_type = pub_type
     db.session.commit()
+
+def set_encrypted_pdf_url(pub, url):
+    pub.encryptedPDF = url
+    db.session.commit()
+
+def set_pub_access(pub):
+    pub.free_access = True
+    db.session.commit()

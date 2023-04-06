@@ -170,7 +170,7 @@ def follow_back_researcher(re_id, sub_id):
     
 def author_added_notif(p_id, r_id):
     authors = PubRecord.query.filter_by(publication_id = p_id).all()
-    pub = Publication.query.filter_by(id = p_id)
+    pub = Publication.query.filter_by(id = p_id).first()
     re = Researcher.query.filter_by(id = r_id).first()
     title = "New Researcher Added."
     notif_title = json.dumps({"researcher_id": f"{re.id}", "name": f"{re.title} {re.first_name} {re.last_name}", "image_url": f"{re.image_url}"})

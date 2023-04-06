@@ -91,7 +91,7 @@
                             </a>
                         {% endif %}
                     {% else %}
-                        <a href="{% if pub.eprint %}{{pub.eprint}}{% else %}{{pub.url}}{% endif %}" class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" download>
+                        <a {% if pub.encryptedPDF %}onclick="getEncryptedPDF({{pub.id}});"{% else %}href="{% if pub.eprint %}{{pub.eprint}}{% else %}{{pub.url}}{% endif %}"{% endif %} class="uk-display-block uk-margin-small-bottom uk-button uk-button-secondary" download>
                             Download 
                         </a>
                     {% endif %}
