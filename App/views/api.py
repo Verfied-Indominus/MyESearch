@@ -12,7 +12,7 @@ from App.controllers.recents import add_publication_to_recents, get_recents_from
 from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher, reSubscribe, reUnsubscribe
 from App.controllers.scholarly_py import fill_pub, get_pubs, search_pub_title
 from App.controllers.suggestions import get_publication_suggestions
-from App.controllers.topic import create_topic, get_all_topics, get_topic_by_name, set_topic_parent, topSubscribe, topUnsubscribe
+from App.controllers.topic import create_topic, get_all_topics, get_topic, get_topic_by_name, set_topic_parent, topSubscribe, topUnsubscribe
 from App.controllers.user import get_user
 from App.controllers.verify import verified
 
@@ -321,7 +321,7 @@ def verify_notif(auth_id, new_auth_id):
 
 @api_views.route('/accept/<s_id>/<pub_id>', methods=['GET'])
 def accept_request(s_id, pub_id):
-        accept(s_id, pub_id)
+        print(accept(s_id, pub_id))
         return 'Accepted'
 
 @api_views.route('/reject/<s_id>/<pub_id>', methods=['GET'])
@@ -331,17 +331,19 @@ def reject_request(s_id, pub_id):
 
 @api_views.route('/subscribe/researcher/<sub_id>/<re_id>', methods=['GET'])
 def re_follow(sub_id, re_id):
+    re = get_researcher(re_id)
     if not reSubscribe(sub_id, re_id):
         reUnsubscribe(sub_id, re_id)
-        return {'text': f'<a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-small uk-transition-fade"> Subscribe</span>'}
-    return {'text': f' <a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-small uk-transition-fade"> Subscribed</span>'}
+        return {'text': f'<a onclick="reSubscribe(this, {sub_id}, {re_id}, `{re.title} {re.first_name} {re.last_name}`);" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-small uk-transition-fade"> Subscribe</span>'}
+    return {'text': f' <a onclick="reSubscribe(this, {sub_id}, {re_id}, `{re.title} {re.first_name} {re.last_name}`);" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-small uk-transition-fade"> Subscribed</span>'}
 
 @api_views.route('/subscribe/topic/<sub_id>/<top_id>', methods=['GET'])
 def top_follow(sub_id, top_id):
+    topic = get_topic(top_id)
     if not topSubscribe(sub_id, top_id):
         topUnsubscribe(sub_id, top_id) 
-        return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id});" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span>'}
-    return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id});" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-auto uk-transition-fade"> Subscribed</span>'}
+        return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id}, `{topic.name}`);" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span>'}
+    return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id}, `{topic.name}`);" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-auto uk-transition-fade"> Subscribed</span>'}
 
 @api_views.route('/followback/<re_id>/<sub_id>', methods=['GET'])
 def follow_back(re_id, sub_id):

@@ -197,10 +197,10 @@
                                     <p class="uk-margin-small-bottom">{{title['name']}} Requested Access to your {{message['pub_type']|title}}.</p>
                                     <div class="uk-flex">
                                       <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                      <a href="/publication/{{message['pub_id']}}">{{message['title']}}</a> 
+                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                     </div>
                                     <div>{{message['message']}}</div>
-                                    <a href="#student-contact" onclick="accept_request({{message['s_id']}}, {{message['pub_id']}});" class="uk-margin-small-top uk-button uk-button-small uk-button-primary uk-border-pill" uk-toggle>Accept</a> 
+                                    <a onclick="accept_request({{message['s_id']}}, {{message['pub_id']}});" href="#student-contact" class="uk-margin-small-top uk-button uk-button-small uk-button-primary uk-border-pill" uk-toggle>Accept</a> 
                                     <div id="student-contact" uk-modal>
                                       <div class="uk-modal-dialog">
                                         <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -208,7 +208,7 @@
                                           <h2 class="uk-modal-title">Contact This Student</h2>
                                         </div>
                                         <div class="uk-modal-body">
-                                          <p>{{message['contact']}}</p>
+                                          <pre>{{message['contact']}}</pre>
                                         </div>
                                         <div class="uk-modal-footer">
                                           You may use the above email address to contact the student and inform them of the necessary procedure.
@@ -454,7 +454,7 @@
                                         <p class="uk-margin-small-bottom">{{title['name']}} Requested Access to your {{message['pub_type']|title}}.</p>
                                         <div class="uk-flex">
                                           <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                          <a href="/publication/{{message['pub_id']}}">{{message['title']}}</a> 
+                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                         </div>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                       </div>
@@ -487,7 +487,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
+                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
                                       <div> 
                                         <p class="uk-margin-small-bottom">
                                         <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>

@@ -75,16 +75,16 @@ def request_access(s_id,r_id,pub_id,message):
     student = Student.query.filter_by(id = s_id).first()
     researcher = Researcher.query.filter_by(id = r_id).first()
     title = f"Publication Request: '{pub.title}'"
-    contact = f"""Student Details:
-                Name: {student.first_name} {student.last_name}
-                Email: {student.email} """
+    contact = f"""Student Details:\n
+                \tName: {student.first_name} {student.last_name}\n
+                \tEmail: {student.email} """
     notif_title = json.dumps({"image_url": f"{student.image_url}", "name": f"{student.first_name} {student.last_name}"})
     notif_message = json.dumps({"pub_type": f"{pub.pub_type}", "pub_title": f"{pub.title}", "contact": contact, "r_id": f"{r_id}", "s_id": f"{s_id}", "pub_id": f"{pub_id}", "message": f"{message}"})
     notif = create_notification(notif_title, notif_message, 2)
     try:
         record = NotificationRecord(r_id, notif.id)
         db.session.add(record)
-        db.sesion.commit()
+        db.session.commit()
         sendEmail(message + contact,title,researcher.email)
         return True
     except Exception:
@@ -182,7 +182,7 @@ def author_added_notif(p_id, r_id):
             if auth.researcher_id != re.id:
                 record = NotificationRecord(auth.researcher_id, notif.id)
                 db.session.add(record)
-                db.sesion.commit()
+                db.session.commit()
                 sendEmail(message, title, auth.researcher.email)
         return True
     except Exception:
@@ -199,8 +199,8 @@ def accept(s_id,pub_id):
     try:
         record = NotificationRecord(s_id, notif.id)
         db.session.add(record)
-        db.sesion.commit()
-        sendEmail(message, title, student.email)
+        db.session.commit()
+        sendEmail(message, title, student.email) 
         return True
     except Exception:
         return False
@@ -216,7 +216,7 @@ def reject(s_id,pub_id):
     try:
         record = NotificationRecord(s_id, notif.id)
         db.session.add(record)
-        db.sesion.commit()
+        db.session.commit()
         sendEmail(message, title, student.email)
         return True
     except Exception:
@@ -232,7 +232,7 @@ def verified_notif(auth_id, res_id):
     try:
         record = NotificationRecord(auth_id, notif.id)
         db.session.add(record)
-        db.sesion.commit()
+        db.session.commit()
         sendEmail(message,title,auth.email)
         return True
     except Exception:

@@ -187,7 +187,7 @@
                     {% endif %}
 
                     {% if current_user.id != user.id %}
-                        <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a onclick="reSubscribe(this, {{current_user.id}}, {{user.id}});" class="uk-icon-button uk-background-secondary" uk-icon="{% if ns.following %}check{% else %}plus{% endif %}"></a><span class="uk-width-auto uk-transition-fade">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</span></div></div>
+                        <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a onclick="reSubscribe(this, {{current_user.id}}, {{user.id}}, '{{user.title}} {{user.first_name}} {{user.last_name}}');" class="uk-icon-button uk-background-secondary" uk-icon="{% if ns.following %}check{% else %}plus{% endif %}"></a><span class="uk-width-auto uk-transition-fade">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</span></div></div>
                     {% endif %}
                 {% else %}
                 <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a href="/login" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span></div></div>

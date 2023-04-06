@@ -12,7 +12,7 @@ function getMessages(msg){
             message: msg,
             status: 'primary',
             pos: 'top-center',
-            timeout: 5000
+            timeout: 7000
         });
     }
 }
@@ -591,15 +591,41 @@ async function addResearchInterests(selected){
 }
 
 
-async function reSubscribe(btn, user_id, re_id){
+async function reSubscribe(btn, user_id, re_id, name){
     let response = await fetch(`/subscribe/researcher/${user_id}/${re_id}`);
     let text = await response.json();
+    let state = "";
+    if (text['text'].includes('check')){
+        state = "subscribed to";
+    }
+    else {
+        state = "unsubscribed from";
+    }
+    UIkit.notification({
+        message: `You have ${state} ${name}`,
+        status: 'primary',
+        pos: 'top-center',
+        timeout: 7000
+    });
     btn.parentNode.innerHTML = text['text'];
 }
 
-async function topSubscribe(btn, user_id, top_id){
+async function topSubscribe(btn, user_id, top_id, name){
     let response = await fetch(`/subscribe/topic/${user_id}/${top_id}`);
     let text = await response.json();
+    let state = "";
+    if (text['text'].includes('check')){
+        state = "subscribed to";
+    }
+    else {
+        state = "unsubscribed from";
+    }
+    UIkit.notification({
+        message: `You have ${state} ${name}`,
+        status: 'primary',
+        pos: 'top-center',
+        timeout: 7000
+    });
     btn.parentNode.innerHTML = text['text'];
 }
 
@@ -619,6 +645,19 @@ async function topSubscribe(btn, user_id, top_id){
 async function addToLibrary(btn, user_id, pub_id){
     let response = await fetch(`/addtolibrary/${user_id}/${pub_id}`);
     let text = await response.json();
+    let state = "";
+    if (text['text'].includes('In')){
+        state = "added to";
+    }
+    else {
+        state = "removed from";
+    }
+    UIkit.notification({
+        message: `Publication ${state} your Library`,
+        status: 'primary',
+        pos: 'top-center',
+        timeout: 7000
+    });
     btn.innerHTML = text['text'];
 }
 
