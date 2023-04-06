@@ -16,7 +16,7 @@ def create_pub(data): #let data be a dictionary
         db.session.add(new_pub)
         db.session.commit()
         return new_pub
-    except:
+    except IntegrityError:
         db.session.rollback()
         return None
 

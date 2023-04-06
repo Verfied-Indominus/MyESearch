@@ -808,7 +808,17 @@ def test():
     create_library(builder.researcher.id)
     create_recents(builder.researcher.id)
     
-
+    # data = {}
+    # data['title'] = 'Veracity: A Fake News Detection Architecture for MANET Messaging'
+    # data['abstract'] = 'Mobile Ad Hoc Network Messaging has become an integral part of today’s social communication landscape. They are used in a variety of applications. One major problem that these networks face is the spread of fake news. This problem can have serious deleterious effects on our social data driven society. Detecting fake news has proven to be challenging even for modern day algorithms. This research presents, Veracity, a unique computational social system to accomplish the task of Fake News Detection in MANET Messaging. The Veracity architecture attempts to model social behaviour and human reactions to news spread over a MANET. Veracity introduces five new algorithms namely, VerifyNews, CompareText, PredictCred, CredScore and EyeTruth for the capture, computation and analysis of the credibility and content data features. The Veracity architecture works in a fully distributed and infrastructureless environment. This study validates Veracity using a generated dataset with features relating to the credibility of news publishers and the content of the message to predict fake news. These features are analysed using a machine learning prediction model. The results of these experiments are analysed using four evaluation methodologies. The analysis reveals positive performance with the use of the fake news detection architecture.'
+    # data['free_access'] = False
+    # data['pub_type'] = 'conference paper'
+    # data['publication_date'] = datetime.date(datetime.now())
+    # data['url'] = 'https://google.com'
+    # data['eprint'] = 'https://google.com'
+    # pub = create_pub(data)
+    # print(pub)
+    # print(pub.toDict())
 
 
 

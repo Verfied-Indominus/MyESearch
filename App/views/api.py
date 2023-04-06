@@ -135,6 +135,7 @@ def load_profile_pubs(id):
 @api_views.route('/update', methods=['GET'])
 def scholarly_update():
     users = get_all_researchers()
+    print(len(users)) 
     for n in range(len(users), 0, -1): 
         user = users[n-1]
         pubs = get_pubs(user.first_name, user.last_name)
@@ -143,10 +144,8 @@ def scholarly_update():
             p = get_pub_containing_title(pubs[i]['bib']['title'].strip().lower())
             if not p:
                 print(pubs[i]['bib']['title'].strip().lower())
-                print(p)
                 pub = fill_pub(pubs[i], user.first_name, user.last_name)
                 if pub:
-                    print('Adding authors')
                     data = {}
                     data['title'] = pub['bib']['title'].lower()
                     data['abstract'] = pub['bib']['abstract']
@@ -175,7 +174,10 @@ def scholarly_update():
                         data['publication_date'] = datetime.date(datetime.strptime(pub['bib']['pub_year'], '%Y'))
                     
                     p = create_pub(data)
+                    print(p)
+                    print(get_pub_byid(2))
                     if p:
+                        print('Adding authors')
                         authors = pub['bib']['author'].split(' and ')
                         temp = []
                         for author in authors:
@@ -190,7 +192,7 @@ def scholarly_update():
                         for re in users:
                             target = []
                             for co in authors:
-                                if re.first_name in co and re.last_name in co:
+                                if re.first_name in co and re.last_name in co: 
                                     target.append(authors.index(co))
                             for t in target:
                                 print(add_pub_record(re.id, p.id))

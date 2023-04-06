@@ -713,6 +713,10 @@ async function update(){
     }
 }
 
+async function update2(){
+    await fetch('/update');
+}
+
 function identifier(id){
     if (localStorage.getItem('id') == null){
         localStorage.setItem('id', id);
