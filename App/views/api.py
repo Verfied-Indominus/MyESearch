@@ -1,3 +1,4 @@
+import ast
 from datetime import datetime
 import json
 from random import shuffle
@@ -5,13 +6,13 @@ from flask import Blueprint
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
-from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title
+from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title
 from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user
 from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher, reSubscribe, reUnsubscribe
 from App.controllers.scholarly_py import fill_pub, get_pubs
 from App.controllers.suggestions import get_publication_suggestions
-from App.controllers.topic import topSubscribe, topUnsubscribe
+from App.controllers.topic import create_topic, get_all_topics, get_topic_by_name, set_topic_parent, topSubscribe, topUnsubscribe
 from App.controllers.user import get_user
 from App.controllers.verify import verified
 
@@ -175,7 +176,6 @@ def scholarly_update():
                     
                     p = create_pub(data)
                     print(p)
-                    print(get_pub_byid(2))
                     if p:
                         print('Adding authors')
                         authors = pub['bib']['author'].split(' and ')
@@ -192,7 +192,7 @@ def scholarly_update():
                         for re in users:
                             target = []
                             for co in authors:
-                                if re.first_name in co and re.last_name in co: 
+                                if re.first_name in co and re.last_name in co:
                                     target.append(authors.index(co))
                             for t in target:
                                 print(add_pub_record(re.id, p.id))
@@ -203,6 +203,31 @@ def scholarly_update():
                         print(add_pub_record(user.id, p.id))
                         print('pub id', p.id)
                         print(p.toDict())
+                        abstract = p.abstract
+                        request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
+                        keywords  = prompt(request)["choices"][0]["text"]
+                        print(keywords)
+                        keywords = '[' + keywords.split('[')[1]
+                        keywords = ast.literal_eval(node_or_string=keywords.strip())
+                        for key in keywords:
+                            topic = get_topic_by_name(key.title())
+                            if not topic and len(key) < 60:
+                                topic = create_topic(key.title())
+                                for top in get_all_topics():
+                                    if top.name in topic.name:
+                                        set_topic_parent(topic.name, top.id)
+                                    if topic.name in top.name:
+                                        set_topic_parent(top.name, topic.id)
+                            if topic:
+                                added = add_topic_to_pub(p, topic)
+                                if not added:
+                                    print('\nNOT ADDED\n') 
+                                    print(p.title)
+                                    print(topic.name)
+                                    print('\n')
+                        print('\n\n', abstract)
+                        print(keywords)
+                        print([tag.topic.name for tag in p.tags.all()])
 
     return 'Created'
 

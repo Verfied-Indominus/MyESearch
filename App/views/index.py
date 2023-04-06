@@ -857,7 +857,7 @@ def test():
 
     # for pub in get_all_publications(): 
     #     print('\n', pub.pub_type)
-    #     print(pub.bibtex, '\n') 
+    #     print(pub.bibtex, '\n')  
 
 
     print('\n\nDONE\n\n')

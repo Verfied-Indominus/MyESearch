@@ -3,14 +3,14 @@ from App.database import db
 from App.models.pubrecord import PubRecord
 
 def add_pub_record(re_id, pub_id):
-    # pubrec = get_pub_record(re_id, pub_id)
-    # if not pubrec:
-    pubrec = PubRecord(re_id, pub_id)
-    db.session.add(pubrec)
-    db.session.commit()
-    notify_subscribers_author(re_id, pub_id)
-    return True
-    # return False
+    pubrec = get_pub_record(re_id, pub_id)
+    if not pubrec:
+        pubrec = PubRecord(re_id, pub_id)
+        db.session.add(pubrec)
+        db.session.commit()
+        notify_subscribers_author(re_id, pub_id)
+        return True
+    return False
 
 def delete_pub_record(re_id, pub_id):
     pubrec = get_pub_record(re_id, pub_id)
