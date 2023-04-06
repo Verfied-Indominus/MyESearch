@@ -105,12 +105,16 @@ def get_shortened_name(name):
 def search_pub_title(pub):
     set_new_proxy()
     found = True
+    i=1
     while True:
         try:
             pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
             break
         except Exception:
             set_new_proxy()
+            i += 1
+            if i > 20:
+                break
             print('search title and author')
     while True:
         try:

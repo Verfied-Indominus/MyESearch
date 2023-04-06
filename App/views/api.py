@@ -6,11 +6,11 @@ from flask import Blueprint
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
-from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title
+from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title, set_pub_bibtex, set_pub_type
 from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user
 from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher, reSubscribe, reUnsubscribe
-from App.controllers.scholarly_py import fill_pub, get_pubs
+from App.controllers.scholarly_py import fill_pub, get_pubs, search_pub_title
 from App.controllers.suggestions import get_publication_suggestions
 from App.controllers.topic import create_topic, get_all_topics, get_topic_by_name, set_topic_parent, topSubscribe, topUnsubscribe
 from App.controllers.user import get_user
@@ -135,10 +135,62 @@ def load_profile_pubs(id):
 
 @api_views.route('/update', methods=['GET'])
 def scholarly_update():
+    all_publications = get_all_publications()
+    for publication in all_publications:
+        if len(publication.tags.all()) == 0:
+            abstract = publication.abstract
+            request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
+            keywords  = prompt(request)["choices"][0]["text"]
+            print(keywords)
+            keywords = '[' + keywords.split('[')[1]
+            keywords = ast.literal_eval(node_or_string=keywords.strip())
+            for key in keywords:
+                topic = get_topic_by_name(key.title())
+                if not topic and len(key) < 60:
+                    topic = create_topic(key.title())
+                    for top in get_all_topics():
+                        if top.name in topic.name:
+                            set_topic_parent(topic.name, top.id)
+                        if topic.name in top.name:
+                            set_topic_parent(top.name, topic.id)
+                if topic:
+                    added = add_topic_to_pub(publication, topic)
+                    if not added:
+                        print('\nNOT ADDED\n') 
+                        print(publication.title)
+                        print(topic.name)
+                        print('\n')
+            print(keywords)
+            print([tag.topic.name for tag in publication.tags.all()])
+
+        if publication.bibtex and 'Patent' in publication.bibtex:
+            set_pub_type(publication, 'patent')
+        if not publication.bibtex:
+            print(publication.title, '\n')
+            bibtex = search_pub_title(publication)
+            if bibtex:
+                items = []
+                bibtex = bibtex.split(sep='{', maxsplit=1)[1].split(sep=',\n ', maxsplit=1)[1]
+                bibtex = bibtex[:-3]
+                items.extend([item.strip() for item in bibtex.split(',\n')])
+                items.pop(0)
+                bibtex = {}
+                for item in items:
+                    bibtex[item.split('=')[0].strip()] = item.split('=')[1].strip().strip('}{')
+                bibtex = json.dumps(bibtex)
+                set_pub_bibtex(publication, bibtex)
+                if 'Patent' in publication.bibtex:
+                    set_pub_type(publication, 'patent')
+                print(publication.bibtex)
+                print(publication.id)
+                print('\n\n')
+            else:
+                print('\nNot Found\n')
+
+
+
     for n in range(3, 0, -1): 
         user = get_user(n-1)
-        print(n)
-
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
         for i in range(len(pubs)):

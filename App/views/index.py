@@ -610,7 +610,7 @@ def edit_profile(id):
     if image:
         image_url = uploadFile(id, image[0])
         remove(f"App/uploads/{image[0]}")
-        builder.image_url(image_url)
+        builder.image_url(image_url) 
 
     if form['current_password']!='' and form['new_password']!='' and form['confirm_password']!='':
         if user.check_password(form['current_password']):
