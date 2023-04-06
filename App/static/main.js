@@ -768,7 +768,7 @@ function pastDate(){
 }
 
 
-async function loadResearchers(id, researchers){
+async function loadResearchers(researchers){
     let ar_ul = document.getElementById('all_researcher_ul');
     let re_num = document.getElementById('researcher_num');
 

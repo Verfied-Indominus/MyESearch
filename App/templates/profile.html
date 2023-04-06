@@ -134,6 +134,29 @@
                                         </div>
                                     {% endif %}
 
+                                    <hr class="uk-margin-large-top">
+                                    <ul uk-accordion>
+                                        <li>
+                                            <a class="uk-accordion-title" href="#">Change Your Password</a>
+                                            <div class="uk-accordion-content">
+                                                <div class="uk-margin">
+                                                    <label class="uk-form-label">Current Password</label>
+                                                    <input class="uk-input" type="password" name="current_password">
+                                                </div>
+
+                                                <div class="uk-margin">
+                                                    <label class="uk-form-label">New Password</label>
+                                                    <input class="uk-input" type="password" name="new_password">
+                                                </div>
+
+                                                <div class="uk-margin">
+                                                    <label class="uk-form-label">Confirm Password</label>
+                                                    <input class="uk-input" type="password" name="confirm_password">
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+
                                     <button id="personal-info-submit" type="submit" hidden></button>
                                 </form>
                             </div>

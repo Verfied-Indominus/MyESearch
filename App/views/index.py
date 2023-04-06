@@ -232,6 +232,8 @@ def login_page():
             login_user(user, remember)
             flash(f'Welcome {user.first_name}')
             return redirect(url_for('.index_page'))
+        else:
+            flash('Incorrect credentials entered')
 
     return render_template('login.html')
 
@@ -518,7 +520,6 @@ def profile(id):
         return redirect(url_for('.index_page'))
     
     topics = get_subscribed_topics(user)
-    print(topics)
     researchers = get_subscribed_researchers(user)
     library = get_publications_from_library(user.library)
     recents = get_publications_from_recents(user.recents)
@@ -539,7 +540,7 @@ def profile(id):
         all_topics = get_all_topics()
         all_topics.sort(key=lambda top: top.name)
         
-        if (int(current_user.id)==int(id)):
+        if isinstance(current_user, User) and (int(current_user.id)==int(id)):
             return render_template('profile.html', user=user, re=re, pubs=pubs, subs=subs, topics=topics, library=library, 
                                    recents=recents, researchers=researchers, interests=interests, skills=skills, types=types, 
                                    dates=dates, faculties=faculties, departments=departments[user.faculty], all_topics=all_topics)
@@ -594,7 +595,24 @@ def edit_profile(id):
         remove(f"App/uploads/{image[0]}")
         builder.image_url(image_url)
 
-    if 'introduction' in form:
+    if form['current_password']!='' and form['new_password']!='' and form['confirm_password']!='':
+        if user.check_password(form['current_password']):
+            if form['new_password']==form['confirm_password']:
+                builder = builder.password(form['new_password'])
+                flash('Password successfully changed')
+            else:
+                flash('Passwords not matching')
+                return redirect(f'/profile/{id}')
+        else:
+            flash('Incorrect Password entered')
+            return redirect(f'/profile/{id}')
+    elif form['current_password']=='' and form['new_password']=='' and form['confirm_password']=='':
+        pass
+    else:
+        flash('Password field(s) left blank')
+        return redirect(f'/profile/{id}')
+
+    if 'introduction' in form: 
         topics = []
         delete_researcher_tags(re)
         interests = form['research_interests'].split('\r\n')
@@ -612,6 +630,7 @@ def edit_profile(id):
         )
 
     builder.build()
+    flash('Profile updated')
     return redirect(f'/profile/{id}')
 
 # EMAIL : myesearch.noreply@gmail.com
