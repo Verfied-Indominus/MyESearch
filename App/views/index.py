@@ -219,7 +219,7 @@ def login_page():
     remember = False
     if request.method == 'POST':
         form = request.form
-        user = get_user_by_email(form['email'])
+        user = get_user_by_email(form['email'].lower())
         if user and check_password_hash(user.password, form['password']):
             if 'remember' in form:
                 remember = True

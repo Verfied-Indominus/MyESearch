@@ -12,7 +12,7 @@ class StudentBuilder():
         return self
 
     def email(self, email):
-        self.student.email = email
+        self.student.email = email.lower()
         return self
 
     def password(self, password):
@@ -62,7 +62,7 @@ class ResearcherBuilder():
         return self
 
     def email(self, email):
-        self.researcher.email = email
+        self.researcher.email = email.lower()
         return self
 
     def password(self, password):
