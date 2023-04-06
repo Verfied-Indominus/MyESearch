@@ -594,7 +594,7 @@ async function addResearchInterests(selected){
 async function reSubscribe(btn, user_id, re_id){
     let response = await fetch(`/subscribe/researcher/${user_id}/${re_id}`);
     let text = await response.json();
-    btn.innerHTML = text['text'];
+    btn.parentNode.innerHTML = text['text'];
 }
 
 async function topSubscribe(btn, user_id, top_id){
@@ -779,30 +779,25 @@ async function loadResearchers(id, researchers){
             let re = researchers[x];
             html1 += `
                 <li data-name="${re['first_name'][0].toUpperCase()}" data-faculty="${re['faculty']}" data-department="${re['department']}" style="padding: 0 30px; transform: translateY(0px);" class="uk-margin-medium-top">
-                    <a href="/profile/${re['id']}" class="uk-text-decoration-none uk-width-expand">
-                        <div class="uk-card uk-card-default uk-padding-small uk-flex hvr-grow-shadow uk-height-1-1">
-                            <div class="uk-margin-small-top uk-margin-small-bottom uk-width-1-1 uk-text-center">
-                                <div class="uk-flex uk-flex-center uk-margin-small-bottom">`;
-                                    let html2 = "";
-                                    if (re['image_url'] != null){
-                                        html2 = `<div class="uk-border-circle uk-background-cover" data-src="${re['image_url']}" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
-                                    }
-                                    else{
-                                        html2 = `<div class="uk-border-circle uk-background-cover" data-src="/static/images/unknown.png" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
-                                    }
-                                    html1 += html2;
-                                    html1 += `
-                                </div>
-                                <h4 class="uk-margin-auto uk-margin-small-top"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
-                                <div> ${re['position']} </div>
-                                <div> ${re['faculty']} </div>
-                                <div class="uk-margin-medium-bottom"> ${re['department']} </div>
-                                <div>
-                                    <a onclick="reSubscribe(this, ${id}, ${re['id']});" class="uk-button uk-button-primary uk-light uk-border-rounded uk-margin-small-bottom">Subscribe</a>          
-                                </div>
+                    <div style="cursor: pointer;" onclick="window.location='/profile/${re['id']}'" class="uk-card uk-card-default uk-padding-small uk-flex hvr-grow-shadow uk-height-1-1">
+                        <div class="uk-margin-small-top uk-margin-small-bottom uk-width-1-1 uk-text-center">
+                            <div class="uk-flex uk-flex-center uk-margin-small-bottom">`;
+                                let html2 = "";
+                                if (re['image_url'] != null){
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="${re['image_url']}" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                else{
+                                    html2 = `<div class="uk-border-circle uk-background-cover" data-src="/static/images/unknown.png" alt="" style="width: 200px; height: 200px;" uk-img></div>`; 
+                                }
+                                html1 += html2;
+                                html1 += `
                             </div>
-                        </div> 
-                    </a>
+                            <h4 class="uk-margin-auto uk-margin-small-top"> ${re['title']} ${re['first_name']} ${re['last_name']} </h4>
+                            <div> ${re['position']} </div>
+                            <div> ${re['faculty']} </div>
+                            <div> ${re['department']} </div>
+                        </div>
+                    </div> 
                 </li>
             `;
             console.log(re['subs']);

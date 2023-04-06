@@ -856,3 +856,27 @@ body{
 #add_pro_pub > div > a{
   color: #1e87f0;
 }
+
+.all-white-text{
+  color: white;
+}
+
+.all-white-text > *{
+  color: white;
+}
+
+.all-white-text > * > *{
+  color: white;
+}
+
+.all-black-text{
+  color: black;
+}
+
+.all-black-text > *{
+  color: black;
+}
+
+.all-black-text > * > *{
+  color: black;
+}
