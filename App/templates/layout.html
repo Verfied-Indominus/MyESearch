@@ -125,10 +125,12 @@
       </div>
 
       {% set unread = [] %}
+      {% set ids = [] %}
       {% if current_user.is_authenticated %}
         {% for rec in current_user.notification_records %}
           {% if not rec.read %}
             {% set __ = unread.append(rec) %}
+            {% set ____ = ids.append(rec.id) %}
           {% endif %}
         {% endfor %}
       {% endif %}
@@ -136,7 +138,7 @@
       <div>
         <ul class="uk-navbar-nav">
           <li>
-            <a onclick="this.firstChild.nextSibling.nextSibling.style.display = 'none';" style="position: relative;">
+            <a onclick="set_read({{ids}}); this.firstChild.nextSibling.nextSibling.style.display = 'none';" style="position: relative;">
               <span class="uk-icon uk-margin-small-right" uk-icon="icon: bell"></span>{% if unread|length > 0 %}<span style="position: absolute; top: 18px; left: 10px;" class="uk-badge">{{unread|length}}</span>{% endif %}
             </a>
             <!-- Researcher added a new publication and a Peer Researcher posted a new publication -->
@@ -158,9 +160,6 @@
 
                   <div class="uk-height-large scroll">
                     {% for rec in unread %}
-                      <script>
-                        fetch(`/setread/{{rec.id}}`);
-                      </script>
 
                       {% set title = rec.notification.title|to_dict %}
                       {% set message = rec.notification.message|to_dict %}

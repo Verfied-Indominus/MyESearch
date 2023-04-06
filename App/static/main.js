@@ -1211,9 +1211,12 @@ async function verify_author(verifier_id, auth_id){
     await fetch(`/verify/notification/${verifier_id}/${auth_id}`);
 } 
 
-// async function set_read(notif_rec_id){
-//     await fetch(`/setread/${notif_rec_id}`);
-// }
+async function set_read(notif_rec_ids){
+    console.log(notif_rec_ids);
+    for (let rec_id of notif_rec_ids){
+        await fetch(`/setread/${rec_id}`);
+    }
+}
 
 async function accept_request(s_id, pub_id){
     await fetch(`/accept/${s_id}/${pub_id}`);

@@ -656,6 +656,7 @@ def request_text(s_id, pub_id):
     pub = get_pub_byid(pub_id)
     for rec in pub.pub_records:
         request_access(s_id, rec.researcher.id, pub_id, form['message'])
+    flash('Your request has been sent')
     return redirect(f'/publication/{pub_id}')
 
 # EMAIL : myesearch.noreply@gmail.com
