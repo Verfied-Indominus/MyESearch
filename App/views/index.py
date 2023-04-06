@@ -530,8 +530,9 @@ def profile(id):
     subs = []
     interests = []
 
+    # encrypt_file(46)
+
     user = get_user(id)
-    print(user.toDict())
 
     if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
         flash('User does not exist or is inaccessible')

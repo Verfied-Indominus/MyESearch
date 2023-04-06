@@ -1277,9 +1277,3 @@ async function clear_notifications(user_id){
     `;
     await fetch(`/clear/notifications/${user_id}`);
 }
-
-async function getEncryptedPDF(pub_id){
-    let response = await fetch(`/getPDF/${pub_id}`);
-    let file = await response.json();
-    return file;
-}

@@ -10,7 +10,7 @@ key = b'/xeej/xb8/x0c/x97/xe9j/xba,W/xcb'
 IV = os.urandom(16)
 
 filename = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
-# file = open(filename, 'rb')
+file = open(filename, 'rb')
 
 def create_doc_image(file_name):
     try:
@@ -80,10 +80,13 @@ def decrypt_pdf_from_url(url):
     content = response.content
     while len(content) % 16 != 0:
         content += b'\n' 
-    decryptor = AES.new(key, AES.MODE_CBC, IV=IV)
+    decryptor = AES.new(key, AES.MODE_CBC, IV=IV) 
     plainText = decryptor.decrypt(content)
     i = random.randint(0, 100)
     with open(f"App/uploads/{i}.pdf", "wb") as f:
         f.write(plainText)
         f.close()
-    return f"App/uploads/{i}.pdf"
+    return f"uploads/{i}.pdf" 
+
+# url = encrypt_pdf(file, 1)
+# decrypt_pdf_from_url(url) 

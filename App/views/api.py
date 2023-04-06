@@ -2,7 +2,7 @@ import ast
 from datetime import datetime
 import json
 from random import shuffle
-from flask import Blueprint, send_from_directory
+from flask import Blueprint, send_file, send_from_directory
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
@@ -355,4 +355,6 @@ def follow_back(re_id, sub_id):
 def get_encrypted_pdf(pub_id):
     pub = get_pub_byid(pub_id)
     filename = decrypt_pdf_from_url(pub.encryptedPDF)
-    return send_from_directory('App/uploads', filename, as_attachment=True)
+    print(filename)  
+    # return send_from_directory('App/uploads/', filename, as_attachment=True)
+    return send_file(filename, "application/pdf", True) 

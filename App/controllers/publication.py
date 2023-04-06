@@ -1,4 +1,5 @@
 from App.controllers.notification import notify_subscribers_topic
+from App.controllers.pyre_base import uploadPDF
 from App.models import Publication, PublicationTag
 from App.database import db
 from sqlalchemy.exc import IntegrityError
@@ -123,4 +124,9 @@ def set_encrypted_pdf_url(pub, url):
 
 def set_pub_access(pub):
     pub.free_access = True
+    db.session.commit()
+
+def encrypt_file(pub_id): 
+    pub = get_pub_byid(pub_id)
+    pub.encryptedPDF = uploadPDF(pub_id, "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf")
     db.session.commit()
