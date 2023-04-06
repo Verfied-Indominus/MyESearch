@@ -254,15 +254,15 @@ def reject_request(s_id, pub_id):
 def re_follow(sub_id, re_id):
     if not reSubscribe(sub_id, re_id):
         reUnsubscribe(sub_id, re_id)
-        return {'text': f'<a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade">  Subscribe</span>'}
-    return {'text': f'<a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-auto uk-transition-fade">  Subscribed</span>'}
+        return {'text': f'<a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-small uk-transition-fade"> Subscribe</span>'}
+    return {'text': f' <a onclick="reSubscribe(this, {sub_id}, {re_id});" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-small uk-transition-fade"> Subscribed</span>'}
 
 @api_views.route('/subscribe/topic/<sub_id>/<top_id>', methods=['GET'])
 def top_follow(sub_id, top_id):
     if not topSubscribe(sub_id, top_id):
-        topUnsubscribe(sub_id, top_id)
-        return {'text': 'Subscribe'}
-    return {'text': 'Subscribed'}
+        topUnsubscribe(sub_id, top_id) 
+        return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id});" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span>'}
+    return {'text': f'<a onclick="topSubscribe(this, {sub_id}, {top_id});" class="uk-icon-button uk-background-secondary" uk-icon="check"></a><span class="uk-width-auto uk-transition-fade"> Subscribed</span>'}
 
 @api_views.route('/followback/<re_id>/<sub_id>', methods=['GET'])
 def follow_back(re_id, sub_id):

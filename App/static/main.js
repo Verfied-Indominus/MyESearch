@@ -600,7 +600,7 @@ async function reSubscribe(btn, user_id, re_id){
 async function topSubscribe(btn, user_id, top_id){
     let response = await fetch(`/subscribe/topic/${user_id}/${top_id}`);
     let text = await response.json();
-    btn.innerHTML = text['text'];
+    btn.parentNode.innerHTML = text['text'];
 }
 
 

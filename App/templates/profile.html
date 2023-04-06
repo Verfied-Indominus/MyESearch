@@ -161,15 +161,12 @@
 
                     {% if current_user.id != user.id %}
                         <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a onclick="reSubscribe(this, {{current_user.id}}, {{user.id}});" class="uk-icon-button uk-background-secondary" uk-icon="{% if ns.following %}check{% else %}plus{% endif %}"></a><span class="uk-width-auto uk-transition-fade">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</span></div></div>
-                            <!-- <a onclick="reSubscribe(this, {{current_user.id}}, {{user.id}});" class="uk-button uk-button-primary uk-margin-auto-horizontal uk-light uk-border-pill">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</a>           -->
                     {% endif %}
                 {% else %}
-                    <div class="uk-margin-small-top uk-text-center">
-                        <a href="/login" class="uk-button uk-button-primary uk-margin-auto-horizontal uk-light uk-border-pill">Subscribe</a>          
-                    </div>
+                <div style="position: absolute; top: 250px; right: 70px;"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a href="/login" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span></div></div>
                 {% endif %}
                 <div class="uk-padding all-white-text">
-                    <h2 class="uk-margin-small-top">{% if re %} {{user.title}} {% endif %} {{user.first_name}} {{ user.last_name }}</h2>
+                    <h2 class="uk-margin-small-top">{% if re %} {{user.title}} {% endif %} {{user.first_name}} {{user.middle_name}} {{ user.last_name }}</h2>
                     <div class="uk-text-default">
                         <div> {% if re %} {{user.position}} {% else %} Student {% endif %} at {{user.institution}} </div>
                         <h3>About</h3>
