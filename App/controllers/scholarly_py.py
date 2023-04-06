@@ -105,45 +105,45 @@ def get_shortened_name(name):
 def search_pub_title(pub):
     set_new_proxy()
     found = False
-    while True:
-        try:
-            pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
-            break
-        except Exception:
-            set_new_proxy()
-            print('search title and author')
-    while True:
-        try:
-            pub1 = next(pub1)
-            break
-        except Exception as e:
-            set_new_proxy()
-            print('next pub')
-            if isinstance(e, StopIteration): 
-                found = False
-                break
-    if not found:
-        while True:
-            try:
-                pub1 = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
-                break
-            except Exception:
-                set_new_proxy() 
-                print('search title and author again') 
-        while True:
-            try:
-                pub1 = next(pub1)
-                found = True
-                break
-            except Exception as e:
-                set_new_proxy()
-                print('next pub')
-                i += 1
-                if i > 25:
-                    break
-                if isinstance(e, StopIteration):
-                    found = False
-                    break
+    # while True:
+    #     try:
+    #         pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
+    #         break
+    #     except Exception:
+    #         set_new_proxy()
+    #         print('search title and author')
+    # while True:
+    #     try:
+    #         pub1 = next(pub1)
+    #         break
+    #     except Exception as e:
+    #         set_new_proxy()
+    #         print('next pub')
+    #         if isinstance(e, StopIteration): 
+    #             found = False
+    #             break
+    # if not found:
+    #     while True:
+    #         try:
+    #             pub1 = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
+    #             break
+    #         except Exception:
+    #             set_new_proxy() 
+    #             print('search title and author again') 
+    #     while True:
+    #         try:
+    #             pub1 = next(pub1)
+    #             found = True
+    #             break
+    #         except Exception as e:
+    #             set_new_proxy()
+    #             print('next pub')
+    #             i += 1
+    #             if i > 25:
+    #                 break
+    #             if isinstance(e, StopIteration):
+    #                 found = False
+    #                 break
     if not found:
         while True:
             try:
