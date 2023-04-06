@@ -1,10 +1,9 @@
 from App.models import Publication, PublicationTag
 from App.database import db
-from datetime import date
+from sqlalchemy.exc import IntegrityError
 
 def create_pub(data): #let data be a dictionary
     try:
-        print(data)
         new_pub = Publication(
             title= data["title"],
             abstract= data["abstract"],
@@ -16,11 +15,9 @@ def create_pub(data): #let data be a dictionary
         )
         db.session.add(new_pub)
         db.session.commit()
-        print("Pub Added to DB")
         return new_pub
     except:
         db.session.rollback()
-        print("Error")
         return None
 
 def add_coauthors(publication, coauthors):

@@ -21,7 +21,6 @@ api_views = Blueprint('api_views', __name__, template_folder='../templates')
 def load_publications():
     publications = get_all_publications_json() 
     publications.sort(key=lambda pub: pub['publication_date'], reverse=True)
-    print(publications)
     return publications
 
 @api_views.route('/load/researchers', methods=['GET'])
@@ -136,7 +135,7 @@ def load_profile_pubs(id):
 @api_views.route('/update', methods=['GET'])
 def scholarly_update():
     users = get_all_researchers()
-    for n in range(len(users), 0, -1):
+    for n in range(len(users), 0, -1): 
         user = users[n-1]
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
@@ -200,7 +199,8 @@ def scholarly_update():
 
                         add_coauthors(p, authors)
                         print(add_pub_record(user.id, p.id))
-                        print(p.id)
+                        print('pub id', p.id)
+                        print(p.toDict())
 
     return 'Created'
 

@@ -53,7 +53,7 @@ def delete_notification(id):
 #    10 - Researcher rejected access request
 #    11 - Researcher has been verified
 
-def notify_subscribers_author(r_id,pub_id):
+def notify_subscribers_author(r_id, pub_id):
     researcher = Researcher.query.filter_by(id = r_id).first()
     subs = researcher.sub_records.all()
     pub = Publication.query.filter_by(id = pub_id).first()
