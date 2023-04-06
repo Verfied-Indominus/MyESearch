@@ -268,7 +268,7 @@
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
                               <div class="uk-width-auto ">
                                 <div class="uk-flex">
-                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -285,7 +285,7 @@
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
                               <div class="uk-width-auto ">
                                 <div class="uk-flex">
-                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom">{{title['name']}} started following you.
                                     <button onclick="followback({{current_user.id}}, {{title['researcher_id']}}); this.innerHTML='Following'" class="uk-button uk-margin-small-top uk-button-small uk-button-primary uk-border-pill">Follow Back</button> 
@@ -304,7 +304,7 @@
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
                               <div class="uk-width-auto ">
                                 <div class="uk-flex">
-                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -382,7 +382,7 @@
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
                               <div class="uk-width-auto ">
                                 <div class="uk-flex">
-                                  <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                  <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -487,7 +487,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{title['pub_type']}}.png" alt="Cover">
                                       <div> 
                                         <p class="uk-margin-small-bottom">
                                         <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
@@ -505,7 +505,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -522,7 +522,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -539,7 +539,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
@@ -617,7 +617,7 @@
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
                                   <div class="uk-width-auto ">
                                     <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
                                         <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
