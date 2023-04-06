@@ -21,7 +21,6 @@
                     {% endfor %}
 
                     <div class="uk-margin-medium-left"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a onclick="topSubscribe(this, {{current_user.id}}, {{topic_.id}});" class="uk-icon-button uk-background-secondary" uk-icon="{% if ns.following %}check{% else %}plus{% endif %}"></a><span class="uk-width-auto uk-transition-fade">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</span></div></div>
-                    <!-- <a onclick="topSubscribe(this, {{current_user.id}}, {{topic_.id}})" class="uk-margin-medium-left uk-button uk-button-danger uk-border-pill">{% if ns.following %} Subscribed {% else %} Subscribe {% endif %}</a> -->
                 {% else %}
                     <div class="uk-margin-medium-left"><div class="uk-inline uk-transition-toggle uk-width-auto uk-text-right" tabindex="0"><a href="/login" class="uk-icon-button uk-background-secondary" uk-icon="plus"></a><span class="uk-width-auto uk-transition-fade"> Subscribe</span></div></div>
                 {% endif %}

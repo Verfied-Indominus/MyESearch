@@ -104,17 +104,13 @@ def get_shortened_name(name):
 # to get citations
 def search_pub_title(pub):
     set_new_proxy()
-    found = True
-    i=1
+    found = False
     while True:
         try:
-            pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
+            pub1 = scholarly.search_pubs(query='allintitle:"{}" author:"{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
             break
         except Exception:
             set_new_proxy()
-            i += 1
-            if i > 20:
-                break
             print('search title and author')
     while True:
         try:
@@ -123,13 +119,13 @@ def search_pub_title(pub):
         except Exception as e:
             set_new_proxy()
             print('next pub')
-            if isinstance(e, StopIteration):
+            if isinstance(e, StopIteration): 
                 found = False
                 break
     if not found:
         while True:
             try:
-                pub1 = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records.first().researcher.first_name, pub.pub_records.first().researcher.last_name), citations=False)
+                pub1 = scholarly.search_pubs(query='allintitle:"{}" author: "{} {}"'.format(pub.title, pub.pub_records[0].researcher.first_name, pub.pub_records[0].researcher.last_name), citations=False)
                 break
             except Exception:
                 set_new_proxy() 
@@ -142,6 +138,9 @@ def search_pub_title(pub):
             except Exception as e:
                 set_new_proxy()
                 print('next pub')
+                i += 1
+                if i > 25:
+                    break
                 if isinstance(e, StopIteration):
                     found = False
                     break
@@ -156,12 +155,12 @@ def search_pub_title(pub):
         while True:
             try:
                 pub1 = next(pub1)
-                for auth in pub1['bib']['author']:
-                    print(f"{pub.pub_records.first().researcher.last_name}")
+                for auth in pub1['bib']['author']: 
+                    print(f"{pub.pub_records[0].researcher.last_name}")
                     print(auth)
-                    print(f"{pub.pub_records.first().researcher.last_name}" in auth)
+                    print(f"{pub.pub_records[0].researcher.last_name}" in auth)
                     print('\n')
-                    if f"{pub.pub_records.first().researcher.last_name}" in auth:
+                    if f"{pub.pub_records[0].researcher.last_name}" in auth:
                         found = True
                 break
             except Exception as e:

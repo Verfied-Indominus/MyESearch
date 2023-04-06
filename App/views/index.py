@@ -196,9 +196,7 @@ def publication_page(id):
 @index_views.route('/topic/<id>', methods=['GET'])
 def topic_page(id):
     topic_ = get_topic_id(id) 
-    print('got topic')
     pubs = get_all_publications()
-    print('after pubs')
 
     if not topic_:
         flash('Topic does not exist or is inaccessible')
@@ -206,18 +204,12 @@ def topic_page(id):
     
     topic_pubs = []
     topic_researchers = []
-    print('before loopss')
     for tag in topic_.pub_tags.all():
-        print('in first loop')
         topic_pubs.append(tag.publication.toDict())
-        print('pub dictionary')
         for rec in tag.publication.pub_records:
-            print('pub 2nd loop recs')
             re = rec.researcher.toDict()
-            print('re dict\n\n')
             if re not in topic_researchers:
                 topic_researchers.append(re)
-        print('finished loop 2')
 
     return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs, topic_researchers=topic_researchers)
 
