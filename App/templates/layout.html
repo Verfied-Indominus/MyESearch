@@ -233,7 +233,7 @@
                                   <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div>
                                     <p class="uk-margin-small-bottom">{{title['name']}} needs to be Verified as a UWI Researcher.</p>
-                                    <button onclick="verify_author({{current_user.id}}, {{title['researcher_id']}});" class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
+                                    <button onclick="verify_author({{current_user.id}}, {{title['researcher_id']}}, '{{title['name']}}'); this.nextSibling.style.display='none'; this.style.display='none';" class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
                                     <button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="uk-button uk-button-small uk-button-danger uk-border-pill">Dismiss</button>
                                     <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
                                   </div>

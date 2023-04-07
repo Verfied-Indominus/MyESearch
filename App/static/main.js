@@ -1246,7 +1246,13 @@ function endLoad(){
     }, 200);
 }
 
-async function verify_author(verifier_id, auth_id){
+async function verify_author(verifier_id, auth_id, name){
+    UIkit.notification({
+        message: `You have verified ${name}`,
+        status: 'primary',
+        pos: 'top-center',
+        timeout: 7000
+    });
     await fetch(`/verify/${verifier_id}/${auth_id}`);
 } 
 
