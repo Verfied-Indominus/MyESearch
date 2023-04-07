@@ -6,6 +6,9 @@ from App.models import ResearcherTag
 def get_all_researchers():
     return Researcher.query.all()
 
+def get_all_researchers_verified():
+    return Researcher.query.filter_by(verified=True).all()
+
 def add_interests_to_researcher(topics, re_id):
     for topic in topics:
         tag = ResearcherTag(re_id, topic.id)
@@ -39,6 +42,7 @@ def get_subscribed_researchers(user):
 
 def set_verified(re):
     re.verify()
+    db.commit()
 
 def delete_researcher(id):
     researcher = get_researcher(id)

@@ -873,6 +873,10 @@ def test():
     #     print('\n', pub.pub_type)
     #     print(pub.bibtex, '\n')  
 
+    for re in get_all_researchers():
+        set_verified(re)
+        print(re.verified)
+
 
     print('\n\nDONE\n\n')
 

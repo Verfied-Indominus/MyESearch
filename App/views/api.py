@@ -10,7 +10,7 @@ from App.controllers.pdf import decrypt_pdf_from_url
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title, set_pub_bibtex, set_pub_type
 from App.controllers.pubrecord import add_pub_record
 from App.controllers.recents import add_publication_to_recents, get_recents_from_user
-from App.controllers.researcher import add_search, add_view, get_all_researchers, get_researcher, reSubscribe, reUnsubscribe
+from App.controllers.researcher import add_search, add_view, get_all_researchers, get_all_researchers_verified, get_researcher, reSubscribe, reUnsubscribe
 from App.controllers.scholarly_py import fill_pub, get_pubs, search_pub_title
 from App.controllers.suggestions import get_publication_suggestions
 from App.controllers.topic import create_topic, get_all_topics, get_topic, get_topic_by_name, set_topic_parent, topSubscribe, topUnsubscribe
@@ -27,7 +27,7 @@ def load_publications():
 
 @api_views.route('/load/researchers', methods=['GET'])
 def load_researchers():
-    researchers = get_all_researchers()
+    researchers = get_all_researchers_verified()
     shuffle(researchers)
     return [re.toDict() for re in researchers]
 
