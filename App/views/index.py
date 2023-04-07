@@ -888,7 +888,6 @@ def test():
     #     print('\n', pub.pub_type)
     #     print(pub.bibtex, '\n')  
 
-    reject(5, 1)
 
     print('\n\nDONE\n\n')
 
