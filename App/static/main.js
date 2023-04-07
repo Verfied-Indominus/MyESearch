@@ -1247,7 +1247,7 @@ function endLoad(){
 }
 
 async function verify_author(verifier_id, auth_id){
-    await fetch(`/verify/notification/${verifier_id}/${auth_id}`);
+    await fetch(`/verify/${verifier_id}/${auth_id}`);
 } 
 
 async function set_read(notif_rec_ids){

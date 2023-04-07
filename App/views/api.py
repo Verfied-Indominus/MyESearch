@@ -297,38 +297,25 @@ def setread(notif_rec_id):
 
 @api_views.route("/verify/<auth_id>/<new_auth_id>", methods=['GET'])
 def verify(auth_id, new_auth_id):
-    res = verified(auth_id)
+    res = verified(new_auth_id)
+    print(res)
     if res:
         res = verified_notif(new_auth_id, auth_id)
         if res:
-            return 200
+            return '200'
         else:
-            return 300
-    return 300
-
-@api_views.route("/verify/notification/<auth_id>/<new_auth_id>", methods=['GET'])
-def verify_notif(auth_id, new_auth_id):
-    auth = get_researcher(new_auth_id)
-    verifier = get_researcher(auth_id)
-    verify_author_notif(auth, verifier)
-    res = verified(auth_id)
-    if res:
-        res = verified_notif(new_auth_id, auth_id)
-        if res:
-            return 200
-        else:
-            return 300
-    return 300
+            return '300'
+    return '300'
 
 @api_views.route('/accept/<s_id>/<pub_id>', methods=['GET'])
 def accept_request(s_id, pub_id):
-        print(accept(s_id, pub_id))
-        return 'Accepted'
+    print(accept(s_id, pub_id))
+    return 'Accepted'
 
 @api_views.route('/reject/<s_id>/<pub_id>', methods=['GET'])
 def reject_request(s_id, pub_id):
-        reject(s_id, pub_id)
-        return 'Rejected'
+    reject(s_id, pub_id)
+    return 'Rejected'
 
 @api_views.route('/subscribe/researcher/<sub_id>/<re_id>', methods=['GET'])
 def re_follow(sub_id, re_id):
@@ -354,6 +341,5 @@ def follow_back(re_id, sub_id):
 @api_views.route('/getPDF/<pub_id>', methods=['GET'])
 def get_encrypted_pdf(pub_id):
     pub = get_pub_byid(pub_id)
-    delete_pub() 
     filename = decrypt_pdf_from_url(pub.encryptedPDF)
     return send_file(filename, "application/pdf", True) 
