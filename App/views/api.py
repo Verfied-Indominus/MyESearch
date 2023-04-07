@@ -80,7 +80,12 @@ def add_download(id):
 @api_views.route('/publication/addcitation/<id>', methods=['GET'])
 def add_citation(id):
     pub = get_pub_byid(id)
+
+    if not pub.bibtex:
+        return {'citation': "No Citation information was specified"}
+
     add_citation_to_pub(pub)
+
     citation = []
     request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
     citation.append(prompt(request)["choices"][0]["text"])
@@ -96,6 +101,10 @@ def add_citation(id):
 @api_views.route('/publication/getcitation/<id>', methods=['GET'])
 def get_citation(id):
     pub = get_pub_byid(id)
+
+    if not pub.bibtex:
+        return {'citation': "No Citation information was specified"}
+
     citation = []
     request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
     citation.append(prompt(request)["choices"][0]["text"])
@@ -107,6 +116,7 @@ def get_citation(id):
     citation.append(prompt(request)["choices"][0]["text"])
 
     return {'citation': citation}
+    
 
 @api_views.route('/publication/addsearch/<id>', methods=['GET'])
 def add_search_pub(id):

@@ -691,28 +691,48 @@ async function addCitation(id){
         let response = await fetch(`/publication/addcitation/${id}`);
         let citation = await response.json();
         let cite_body = document.getElementById('citation-modal-body');
-        let html = `
-            <h4 class="uk-modal-title">Chicago</h4>
-            <div>${citation['citation'][0]}</div>
-            <h4 class="uk-modal-title">APA</h4>
-            <div>${citation['citation'][1]}</div>
-            <h4 class="uk-modal-title">MLA</h4>
-            <div>${citation['citation'][2]}</div>
-        `;
+        let html="";
+        if (Array.isArray(citation['citation'])){
+            html = `
+                <h4 class="uk-modal-title">Chicago</h4>
+                <div>${citation['citation'][0]}</div>
+                <h4 class="uk-modal-title">APA</h4>
+                <div>${citation['citation'][1]}</div>
+                <h4 class="uk-modal-title">MLA</h4>
+                <div>${citation['citation'][2]}</div>
+            `;
+        }
+        else{
+            html = `
+                <div class="uk-text-center">
+                  <h4>${citation['citation']}</h4>
+                </div>
+            `;
+        }
         cite_body.innerHTML = html;
     }
     else {
         let response = await fetch(`/publication/getcitation/${id}`);
         let citation = await response.json();
         let cite_body = document.getElementById('citation-modal-body');
-        let html = `
-            <h4 class="uk-modal-title">Chicago</h4>
-            <div>${citation['citation'][0]}</div>
-            <h4 class="uk-modal-title">APA</h4>
-            <div>${citation['citation'][1]}</div>
-            <h4 class="uk-modal-title">MLA</h4>
-            <div>${citation['citation'][2]}</div>
-        `;
+        let html="";
+        if (Array.isArray(citation['citation'])){
+            html = `
+                <h4 class="uk-modal-title">Chicago</h4>
+                <div>${citation['citation'][0]}</div>
+                <h4 class="uk-modal-title">APA</h4>
+                <div>${citation['citation'][1]}</div>
+                <h4 class="uk-modal-title">MLA</h4>
+                <div>${citation['citation'][2]}</div>
+            `;
+        }
+        else{
+            html = `
+                <div class="uk-text-center">
+                  <h4>${citation['citation']}</h4>
+                </div>
+            `;
+        }
         cite_body.innerHTML = html;
     }
 }
