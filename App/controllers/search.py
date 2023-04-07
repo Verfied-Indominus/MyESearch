@@ -99,6 +99,10 @@ def parse_search(search_terms):
             if result:
                 author_publications.extend([pub for pub in result if pub not in publications])
 
+
+    publications.sort(key=lambda pub: pub.publication_date, reverse=True)
+    author_publications.sort(key=lambda pub: pub.publication_date, reverse=True)
+    topic_publications.sort(key=lambda pub: pub.publication_date, reverse=True)
     return authors, author_publications, topic_authors, publications, topic_publications, topics 
 
     # for word in words:

@@ -212,6 +212,7 @@ def topic_page(id):
             if re not in topic_researchers:
                 topic_researchers.append(re)
 
+    topic_pubs.sort(key=lambda pub: pub['publication_date'], reverse=True)
     return render_template('results.html', topic_=topic_, topic_page=True, topic_pubs=topic_pubs, topic_researchers=topic_researchers)
 
 @index_views.route('/login', methods=['GET', 'POST'])
