@@ -2,28 +2,25 @@ import fitz
 import os
 import requests
 import random
-from Crypto.Cipher import AES
 from .open_ai import prompt
 from .pyre_base import uploadPDF
+from cryptography.fernet import Fernet
 
-key = b'/xeej/xb8/x0c/x97/xe9j/xba,W/xcb'
-IV = os.urandom(16)
+filename = "A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
+# file = open(filename, 'rb')
 
-filename = "App/uploads/A_Deep_Learning_Approach_for_Efficient_Palm_Reading.pdf"
-file = open(filename, 'rb')
-
-def create_doc_image(file_name):
-    try:
-        new_file = file_name.split(".")[0]
-        doc = fitz.open(file_name)
-        first_page = doc[0]
-        image = first_page.get_pixmap()
-        image.save(f"images/{new_file}.png")
-        #can upload file here one time or do it in a separate function
-        #if added swap return value to be the url returned from upload function
-        return True
-    except:
-        return False #change to None if file upload is included
+# def create_doc_image(file_name):
+#     try:
+#         new_file = file_name.split(".")[0]
+#         doc = fitz.open(file_name)
+#         first_page = doc[0]
+#         image = first_page.get_pixmap()
+#         image.save(f"images/{new_file}.png")
+#         #can upload file here one time or do it in a separate function
+#         #if added swap return value to be the url returned from upload function
+#         return True
+#     except:
+#         return False #change to None if file upload is included
 
 def get_information(file_name):
     
@@ -61,33 +58,39 @@ def get_information(file_name):
 
     return keywords, abstract, title
 
-def encrypt_pdf(file, id):
-    data = file.read()
-    encryptor = AES.new(key=key, mode=AES.MODE_CBC, IV=IV)
-    while len(data) % 16 != 0:
-        data += b'\n'
-    cipher = encryptor.encrypt(data)
-    with open(f"App/uploads/{id}.pdf", "wb") as f:
-        f.write(cipher)
-        f.close()
+def encrypt_pdf(filename, id):
+
+    with open('mykey.key', 'rb') as mykey:
+        key = mykey.read()
+
+
+    f = Fernet(key)
+
+    with open(filename, 'rb') as original_file:
+        original = original_file.read()
+
+    encrypted = f.encrypt(original)
+
+    with open (f"App/uploads/{id}.pdf", 'wb') as encrypted_file:
+        encrypted_file.write(encrypted)
+
     url = uploadPDF(id, f"{id}.pdf")
-    os.remove(f"App/uploads/{id}.pdf")
     return url
 
 
 def decrypt_pdf_from_url(url):
     response = requests.get(url)
-    content = response.content
-    # while len(content) % 16 != 0:
-    #     content += b'\n' 
-    decryptor = AES.new(key, AES.MODE_CBC, IV=IV)
-    plainText = decryptor.decrypt(content)
-    i = random.randint(0, 100)
-    with open(f"App/uploads/{i}.pdf", "wb") as f:
-        f.write(plainText)
-        f.close()
-    return f"uploads/{i}.pdf" 
+    encrypted = response.content
 
-# url = encrypt_pdf(file, 1)
-# print(url)
-# decrypt_pdf_from_url(url) 
+    with open('mykey.key', 'rb') as mykey:
+        key = mykey.read()
+
+    f = Fernet(key)
+
+    decrypted = f.decrypt(encrypted)
+
+    i = random.randint(0, 100)
+    with open(f"App/uploads/{i}.pdf", 'wb') as decrypted_file:
+        decrypted_file.write(decrypted)
+    
+    return f"uploads/{i}.pdf" 

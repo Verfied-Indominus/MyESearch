@@ -354,9 +354,5 @@ def follow_back(re_id, sub_id):
 @api_views.route('/getPDF/<pub_id>', methods=['GET'])
 def get_encrypted_pdf(pub_id):
     pub = get_pub_byid(pub_id)
-    url = 'https://firebasestorage.googleapis.com/v0/b/my-e-search.appspot.com/o/pdfs%2F1?alt=media'
-    # filename = decrypt_pdf_from_url(pub.encryptedPDF)
-    filename = decrypt_pdf_from_url(url)
-    print(filename)  
-    # return send_from_directory('App/uploads/', filename, as_attachment=True)
+    filename = decrypt_pdf_from_url(pub.encryptedPDF)
     return send_file(filename, "application/pdf", True) 
