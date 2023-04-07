@@ -880,3 +880,9 @@ body{
 .all-black-text > * > *{
   color: black;
 }
+
+.uk-notification.uk-notification-top-center > *{
+  background-color: #f4b630f9;
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+}
