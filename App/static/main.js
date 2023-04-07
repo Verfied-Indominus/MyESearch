@@ -1272,8 +1272,10 @@ async function followback(researcher_id, subscriber_id){
 async function clear_notifications(user_id){
     let notifs_body = document.getElementById('all-notifs-body');
     notifs_body.innerHTML = `
-        <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
-        <h4 class="uk-margin-remove-top">No Notifications Present</h4>
+        <div class="uk-margin-auto uk-text-center">
+            <img class="uk-width-2-3" src="/static/images/noNotifs2.jpg" alt="No Notifications Present">
+            <h4 class="uk-margin-remove-top">No Notifications Present</h4>
+        </div>
     `;
     await fetch(`/clear/notifications/${user_id}`);
 }
