@@ -224,7 +224,7 @@ def reject(s_id,pub_id):
 
 def verified_notif(auth_id, res_id): 
     auth = Researcher.query.filter_by(id = auth_id).first()
-    re = User.query.filter_by(id = res_id).first()
+    re = Researcher.query.filter_by(id = res_id).first()
     title = f"Verified"
     message = f"You have been verified by {re.first_name} {re.last_name}."
     notif_title = json.dumps({"researcher_id": f"{re.id}", "name": f"{re.title} {re.first_name} {re.last_name}", "image_url": f"{re.image_url}"})
