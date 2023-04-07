@@ -201,7 +201,7 @@ def topic_page(id):
 
     if not topic_:
         flash('Topic does not exist or is inaccessible')
-        return redirect(url_for('.index_page')) 
+        return redirect(url_for('.index_page'))
     
     topic_pubs = []
     topic_researchers = []
@@ -685,142 +685,142 @@ def mails():
 def test():
 
     
-    builder = (
-        ResearcherBuilder()
-        .title('Prof.')
-        .first_name('Patrick')
-        .last_name('Hosein')
-        .email('patrick.hosein@sta.uwi.edu')
-        .password('patrickpass')
-        .institution('The University of The West Indies, St. Augustine')
-        .faculty('Science & Technology')
-        .department('Computing & Information Technology')
-        .position('Professor')
-        .start_year('2010')
-        .qualifications('PhD (MIT)')
-        .skills('Wireless Networks')
-    )
+    # builder = (
+    #     ResearcherBuilder()
+    #     .title('Prof.')
+    #     .first_name('Patrick')
+    #     .last_name('Hosein')
+    #     .email('patrick.hosein@sta.uwi.edu')
+    #     .password('patrickpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .position('Professor')
+    #     .start_year('2010')
+    #     .qualifications('PhD (MIT)')
+    #     .skills('Wireless Networks')
+    # )
 
-    builder.build()
+    # builder.build()
 
-    topic = get_topic_by_name('Artificial Intelligence')
-    if not topic:
-        topic = create_topic('Artificial Intelligence')
-    add_interests_to_researcher([topic], builder.researcher.id)
+    # topic = get_topic_by_name('Artificial Intelligence')
+    # if not topic:
+    #     topic = create_topic('Artificial Intelligence')
+    # add_interests_to_researcher([topic], builder.researcher.id)
 
-    create_library(builder.researcher.id)
-    create_recents(builder.researcher.id)
+    # create_library(builder.researcher.id)
+    # create_recents(builder.researcher.id)
 
-    builder = (
-        ResearcherBuilder()
-        .title('Dr.')
-        .first_name('Phaedra')
-        .last_name('Mohammed')
-        .email('Phaedra.Mohammed@sta.uwi.edu')
-        .password('phaedrapass')
-        .institution('The University of The West Indies, St. Augustine')
-        .faculty('Science & Technology')
-        .department('Computing & Information Technology')
-        .position('Full-Time Lecturer')
-        .start_year('2017')
-        .qualifications('Ph.D. Computer Science (UWI)')
-        .certifications('Raspberry Pi Certified Educator')
-        .skills('Computational Models of Culture, Intelligent Tutoring Systems, Expert Systems, Knowledge Representation, Ontological Modelling')
-        .build()
-        .image_url(uploadFile(builder.researcher.id, 'phaedra.jpg'))
-        .build()
-    )
+    # builder = (
+    #     ResearcherBuilder()
+    #     .title('Dr.')
+    #     .first_name('Phaedra')
+    #     .last_name('Mohammed')
+    #     .email('Phaedra.Mohammed@sta.uwi.edu')
+    #     .password('phaedrapass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .position('Full-Time Lecturer')
+    #     .start_year('2017')
+    #     .qualifications('Ph.D. Computer Science (UWI)')
+    #     .certifications('Raspberry Pi Certified Educator')
+    #     .skills('Computational Models of Culture, Intelligent Tutoring Systems, Expert Systems, Knowledge Representation, Ontological Modelling')
+    #     .build()
+    #     .image_url(uploadFile(builder.researcher.id, 'phaedra.jpg'))
+    #     .build()
+    # )
 
-    interests = ['Artificial Intelligence in Education', 'Learning Engineering', 'Semantic Web Technologies', 'Natural Language Processing', 'Intelligent Learning Environments']
-    topics = []
-    for name in interests:
-        topic = get_topic_by_name(name)
-        if not topic:
-            topic = create_topic(name)
-            for top in get_all_topics():
-                if top.name in topic.name:
-                    topic.set_parent_id(top.id)
-                elif topic.name in top.name:
-                    top.set_parent_id(topic.id)
-        topics.append(topic)
-    add_interests_to_researcher(topics, builder.researcher.id)
+    # interests = ['Artificial Intelligence in Education', 'Learning Engineering', 'Semantic Web Technologies', 'Natural Language Processing', 'Intelligent Learning Environments']
+    # topics = []
+    # for name in interests:
+    #     topic = get_topic_by_name(name)
+    #     if not topic:
+    #         topic = create_topic(name)
+    #         for top in get_all_topics():
+    #             if top.name in topic.name:
+    #                 topic.set_parent_id(top.id)
+    #             elif topic.name in top.name:
+    #                 top.set_parent_id(topic.id)
+    #     topics.append(topic)
+    # add_interests_to_researcher(topics, builder.researcher.id)
 
-    create_library(builder.researcher.id)
-    create_recents(builder.researcher.id)
+    # create_library(builder.researcher.id)
+    # create_recents(builder.researcher.id)
 
-    builder = (
-        ResearcherBuilder()
-        .title('Mr.')
-        .first_name('Amit')
-        .middle_name('Neil')
-        .last_name('Ramkissoon')
-        .email('amit.ramkissoon@my.uwi.edu')
-        .password('amitpass')
-        .institution('The University of The West Indies, St. Augustine')
-        .faculty('Science & Technology')
-        .department('Computing & Information Technology')
-        .position('Teaching Assistant')
-        .start_year('2020')
-        .qualifications('B.Sc. Computer Science (UWI)\nM.Sc. Computer Science (UWI)\nPh.D. Computer Science (UWI) - in progress')
-        .skills('Fake News Detection\nSocial Computing\nInfrastructureless Social Networks')
-        .introduction('Amit Neil Ramkissoon is a PhD Computer Science Candidate at the Department of Computing & Information Technology at The University of the West Indies at St Augustine. He did both his Bachelors Degree and Masters Degree at The University of the West Indies at St Augustine. His research interest entails Artificial Intelligence, Computational Social Systems, Data Mining, Distributed Computing, Fake News Detection and Mobile Ad Hoc Networks.')
-        .website_url('https://sites.google.com/site/amitneilramkissoon')
-        .build()
-        .image_url(uploadFile(builder.researcher.id, 'amit.jpg'))
-        .build()
-    )
+    # builder = (
+    #     ResearcherBuilder()
+    #     .title('Mr.')
+    #     .first_name('Amit')
+    #     .middle_name('Neil')
+    #     .last_name('Ramkissoon')
+    #     .email('amit.ramkissoon@my.uwi.edu')
+    #     .password('amitpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .position('Teaching Assistant')
+    #     .start_year('2020')
+    #     .qualifications('B.Sc. Computer Science (UWI)\nM.Sc. Computer Science (UWI)\nPh.D. Computer Science (UWI) - in progress')
+    #     .skills('Fake News Detection\nSocial Computing\nInfrastructureless Social Networks')
+    #     .introduction('Amit Neil Ramkissoon is a PhD Computer Science Candidate at the Department of Computing & Information Technology at The University of the West Indies at St Augustine. He did both his Bachelors Degree and Masters Degree at The University of the West Indies at St Augustine. His research interest entails Artificial Intelligence, Computational Social Systems, Data Mining, Distributed Computing, Fake News Detection and Mobile Ad Hoc Networks.')
+    #     .website_url('https://sites.google.com/site/amitneilramkissoon')
+    #     .build()
+    #     .image_url(uploadFile(builder.researcher.id, 'amit.jpg'))
+    #     .build()
+    # )
 
-    interests = ['Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection']
-    topics = []
-    for name in interests:
-        topic = get_topic_by_name(name)
-        if not topic:
-            topic = create_topic(name)
-            for top in get_all_topics():
-                if top.name in topic.name:
-                    topic.set_parent_id(top.id)
-                elif topic.name in top.name:
-                    top.set_parent_id(topic.id)
-        topics.append(topic)
-    add_interests_to_researcher(topics, builder.researcher.id)
+    # interests = ['Data Mining', 'Distributed Computing', 'Artificial Intelligence', 'Computational Social Systems', 'Fake News Detection']
+    # topics = []
+    # for name in interests:
+    #     topic = get_topic_by_name(name)
+    #     if not topic:
+    #         topic = create_topic(name)
+    #         for top in get_all_topics():
+    #             if top.name in topic.name:
+    #                 topic.set_parent_id(top.id)
+    #             elif topic.name in top.name:
+    #                 top.set_parent_id(topic.id)
+    #     topics.append(topic)
+    # add_interests_to_researcher(topics, builder.researcher.id)
 
-    create_library(builder.researcher.id)
-    create_recents(builder.researcher.id)
+    # create_library(builder.researcher.id)
+    # create_recents(builder.researcher.id)
 
-    builder = (
-        ResearcherBuilder()
-        .title('Dr.')
-        .first_name('Vijayanandh')
-        .last_name('Rajamanickam')
-        .email('Vijayanandh.Rajamanickam@sta.uwi.edu')
-        .password('vijayanandhpass')
-        .institution('The University of The West Indies, St. Augustine')
-        .faculty('Science & Technology')
-        .department('Computing & Information Technology')
-        .position('Full-Time Lecturer')
-        .start_year('2021')
-        .qualifications('B.Sc. Mathematics\nM.C.A Computer Applications\nM.Phil Computer Science\nPh.D Computer Science')
-        .skills('Image Processing')
-    )
+    # builder = (
+    #     ResearcherBuilder()
+    #     .title('Dr.')
+    #     .first_name('Vijayanandh')
+    #     .last_name('Rajamanickam')
+    #     .email('Vijayanandh.Rajamanickam@sta.uwi.edu')
+    #     .password('vijayanandhpass')
+    #     .institution('The University of The West Indies, St. Augustine')
+    #     .faculty('Science & Technology')
+    #     .department('Computing & Information Technology')
+    #     .position('Full-Time Lecturer')
+    #     .start_year('2021')
+    #     .qualifications('B.Sc. Mathematics\nM.C.A Computer Applications\nM.Phil Computer Science\nPh.D Computer Science')
+    #     .skills('Image Processing')
+    # )
 
-    builder.build()
+    # builder.build()
 
-    interests = ['Image Processing', 'Image Segmenation', 'Image and Video Security']
-    topics = []
-    for name in interests:
-        topic = get_topic_by_name(name)
-        if not topic:
-            topic = create_topic(name)
-            for top in get_all_topics():
-                if top.name in topic.name:
-                    topic.set_parent_id(top.id)
-                elif topic.name in top.name:
-                    top.set_parent_id(topic.id)
-        topics.append(topic)
-    add_interests_to_researcher(topics, builder.researcher.id)
+    # interests = ['Image Processing', 'Image Segmenation', 'Image and Video Security']
+    # topics = []
+    # for name in interests:
+    #     topic = get_topic_by_name(name)
+    #     if not topic:
+    #         topic = create_topic(name)
+    #         for top in get_all_topics():
+    #             if top.name in topic.name:
+    #                 topic.set_parent_id(top.id)
+    #             elif topic.name in top.name:
+    #                 top.set_parent_id(topic.id)
+    #     topics.append(topic)
+    # add_interests_to_researcher(topics, builder.researcher.id)
 
-    create_library(builder.researcher.id)
-    create_recents(builder.researcher.id)
+    # create_library(builder.researcher.id)
+    # create_recents(builder.researcher.id)
     
     # data = {}
     # data['title'] = 'Veracity: A Fake News Detection Architecture for MANET Messaging'

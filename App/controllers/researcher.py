@@ -37,6 +37,9 @@ def get_subscribed_researchers(user):
         researchers.append(rec.subject)
     return researchers
 
+def set_verified(re):
+    re.verify()
+
 def delete_researcher(id):
     researcher = get_researcher(id)
     if not researcher:
