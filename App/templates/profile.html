@@ -7,7 +7,7 @@
 {% block content %}
 <script type="text/javascript" src="/static/main.js"></script>
 <script>      
-    {% if re %}
+    {% if re and user.verified %}
         this.document.body.style.overflowY = 'hidden';
         function pageLoad(){null}
         fetch('/load/profilepubs/{{user.id}}').then((response) => response.json()).then((pubs) => {
@@ -25,7 +25,6 @@
 </script>
 
 <div class="uk-padding uk-inline">
-    
     <div class="uk-grid uk-margin-remove" uk-grid uk-height-viewport="offset-top: true">
         <div class="uk-card uk-background-primary uk-width-1-3 uk-padding-remove uk-flex uk-flex-center" style="color: white">
             <div class="uk-margin-medium-bottom uk-inline uk-width-expand">
@@ -789,14 +788,13 @@
                     </div>
         </div>
     </div>
-
-    <div class="uk-overlay uk-overlay-primary uk-position-cover"></div>
-    <h4 class="uk-overlay uk-text-center uk-overlay-default uk-background-default uk-position-top-center uk-margin-large-top uk-flex uk-flex-column">
-        You have not yet been verified. Until then, your account is on hold.
-        <img class="uk-width-1-3 uk-margin-auto" src="/static/images/verify.png" alt="Verification">
-    </h4>
+    {% if not user.verified and current_user.id == user.id %}
+        <div class="uk-overlay uk-overlay-primary uk-position-cover"></div>
+        <h4 class="uk-overlay uk-text-center uk-overlay-default uk-background-default uk-position-top-center uk-margin-large-top uk-flex uk-flex-column">
+            You have not yet been verified. Until then, your account is on hold.
+            <img class="uk-width-1-3 uk-margin-auto" src="/static/images/verify.png" alt="Verification">
+        </h4>
+    {% endif %}
 
 </div>
-
-
 {% endblock %}

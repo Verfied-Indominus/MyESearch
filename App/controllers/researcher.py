@@ -42,7 +42,7 @@ def get_subscribed_researchers(user):
 
 def set_verified(re):
     re.verify()
-    db.commit()
+    db.session.commit()
 
 def delete_researcher(id):
     researcher = get_researcher(id)
