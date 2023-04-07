@@ -788,7 +788,7 @@
                     </div>
         </div>
     </div>
-    {% if not user.verified and current_user.id == user.id %}
+    {% if re and not user.verified and current_user.id == user.id %}
         <div class="uk-overlay uk-overlay-primary uk-position-cover"></div>
         <h4 class="uk-overlay uk-text-center uk-overlay-default uk-background-default uk-position-top-center uk-margin-large-top uk-flex uk-flex-column">
             You have not yet been verified. Until then, your account is on hold.

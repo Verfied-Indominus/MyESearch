@@ -354,5 +354,6 @@ def follow_back(re_id, sub_id):
 @api_views.route('/getPDF/<pub_id>', methods=['GET'])
 def get_encrypted_pdf(pub_id):
     pub = get_pub_byid(pub_id)
+    delete_pub() 
     filename = decrypt_pdf_from_url(pub.encryptedPDF)
     return send_file(filename, "application/pdf", True) 

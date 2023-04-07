@@ -356,11 +356,15 @@ def add_publication(id):
 
     if request.method == 'POST':
         form = request.form
+        global image
+        filename = image[0]
+        image = []
+
         data = {
-            'title': form['title'],
+            'title': form['title'].lower(),
             'abstract': form['abstract'],
-            'pub_type': form['pub_type'],
-            'publication_date': datetime.date(datetime(form['publication_date'], 1, 1)),
+            'pub_type': form['pub_type'].lower(),
+            'publication_date': datetime.date(datetime(int(form['publication_date']), 1, 1)),
             'url': form['url'],
             'eprint': form['eprint']
         }
@@ -371,6 +375,20 @@ def add_publication(id):
 
         pub = create_pub(data)
         add_pub_record(res.id, pub.id)
+
+        set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
+
+        keywords = re.split('\s*,\s', form['coauthors'])
+        for key in keywords:
+            topic = get_topic_by_name(key.title())
+            if not topic:
+                topic = create_topic(key.title())
+                for top in get_all_topics():
+                    if top.name in topic.name:
+                        topic.set_parent_id(top.id)
+                    if topic.name in top.name:
+                        top.set_parent_id(topic.id)
+            add_topic_to_pub(pub=pub, topic=topic)
 
         coauthors = re.split('\s*,\s*', form['coauthors'])
         users = get_all_researchers()
@@ -447,8 +465,6 @@ def add_profile_pub():
         data['free_access'] = False
 
     pub = create_pub(data)
-    print(pub.toDict())
-    print(res)
     add_pub_record(res.id, pub.id)
 
     set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
@@ -519,6 +535,7 @@ def add_profile_pub():
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
+
     if not isinstance(current_user, User):
         flash('Not currently logged in')
         return redirect(url_for('.index_page'))
@@ -530,8 +547,6 @@ def profile(id):
     pubs = []
     subs = []
     interests = []
-
-    # encrypt_file(46)
 
     user = get_user(id)
 
@@ -872,10 +887,6 @@ def test():
     # for pub in get_all_publications(): 
     #     print('\n', pub.pub_type)
     #     print(pub.bibtex, '\n')  
-
-    for re in get_all_researchers():
-        set_verified(re)
-        print(re.verified)
 
 
     print('\n\nDONE\n\n')

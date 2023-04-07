@@ -653,15 +653,15 @@
             <a href="#">
               <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
             </a>
-            <div style="min-width: 180px;" class="uk-card uk-card-default uk-background-muted uk-padding-small uk-width-auto" uk-drop="mode: click">
+            <div style="min-width: 200px;" class="uk-card uk-card-default uk-background-muted uk-padding-small uk-width-auto" uk-drop="mode: click">
               <ul class="uk-nav">
                 {% if current_user.is_authenticated %}
                   <div class="uk-flex uk-flex-middle">
-                    <img style="height:25px;" class="uk-border-circle uk-margin-small-right" width="25" height="25" {% if not current_user.image_url %}src="/static/images/unknown.png"{% else %}src="{{current_user.image_url}}"{% endif %} alt="Avatar">
+                    <div style="width: 35px; height: 35px;" class="uk-border-circle uk-background-cover uk-margin-small-right" data-src="{% if not current_user.image_url %}/static/images/unknown.png{% else %}{{current_user.image_url}}{% endif %}" alt="Avatar" uk-img></div>
                     <div>{{current_user.first_name}} {{current_user.last_name}}</div>
                   </div>
                   <hr>
-                  <li onclick="window.location.href='/logout';"><a href="/logout" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Logout <span class="uk-margin-auto-left" uk-icon="sign-out"></span></a></li>
+                  <li onclick="window.location.href='/logout';" class="uk-width-3-5 uk-margin-auto"><a href="/logout" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Logout <span class="uk-margin-auto-left" uk-icon="sign-out"></span></a></li>
                 {% else %}
                   <li onclick="window.location.href='/login';"><a href="/login" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Login <span class="uk-margin-auto-left" uk-icon="sign-in"></span></a></li>
                   <li onclick="window.location.href='/signup';"><a href="/signup" class="uk-box-shadow-hover-small uk-padding-small" uk-toggle="cls: uk-background-default; mode: hover;">Signup <span class="uk-margin-auto-left" uk-icon="plus-circle"></span></a></li>
