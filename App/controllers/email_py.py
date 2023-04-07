@@ -1,5 +1,9 @@
 import gmail
 
+# EMAIL : myesearch.noreply@gmail.com
+# PASSWORD: admin@noreply
+# APP_PASSWORD: sibvelfmfcupbche
+
 def sendEmail(message,subject,receipient,html=None,attachments=None):
     try:
         mail = gmail.GMail("somemail.mail.com","mailapppassword")
