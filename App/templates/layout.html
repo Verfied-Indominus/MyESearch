@@ -178,7 +178,7 @@
                                     <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                     <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a>
                                   </div>
-                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                  <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                 </div>
                               </div>
                             </div>
@@ -216,7 +216,7 @@
                                       </div>
                                     </div>
                                     <button onclick="reject_request({{message['s_id']}}, {{message['pub_id']}});" class="uk-margin-small-top uk-button uk-button-small uk-button-danger uk-border-pill">Decline</button>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -235,7 +235,7 @@
                                     <p class="uk-margin-small-bottom">{{title['name']}} needs to be Verified as a UWI Researcher.</p>
                                     <button onclick="verify_author({{current_user.id}}, {{title['researcher_id']}}, '{{title['name']}}'); this.nextSibling.style.display='none'; this.style.display='none';" class="uk-button uk-button-small uk-button-primary uk-border-pill">Verify</button> 
                                     <button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="uk-button uk-button-small uk-button-danger uk-border-pill">Dismiss</button>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -254,7 +254,7 @@
                                     <p class="uk-margin-small-bottom">
                                       <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.
                                     </p>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -271,7 +271,7 @@
                                   <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -290,7 +290,7 @@
                                     <p class="uk-margin-small-bottom">{{title['name']}} started following you.
                                     <button onclick="followback({{current_user.id}}, {{title['researcher_id']}}); this.innerHTML='Following'" class="uk-button uk-margin-small-top uk-button-small uk-button-primary uk-border-pill">Follow Back</button> 
                                     </p>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -307,7 +307,7 @@
                                   <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -328,7 +328,7 @@
                                       <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                       <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                     </div>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -340,18 +340,18 @@
                         <!-- A Researcher accepted request to access publication -->
                         <div class="uk-card-header uk-padding-small">
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
-                              <div class="uk-width-auto ">
+                            <div class="uk-width-auto ">
+                              <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
+                              <div>
                                 <div class="uk-flex">
+                                  <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                   <div>
-                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
-                                    <div class="uk-flex">
-                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
-                                    </div>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
+                            </div>
                           </div>
                         </div>
                       {% endif %}
@@ -360,18 +360,18 @@
                         <!-- A Researcher rejected request to access publication -->
                         <div class="uk-card-header uk-padding-small">
                           <div class="uk-grid-small uk-flex-middle" uk-grid>
-                              <div class="uk-width-auto ">
+                            <div class="uk-width-auto ">
+                              <div>
+                                <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
                                 <div class="uk-flex">
+                                  <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                   <div>
-                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
-                                    <div class="uk-flex">
-                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                      <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
-                                    </div>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
+                            </div>
                           </div>
                         </div>
                       {% endif %}
@@ -385,7 +385,7 @@
                                   <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                   <div> 
                                     <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
-                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                    <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                   </div>
                                 </div>
                               </div>
@@ -435,7 +435,7 @@
                                         <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                         <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a>
                                       </div>
-                                      <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                      <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                     </div>
                                   </div>
                                 </div>
@@ -456,7 +456,7 @@
                                           <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                           <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                         </div>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -473,7 +473,7 @@
                                       <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div>
                                         <p class="uk-margin-small-bottom">{{title['name']}} needs to be Verified as a UWI Researcher.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -491,7 +491,7 @@
                                       <div> 
                                         <p class="uk-margin-small-bottom">
                                         <a href="/publication/{{title['pub_id']}}">{{title['pub_title']|title}}</a> was added to <a href="/topic/{{title['topic_id']}}">{{title['topic_name']}}</a>.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -508,7 +508,7 @@
                                       <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -525,7 +525,7 @@
                                       <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom">{{title['name']}} started following you.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -542,7 +542,7 @@
                                       <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
                                       <div> 
                                         <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has reciprocated your follow request.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -563,7 +563,7 @@
                                           <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                           <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
                                         </div>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
@@ -575,18 +575,18 @@
                             <!-- A Researcher accepted request to access publication -->
                             <div class="uk-card-header uk-padding-small">
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
-                                  <div class="uk-width-auto ">
+                                <div class="uk-width-auto ">
+                                  <div>
+                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
                                     <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                       <div>
-                                        <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been granted. The author may contact you via email.</p>
-                                        <div class="uk-flex">
-                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
-                                        </div>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
+                                </div>
                               </div>
                             </div>
                           {% endif %}
@@ -595,18 +595,18 @@
                             <!-- A Researcher rejected request to access publication -->
                             <div class="uk-card-header uk-padding-small">
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
-                                  <div class="uk-width-auto ">
+                                <div class="uk-width-auto ">
+                                  <div>
+                                    <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
                                     <div class="uk-flex">
+                                      <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
                                       <div>
-                                        <p class="uk-margin-small-bottom">Your request to access "{{message['pub_title']|title}}" has been rejected.</p>
-                                        <div class="uk-flex">
-                                          <img style="height:40px;" class=" uk-margin-small-right" width="40" height="40" src="/static/images/publications/{{message['pub_type']}}.png" alt="Cover">
-                                          <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
-                                        </div>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
+                                        <a href="/publication/{{message['pub_id']}}">{{message['pub_title']|title}}</a> 
+                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                       </div>
                                     </div>
                                   </div>
+                                </div>
                               </div>
                             </div>
                           {% endif %}
@@ -615,15 +615,15 @@
                             <!-- Another researcher has verified your account -->
                             <div class="uk-card-header uk-padding-small">
                               <div class="uk-grid-small uk-flex-middle" uk-grid>
-                                  <div class="uk-width-auto ">
-                                    <div class="uk-flex">
-                                      <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
-                                      <div> 
-                                        <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
-                                        <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated.strftime("%B %d, %Y  %I:%M %p")}}</span></p>
-                                      </div>
+                                <div class="uk-width-auto ">
+                                  <div class="uk-flex">
+                                    <img style="height:40px;" class="uk-border-circle uk-margin-small-right" width="40" height="40" {% if not title['image_url'] or title['image_url']=='None' %}src="/static/images/unknown.png"{% else %}src="{{title['image_url']}}"{% endif %} alt="Avatar">
+                                    <div> 
+                                      <p class="uk-margin-small-bottom"><a href="/profile/{{title['researcher_id']}}">{{title['name']}}</a> has verified your account. You may now add your publications on your profile page.</p>
+                                      <p class="uk-text-meta uk-margin-small-top uk-margin-remove-bottom"><span>{{notif.last_updated|tt_time}}</span></p>
                                     </div>
                                   </div>
+                                </div>
                               </div>
                             </div>
                           {% endif %}

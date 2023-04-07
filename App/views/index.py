@@ -1,7 +1,7 @@
 import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
-from App.controllers.notification import author_added_notif, request_access, verify_author_notif
+from App.controllers.notification import author_added_notif, reject, request_access, verify_author_notif
 from App.controllers.pdf import get_information
 from App.controllers.pubrecord import add_pub_record
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
@@ -888,9 +888,7 @@ def test():
     #     print('\n', pub.pub_type)
     #     print(pub.bibtex, '\n')  
 
-    re = get_researcher(4)
-    verifier = current_user
-    verify_author_notif(re, verifier)
+    reject(5, 1)
 
     print('\n\nDONE\n\n')
 

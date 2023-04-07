@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import click, pytest, sys, json
 from flask import Flask
 from flask.cli import AppGroup
@@ -19,6 +20,11 @@ migrate = get_migrate(app)
 @app.template_filter('to_dict')
 def to_dict(my_string):
     return json.loads(my_string)
+
+@app.template_filter('tt_time')
+def to_tt_time(dtobj):
+    obj = dtobj-timedelta(hours=4)
+    return obj.strftime("%B %d, %Y  %I:%M %p")
 
 
 '''
