@@ -189,9 +189,9 @@ def scholarly_update():
                 print('\nNot Found\n')
 
 
-
-    for n in range(3, 0, -1): 
-        user = get_user(n-1)
+    researchers = get_all_researchers()
+    for n in range(len(researchers), 0, -1): 
+        user = researchers[n-1]
         pubs = get_pubs(user.first_name, user.last_name)
         print(user.first_name, user.last_name)
         for i in range(len(pubs)):
@@ -242,7 +242,7 @@ def scholarly_update():
                                 author.reverse()
                                 temp.append(' '.join(author))
                         authors = temp
-                        for re in get_all_researchers():
+                        for re in researchers:
                             target = []
                             for co in authors:
                                 if re.first_name in co and re.last_name in co:
