@@ -185,7 +185,7 @@ def publication_page(id):
     pub = get_pub_byid(id)
     
     if not pub:
-        flash('Publication does not exist or is inaccessible')
+        flash('Publication does not exist or is inaccessible.')
         return redirect(url_for('.index_page')) 
     return render_template("publication.html", pub=pub)
 
@@ -195,7 +195,7 @@ def topic_page(id):
     pubs = get_all_publications()
 
     if not topic_:
-        flash('Topic does not exist or is inaccessible')
+        flash('Topic does not exist or is inaccessible.')
         return redirect(url_for('.index_page'))
     
     topic_pubs = []
@@ -220,17 +220,17 @@ def login_page():
             if 'remember' in form:
                 remember = True
             login_user(user, remember)
-            flash(f'Welcome {user.first_name}')
+            flash(f'Welcome {user.first_name}!')
             return redirect(url_for('.index_page'))
         else:
-            flash('Incorrect credentials entered')
+            flash('Incorrect credentials entered.')
 
     return render_template('login.html')
 
 @index_views.route('/logout', methods=['GET'])
 def logout():
     if not isinstance(current_user, User):
-        flash('Not currently logged in')
+        flash('Not currently logged in.')
     else:
         logout_user()
     return redirect(url_for('.index_page'))
@@ -317,7 +317,7 @@ def signup_page():
             user = builder.student
 
         if not user:
-            flash('There already is an account associated with that email')
+            flash('There already is an account associated with that email.')
             return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
 
         create_library(user.id)
@@ -333,7 +333,7 @@ def signup_page():
             builder.build()
 
         login_user(user, False)
-        flash('You successfully created your account')
+        flash('You successfully created your account!')
 
         if re:
             verify_process(user.id)
@@ -346,8 +346,8 @@ def signup_page():
 def add_publication(id):
     res = get_researcher(id)
     if not res:
-        flash("The specified User ID does not exist or is not a Researcher's")
-        flash('Researchers may also add publications in their profile')
+        flash("The specified User ID does not exist or is not a Researcher's.")
+        flash('Researchers may also add publications in their profile.')
         return redirect(url_for('.index_page'))
 
     if request.method == 'POST':
@@ -435,7 +435,7 @@ def add_publication(id):
 
         set_pub_bibtex(pub, bibtex)
 
-        flash('A publication has been succesfully added')
+        flash('A publication has been succesfully added!')
         return redirect(url_for('.index_page'))
     return render_template('addpublication.html', id=id, types=types, dates=dates)
 
@@ -526,14 +526,14 @@ def add_profile_pub():
 
     set_pub_bibtex(pub, bibtex)
 
-    flash('A publication has been succesfully added')
+    flash('A publication has been succesfully added!')
     return redirect(url_for('.profile', id=res.id))
 
 @index_views.route('/myprofile', methods=['GET'])
 def my_profile():
 
     if not isinstance(current_user, User):
-        flash('Not currently logged in')
+        flash('Not currently logged in.')
         return redirect(url_for('.index_page'))
     return redirect(url_for('.profile', id=current_user.id))
 
@@ -547,7 +547,7 @@ def profile(id):
     user = get_user(id)
 
     if not user or (not isinstance(user, Researcher) and current_user.id != user.id):
-        flash('User does not exist or is inaccessible')
+        flash('User does not exist or is inaccessible.')
         return redirect(url_for('.index_page'))
     
     topics = get_subscribed_topics(user)
@@ -630,17 +630,17 @@ def edit_profile(id):
         if user.check_password(form['current_password']):
             if form['new_password']==form['confirm_password']:
                 builder = builder.password(form['new_password'])
-                flash('Password successfully changed')
+                flash('Password successfully changed!')
             else:
-                flash('Passwords not matching')
+                flash('Passwords not matching.')
                 return redirect(f'/profile/{id}')
         else:
-            flash('Incorrect Password entered')
+            flash('Incorrect Password entered.')
             return redirect(f'/profile/{id}')
     elif form['current_password']=='' and form['new_password']=='' and form['confirm_password']=='':
         pass
     else:
-        flash('Password field(s) left blank')
+        flash('Password field(s) left blank.')
         return redirect(f'/profile/{id}')
 
     if 'introduction' in form: 
@@ -661,7 +661,7 @@ def edit_profile(id):
         )
 
     builder.build()
-    flash('Profile updated')
+    flash('Profile updated!')
     return redirect(f'/profile/{id}')
 
 @index_views.route('/request/<s_id>/<pub_id>', methods=['POST'])
@@ -670,5 +670,5 @@ def request_text(s_id, pub_id):
     pub = get_pub_byid(pub_id)
     for rec in pub.pub_records:
         request_access(s_id, rec.researcher.id, pub_id, form['message'])
-    flash('Your request has been sent')
+    flash('Your request has been sent.')
     return redirect(f'/publication/{pub_id}')
