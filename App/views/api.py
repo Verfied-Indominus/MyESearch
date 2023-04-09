@@ -1,6 +1,8 @@
 import ast
 from datetime import datetime
+import io
 import json
+import os
 from random import shuffle
 from flask import Blueprint, send_file, send_from_directory
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
@@ -352,4 +354,15 @@ def follow_back(re_id, sub_id):
 def get_encrypted_pdf(pub_id):
     pub = get_pub_byid(pub_id)
     filename = decrypt_pdf_from_url(pub.encryptedPDF)
-    return send_file(filename, "application/pdf", True) 
+
+    return_data = io.BytesIO()
+    with open(f"App/{filename}", "rb") as file:
+        return_data.write(file.read())
+
+    return_data.seek(0)
+    os.remove(f"App/{filename}")
+
+    name = pub.title
+    name = name.title()
+
+    return send_file(return_data, "application/pdf", True, f"{name}.pdf")
