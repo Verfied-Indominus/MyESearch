@@ -80,6 +80,10 @@ def get_publication_suggestions(pub):
     topics = list(set(topics))
     pubs = get_ranked_pubs()
 
+    researchers.sort(key=lambda pub: pub.publication_date, reverse=True)
+    topics.sort(key=lambda pub: pub.publication_date, reverse=True)
+    pubs.sort(key=lambda pub: pub.publication_date, reverse=True)
+
     return researchers, topics, pubs
 
 def get_researcher_pubs(id):
