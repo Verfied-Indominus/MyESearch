@@ -22,13 +22,13 @@ def verify_process(auth_id):
         verifier = random.choice(department_auths)
         ver = f"/verify/{verifier.id}/{auth_id}"
         message = f"""
-        Hi {verifier.first_name} {verifier.lastname}, 
-            Is {auth.first_name} {auth.last_name} a valid researcher in your department?
+        Hi {verifier.first_name} {verifier.lastname},\n 
+            Is {auth.first_name} {auth.last_name} a valid researcher in your department?\n\n
 
-            Click on the appropriate link to confirm.
-            CONFIRM: {request.base_url+ver}
+            Click on the appropriate link to confirm.\n
+            CONFIRM: {request.base_url+ver}\n\n
             
-    Regards,
+    Regards,\n
     MyEsearch
     """
         verify_author_notif(auth, verifier)
@@ -38,13 +38,13 @@ def verify_process(auth_id):
         verifier = random.choice(faculty_auths)
         ver = f"/verify/{verifier.id}/{auth_id}"
         message = f"""
-    Hi {verifier.first_name} {verifier.lastname}, 
-        Is {auth.first_name} {auth.last_name} a vaild researcher in your department?
+    Hi {verifier.first_name} {verifier.lastname},\n
+        Is {auth.first_name} {auth.last_name} a vaild researcher in your department?\n\n
 
-        Click on the appropriate link to confirm.
-        CONFIRM: {request.base_url+ver}
+        Click on the appropriate link to confirm.\n
+        CONFIRM: {request.base_url+ver}\n\n
             
-    Regards,
+    Regards,\n
     MyEsearch
     """
         verify_author_notif(auth, verifier)

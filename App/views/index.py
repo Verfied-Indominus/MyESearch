@@ -1,9 +1,10 @@
 import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import current_user
-from App.controllers.notification import author_added_notif, reject, request_access, verify_author_notif
+from App.controllers.notification import author_added_notif, request_access
 from App.controllers.pdf import get_information
 from App.controllers.pubrecord import add_pub_record
+from App.controllers.verify import verify_process
 from App.models.forms import ResearcherSignUpForm, BaseSignUpForm
 from App.models.user import User, check_password_hash
 from App.controllers.topic import *
@@ -21,7 +22,6 @@ from werkzeug.utils import secure_filename
 from os import remove
 from datetime import datetime
 import json
-import gmail
 
 from App.models.builder import *
 
@@ -178,12 +178,7 @@ def index_page():
         'Robotics'
     ]
 
-    # suggestions = []
-    # if (isinstance(current_user, User)):
-    #     suggestions = get_home_suggestions(current_user)
-
     return render_template('index.html',topics=topics)
-    # return render_template('index.html',topics=topics, suggestions=suggestions)
 
 @index_views.route('/publication/<id>',methods=["GET"])
 def publication_page(id):
@@ -341,6 +336,7 @@ def signup_page():
         flash('You successfully created your account')
 
         if re:
+            verify_process(user.id)
             return redirect(url_for('.add_publication', id=user.id))
         else:
             return redirect(url_for('.index_page'))
