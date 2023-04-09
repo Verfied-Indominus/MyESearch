@@ -602,7 +602,7 @@ async function reSubscribe(btn, user_id, re_id, name){
         state = "unsubscribed from";
     }
     UIkit.notification({
-        message: `You have ${state} ${name}`,
+        message: `You have ${state} ${name}.`,
         status: 'primary',
         pos: 'top-center',
         timeout: 7000
@@ -621,7 +621,7 @@ async function topSubscribe(btn, user_id, top_id, name){
         state = "unsubscribed from";
     }
     UIkit.notification({
-        message: `You have ${state} ${name}`,
+        message: `You have ${state} ${name}.`,
         status: 'primary',
         pos: 'top-center',
         timeout: 7000
@@ -653,7 +653,7 @@ async function addToLibrary(btn, user_id, pub_id){
         state = "removed from";
     }
     UIkit.notification({
-        message: `Publication ${state} your Library`,
+        message: `Publication ${state} your Library.`,
         status: 'primary',
         pos: 'top-center',
         timeout: 7000
@@ -1268,7 +1268,7 @@ function endLoad(){
 
 async function verify_author(verifier_id, auth_id, name){
     UIkit.notification({
-        message: `You have verified ${name}`,
+        message: `You have verified ${name}.`,
         status: 'primary',
         pos: 'top-center',
         timeout: 7000
