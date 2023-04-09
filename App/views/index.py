@@ -162,6 +162,8 @@ def search():
         results.append(topics)
 
         return render_template('results.html', results=results, search=True, search_terms=search_terms)
+    flash('No search query submitted.')
+    return redirect('/')
 
 @index_views.route('/', methods=['GET'])
 def index_page():
