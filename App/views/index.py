@@ -151,7 +151,7 @@ def all_researchers():
 def search():
     if request.method == 'POST':
         form = request.form
-        search_terms = form['search']
+        search_terms = form['search'].strip()
         authors, author_publications, topic_authors, publications, topic_publications, topics  = parse_search(search_terms)
         results = []
         results.append(authors)
