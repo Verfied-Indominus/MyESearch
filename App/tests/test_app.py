@@ -65,6 +65,7 @@ class ResearcherUnitTests(unittest.TestCase):
             'certifications': None,
             'skills': 'Data Mining',
             'website_url': None,
+            "subs": [],
             'introduction': 'My name is Bob.'
         })
 
@@ -89,11 +90,11 @@ class LibraryUnitTests(unittest.TestCase):
 
 class NotificationUnitTests(unittest.TestCase):
     def test01_new_notification(self):
-        notif = Notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.',1)
         assert isinstance(notif, Notification) and notif is not None
     
     def test02_notification_toDict(self):
-        notif = Notification('New notification', 'This is a test notification.')
+        notif = Notification('New notification', 'This is a test notification.',1)
         notif_dict = notif.toDict()
         self.assertDictEqual(notif_dict, {
             'id': None,
@@ -115,18 +116,19 @@ class PublicationUnitTests(unittest.TestCase):
             'pub_type':"lol",
             'free_access':True,
             'publication_date': datetime(2020, 2, 24),
+            'url': None,
+            'eprint':None,
             'reads': 0,
             'citations': 0,
             'downloads': 0,
             'searches': 0
             }
-        self.new_pub = Publication(self.data["title"],self.data["abstract"],self.data["free_access"],self.data["pub_type"], self.data["publication_date"])
+        self.new_pub = create_pub(self.data)
 
     def test01_is_publication(self):
         self.assertTrue(isinstance(self.new_pub,Publication))
 
     def test02_correct_publication(self):
-        print(self.new_pub.toDict())
         self.assertDictEqual(self.data, self.new_pub.toDict())
 
 class TopicUnitTests(unittest.TestCase):
@@ -355,7 +357,6 @@ class LibraryIntegrationTests(unittest.TestCase):
         cls.library = create_library(cls.researcher.id)
         
     def test01_new_library_creation(self):
-        print(self.library.toDict())
         assert isinstance(self.library, Library) and self.library is not None
 
     def test02_library_has_user_id_stored(self):
@@ -377,12 +378,14 @@ class PublicationIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data = {
-            'title': "Test PUB",
+            'title': "Test PUB1",
             'abstract':"this apparently is an abstract.",
             'pub_type':"article",
             'free_access':True,
             'publication_date': datetime(2020, 2, 24),
             'reads': 0,
+            'eprint':None,
+            'url':None,
             'citations': 0,
             'downloads': 0,
             'searches': 0
@@ -396,7 +399,6 @@ class PublicationIntegrationTests(unittest.TestCase):
 
     def test03_update(self):
         pub = get_pub(self.data['title'])
-        print(self.data)
         self.assertTrue(update_pub(self.data, pub.id))
 
     def test04_delete_pub(self):
