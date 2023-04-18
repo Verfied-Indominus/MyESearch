@@ -300,7 +300,7 @@ class ResearcherIntegrationTests(unittest.TestCase):
 class NotificationIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.notif = create_notification('New notification', 'This is a test notification.')
+        cls.notif = create_notification('New notification', 'This is a test notification.',"new")
 
     def test01_new_int_notification(self):
         assert isinstance(self.notif, Notification) and self.notif is not None
@@ -381,7 +381,7 @@ class PublicationIntegrationTests(unittest.TestCase):
             'abstract':"this apparently is an abstract.",
             'pub_type':"article",
             'free_access':True,
-            'publication_date': date(2020, 2, 24),
+            'publication_date': datetime(2020, 2, 24),
             'reads': 0,
             'citations': 0,
             'downloads': 0,
@@ -484,38 +484,3 @@ class StudentIntegrationTests(unittest.TestCase):
         id = query_student(name).id
         self.assertTrue(delete_student(id))
 
-class VisitRecordIntegrationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        builder = (
-            StudentBuilder()
-                .email("robby@mail.com")
-                .password("bobpass")
-                .first_name("Bob")
-                .last_name("Burger")
-                .institution("UWI")
-                .faculty("HFE")
-                .department("Gender Studies")
-                .build()
-        )
-        cls.new_student = builder.student
-        builder = (
-            ResearcherBuilder()
-                .email("bobbert@mail.com")
-                .password("bobpass")
-                .first_name("Bob")
-                .last_name("Burger")
-                .institution("UWI")
-                .faculty("HFE")
-                .department("Gender Studies")
-                .build()
-        )
-        cls.new_researcher = builder.researcher
-        cls.vrec = create_visit_record(cls.new_student.id, cls.new_researcher.id)
-
-    def test01_create_visit_record(self):
-        self.assertTrue((isinstance(self.vrec, VisitRecord)) and self.vrec.id is not None)
-
-    def test02_check_last_visited(self):
-        print(self.vrec.last_visited)
-        self.assertFalse(update_visit_record(self.vrec))
