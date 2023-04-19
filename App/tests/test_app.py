@@ -107,9 +107,9 @@ class NotificationUnitTests(unittest.TestCase):
 
 
 class PublicationUnitTests(unittest.TestCase):
-
-    def setUp(self):
-        self.data = {
+    @classmethod
+    def setUpClass(cls):
+        cls.data = {
             "id" : None,
             'title': "Test PUB",
             'abstract':"this apparently is an abstract.",
@@ -123,13 +123,29 @@ class PublicationUnitTests(unittest.TestCase):
             'downloads': 0,
             'searches': 0
             }
-        self.new_pub = create_pub(self.data)
+        cls.new_pub = Publication(cls.data["title"], cls.data["abstract"], cls.data["free_access"], cls.data["pub_type"], cls.data["publication_date"], cls.data["url"], cls.data["eprint"])
 
     def test01_is_publication(self):
         self.assertTrue(isinstance(self.new_pub,Publication))
 
     def test02_correct_publication(self):
-        self.assertDictEqual(self.data, self.new_pub.toDict())
+        pub = {
+            "id" : None,
+            'title': "Test PUB",
+            'authors': [],
+            'coauthors': None,
+            'abstract':"this apparently is an abstract.",
+            'pub_type':"lol",
+            'free_access':True,
+            'publication_date': '2020',
+            'url': None,
+            'eprint':None,
+            'reads': 0,
+            'citations': 0,
+            'downloads': 0,
+            'searches': 0
+            }
+        self.assertDictEqual(pub, self.new_pub.toDict())
 
 class TopicUnitTests(unittest.TestCase):
 
@@ -307,12 +323,12 @@ class NotificationIntegrationTests(unittest.TestCase):
         cls.notif = create_notification('New notification', 'This is a test notification.',1)
 
     def test01_new_int_notification(self):
-        print(self.notif.id)
+        
         assert isinstance(self.notif, Notification) and self.notif is not None
         
     
     def test02_int_notification_toDict(self):
-        print(self.notif)
+       
         notif_dict = self.notif.toDict()
         self.assertDictEqual(notif_dict, {
             'id': 1,
@@ -325,7 +341,7 @@ class NotificationIntegrationTests(unittest.TestCase):
     
     def test03_int_notification_update(self):
         before = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
-        print(update_notification_title(self.notif.id, 'New Test Notification'))
+        update_notification_title(self.notif.id, 'New Test Notification')
         update_notification_message(self.notif.id, 'This is a new message')
         now = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
         notif_dict = self.notif.toDict()
