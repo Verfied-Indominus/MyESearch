@@ -331,6 +331,7 @@ def signup_page():
         if image:
             image_url = uploadFile(user.id, image[0])
             remove(f"App/uploads/{image[0]}")
+            image = []
             builder.image_url(image_url)
             builder.build()
 
@@ -355,8 +356,10 @@ def add_publication(id):
     if request.method == 'POST':
         form = request.form
         global image
-        filename = image[0]
-        image = []
+        filename = ''
+        if image:
+            filename = image[0]
+            image = []
 
         data = {
             'title': form['title'].lower(),
@@ -374,7 +377,8 @@ def add_publication(id):
         pub = create_pub(data)
         add_pub_record(res.id, pub.id)
 
-        set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
+        if filename:
+            set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
 
         keywords = re.split('\s*,\s', form['coauthors'])
         for key in keywords:
@@ -446,8 +450,10 @@ def add_profile_pub():
     res = current_user
     form = request.form
     global image
-    filename = image[0]
-    image = []
+    filename = ""
+    if image:
+        filename = image[0]
+        image = []
 
     data = {
         'title': form['title'].lower(),
@@ -464,8 +470,9 @@ def add_profile_pub():
 
     pub = create_pub(data)
     add_pub_record(res.id, pub.id)
-
-    set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
+    
+    if filename:
+        set_encrypted_pdf_url(pub, uploadPDF(pub.id, filename))
 
     keywords = re.split('\s*,\s', form['coauthors'])
     for key in keywords:
@@ -626,6 +633,7 @@ def edit_profile(id):
     if image:
         image_url = uploadFile(id, image[0])
         remove(f"App/uploads/{image[0]}")
+        image = []
         builder.image_url(image_url) 
 
     if form['current_password']!='' and form['new_password']!='' and form['confirm_password']!='':
