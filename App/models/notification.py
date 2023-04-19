@@ -8,8 +8,8 @@ class Notification(db.Model):
     title = db.Column(db.String(300), nullable=False)
     message = db.Column(db.String(1000), nullable=True)
     type = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, server_default=func.now()-str(timedelta(hours=4)))
-    last_updated = db.Column(db.DateTime, server_default=func.now()-str(timedelta(hours=4)), onupdate=func.now()-str(timedelta(hours=4)))
+    timestamp = db.Column(db.DateTime, nullable=False, server_default=func.now())
+    last_updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     notification_records = db.relationship("NotificationRecord", backref="notification", lazy="dynamic", cascade="all, delete-orphan")
 
     def __init__(self, title, message, type):

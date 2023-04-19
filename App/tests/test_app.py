@@ -243,6 +243,7 @@ class ResearcherIntegrationTests(unittest.TestCase):
             'certifications': None,
             'skills': 'Data Mining',
             'website_url': None,
+            'subs': [],
             'introduction': 'My name is Bob.'
         })
 
@@ -291,6 +292,7 @@ class ResearcherIntegrationTests(unittest.TestCase):
             'qualifications': 'B.Sc. Computer Science (UWI)',
             'certifications': None,
             'skills': 'Data Mining',
+            'subs': [],
             'website_url': 'google.com',
             'introduction': 'My name is Bob.'
         })
@@ -302,12 +304,15 @@ class ResearcherIntegrationTests(unittest.TestCase):
 class NotificationIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.notif = create_notification('New notification', 'This is a test notification.',"new")
+        cls.notif = create_notification('New notification', 'This is a test notification.',1)
 
     def test01_new_int_notification(self):
+        print(self.notif.id)
         assert isinstance(self.notif, Notification) and self.notif is not None
+        
     
     def test02_int_notification_toDict(self):
+        print(self.notif)
         notif_dict = self.notif.toDict()
         self.assertDictEqual(notif_dict, {
             'id': 1,
@@ -320,7 +325,7 @@ class NotificationIntegrationTests(unittest.TestCase):
     
     def test03_int_notification_update(self):
         before = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
-        update_notification_title(self.notif.id, 'New Test Notification')
+        print(update_notification_title(self.notif.id, 'New Test Notification'))
         update_notification_message(self.notif.id, 'This is a new message')
         now = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
         notif_dict = self.notif.toDict()
@@ -363,7 +368,7 @@ class LibraryIntegrationTests(unittest.TestCase):
         assert self.library.user_id == self.researcher.id
 
     def test03_library_linked_to_user(self):
-        user = self.library.user
+        user = self.library.lib_user
         assert isinstance(user, Researcher)
 
     def test04_library_toDict(self):
