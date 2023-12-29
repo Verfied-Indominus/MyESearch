@@ -182,4 +182,23 @@ app.cli.add_command(test)
 app = create_app()
 migrate = get_migrate(app)
 if len(get_all_topics()) == 0:
-  init_topics()
+    topics = {}
+    with open('topics.txt') as f:
+        for line in f.readlines():
+            if line[0] != '\n':
+                top = line.rstrip()
+                temp = top.split(':', 1)
+                topics[temp[0]] = temp[1].strip().split(', ')
+
+    for key in topics:
+        create_topic(key)
+        for index, top in enumerate(topics[key]):
+            if str(top).islower():
+                topics[key][index] = top.title()
+
+    for key in topics:
+        parent = get_topic_by_name(key)
+        for topic in topics[key]:
+            top = create_topic_with_parent(topic, parent.id)
+
+    f.close()
