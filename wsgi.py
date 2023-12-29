@@ -15,6 +15,8 @@ from App.models import User, Student, Researcher
 
 app = create_app()
 migrate = get_migrate(app)
+if len(get_all_topics()) == 0:
+  init_topics()
 
 
 @app.template_filter('to_dict')
