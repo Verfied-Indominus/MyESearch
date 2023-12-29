@@ -1,3 +1,3 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/App/main" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/wsgi" }]
 }
