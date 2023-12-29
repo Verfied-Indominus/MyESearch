@@ -13,12 +13,6 @@ from App.models import User, Student, Researcher
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
-app = create_app()
-migrate = get_migrate(app)
-if len(get_all_topics()) == 0:
-  init_topics()
-
-
 @app.template_filter('to_dict')
 def to_dict(my_string):
     return json.loads(my_string)
@@ -180,3 +174,12 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "App"]))
 
 app.cli.add_command(test)
+
+
+
+
+
+app = create_app()
+migrate = get_migrate(app)
+if len(get_all_topics()) == 0:
+  init_topics()
