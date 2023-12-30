@@ -11,6 +11,11 @@ from App.controllers import ( get_researcher_by_email, get_all_users_json, get_a
 
 from App.models import User, Student, Researcher
 
+
+
+app = create_app()
+migrate = get_migrate(app)
+
 # This commands file allow you to create convenient CLI commands for testing controllers
 
 @app.template_filter('to_dict')
@@ -177,10 +182,6 @@ app.cli.add_command(test)
 
 
 
-
-
-app = create_app()
-migrate = get_migrate(app)
 if len(get_all_topics()) == 0:
     topics = {}
     with open('topics.txt') as f:
