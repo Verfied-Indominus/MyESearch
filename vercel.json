@@ -1,3 +1,15 @@
 {
-  "rewrites": [{ "source": "/App/(.*)", "destination": "/App/views/index" }]
+  "version": 2,
+  "builds": [
+      {
+          "src": "./wsgi.py",
+          "use": "@vercel/python"
+      }
+  ],
+  "routes": [
+      {
+          "src": "/App/(.*)",
+          "dest": "/App/views/index.py"
+      }
+  ]
 }
