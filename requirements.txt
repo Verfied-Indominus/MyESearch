@@ -14,7 +14,7 @@ PyPDF2==3.0.1
 scholarly==1.7.11
 openai==1.6.1
 pyrebase==3.0.27
-pycryptodome
+pycryptodome==3.19.0
 gmail==0.6.3
 Pillow==10.1.0
 PyMuPDF==1.23.8
