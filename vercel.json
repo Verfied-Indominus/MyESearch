@@ -8,7 +8,7 @@
   ],
   "routes": [
       {
-          "src": "/App/(.*)",
+          "src": "/App/templates/(.*)",
           "dest": "/App/views/index.py"
       }
   ]
