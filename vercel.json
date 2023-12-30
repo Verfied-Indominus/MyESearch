@@ -9,7 +9,7 @@
   "routes": [
       {
           "src": "/App/templates/(.*)",
-          "dest": "/App/views/index.py"
+          "dest": "/App/views"
       }
   ]
 }
