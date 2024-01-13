@@ -53,8 +53,7 @@ def init_topics():
                 topics[temp[0]] = temp[1].strip().split(', ')
 
     for key in topics:
-        # create_topic(key)
-        print(key)
+        create_topic(key)
         for index, top in enumerate(topics[key]):
             if str(top).islower():
                 topics[key][index] = top.title()
@@ -62,8 +61,7 @@ def init_topics():
     for key in topics:
         parent = get_topic_by_name(key)
         for topic in topics[key]:
-            # top = create_topic_with_parent(topic, parent.id)
-            print(topic)
+            top = create_topic_with_parent(topic, parent.id)
 
     f.close()
 

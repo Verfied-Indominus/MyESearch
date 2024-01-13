@@ -311,16 +311,16 @@ def signup_page():
             if form['introduction']:
                 builder.introduction(form['introduction'])
 
-        builder.build()
-
-        if re:
-            user = builder.researcher
-        else:
-            user = builder.student
+        user = builder.build()
+        print(user, "\n\nThis is the user\n\n")
 
         if not user:
             flash('There already is an account associated with that email.')
             return render_template('signup.html', baseForm=baseForm, reForm=reForm, interests=interests)
+        elif re and user:
+            user = builder.researcher
+        else:
+            user = builder.student
 
         create_library(user.id)
         create_recents(user.id)

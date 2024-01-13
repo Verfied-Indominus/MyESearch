@@ -3,4 +3,4 @@ SQLALCHEMY_DATABASE_URI = "postgresql://myesearch_jip1_user:IlwsiAclZeGnqJjY1lzx
 PASSWORD = "IlwsiAclZeGnqJjY1lzxCs2PoeemBo1U"
 SECRET_KEY = "secret key"
 JWT_EXPIRATION_DELTA = 7
-ENV = "DEVELOPMENT" 
+ENV = "PRODUCTION" 

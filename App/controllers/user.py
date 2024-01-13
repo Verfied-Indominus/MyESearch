@@ -27,14 +27,11 @@ def get_all_users_json():
 
 # For building Users - Builder DP
 def build_user(user):
-    # try:
-    print('test')
-    db.session.add(user)
-    db.session.commit()
-    print('added')
-    return user
-    # except IntegrityError:
-    #     db.session.rollback()
-    #     print('something went wrong')
-    #     return None
+    try:
+        db.session.add(user)
+        db.session.commit()
+        return user
+    except IntegrityError:
+        db.session.rollback()
+        return None
     

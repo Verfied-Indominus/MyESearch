@@ -11,7 +11,8 @@ def get_all_researchers_verified():
 
 def add_interests_to_researcher(topics, re_id):
     for topic in topics:
-        tag = ResearcherTag(re_id, topic.id)
+        top = get_topic_by_name(topic)
+        tag = ResearcherTag(re_id, top.id)
         db.session.add(tag)
     db.session.commit()
     return True
