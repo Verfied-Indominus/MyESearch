@@ -312,7 +312,6 @@ def signup_page():
                 builder.introduction(form['introduction'])
 
         user = builder.build()
-        print(user, "\n\nThis is the user\n\n")
 
         if not user:
             flash('There already is an account associated with that email.')
@@ -328,6 +327,7 @@ def signup_page():
         if re:
             add_interests_to_researcher(re_interests, user.id)
 
+        global image
         if image:
             image_url = uploadFile(user.id, image[0])
             remove(f"App/uploads/{image[0]}")
@@ -630,6 +630,7 @@ def edit_profile(id):
                 .start_year(form['start_year'])
             )
 
+    global image
     if image:
         image_url = uploadFile(id, image[0])
         remove(f"App/uploads/{image[0]}")

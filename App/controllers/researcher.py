@@ -1,4 +1,5 @@
 from App.controllers.researchersubs import create_sub, remove_sub
+from App.controllers.topic import get_topic_by_name
 from App.database import db
 from App.models import Researcher 
 from App.models import ResearcherTag

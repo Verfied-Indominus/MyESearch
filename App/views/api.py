@@ -8,6 +8,7 @@ from flask import Blueprint, send_file, send_from_directory
 from App.controllers.library import add_publication_to_library, get_library_from_user, remove_publication_from_library
 from App.controllers.notification import accept, delete_all_notif_recs, follow_back_researcher, reject, set_notif_rec_read, verified_notif, verify_author_notif
 from App.controllers.open_ai import prompt
+from App.controllers.edenai import ai_prompt
 from App.controllers.pdf import decrypt_pdf_from_url
 from App.controllers.publication import add_citation_to_pub, add_coauthors, add_download_to_pub, add_read_to_pub, add_search_to_pub, add_topic_to_pub, create_pub, get_all_publications, get_all_publications_json, get_pub_byid, get_pub_containing_title, set_pub_bibtex, set_pub_type
 from App.controllers.pubrecord import add_pub_record
@@ -90,13 +91,16 @@ def add_citation(id):
 
     citation = []
     request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     return {'citation': citation}
 
@@ -109,13 +113,16 @@ def get_citation(id):
 
     citation = []
     request = f"Generate a Chicago-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     request = f"Generate a APA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     request = f"Generate a MLA-style bibliography citation from the following dict: '{json.loads(pub.bibtex)}'"
-    citation.append(prompt(request)["choices"][0]["text"])
+    # citation.append(prompt(request)["choices"][0]["text"])
+    citation.append(ai_prompt(request))
 
     return {'citation': citation}
     
@@ -153,9 +160,12 @@ def scholarly_update():
         if len(publication.tags.all()) == 0:
             abstract = publication.abstract
             request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
-            keywords  = prompt(request)["choices"][0]["text"]
-            print(keywords)
+            # keywords  = prompt(request)["choices"][0]["text"]
+            keywords  = ai_prompt(request)
+            # print(keywords)
             keywords = '[' + keywords.split('[')[1]
+            keywords = keywords.split(']')[0] + ']'
+            print(keywords)
             keywords = ast.literal_eval(node_or_string=keywords.strip())
             for key in keywords:
                 topic = get_topic_by_name(key.title())
@@ -270,7 +280,8 @@ def scholarly_update():
                         print(p.toDict())
                         abstract = p.abstract
                         request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
-                        keywords  = prompt(request)["choices"][0]["text"]
+                        # keywords  = prompt(request)["choices"][0]["text"]
+                        keywords  = ai_prompt(request)
                         print(keywords)
                         keywords = '[' + keywords.split('[')[1]
                         keywords = ast.literal_eval(node_or_string=keywords.strip())

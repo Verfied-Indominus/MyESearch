@@ -17,4 +17,5 @@ from .scholarly_py import *
 from .email_py import *
 from .verify import *
 from .ciphers import *
+from .edenai import *
 

@@ -864,9 +864,10 @@ async function loadResearchers(researchers){
                 </li>
             `;
             console.log(re['subs']);
-            if (x % (researchers.length - 1) == 0){
-                ar_ul.innerHTML = html1;
-            }
+            ar_ul.innerHTML = html1;
+            // if (x % (researchers.length - 1) == 0){
+            //     ar_ul.innerHTML = html1;
+            // }
         }, 0);
     } 
     

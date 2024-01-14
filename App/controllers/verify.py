@@ -11,9 +11,10 @@ def verify_process(auth_id):
     department_auths = Researcher.query.filter_by(department = auth.department).all()
     faculty_auths = Researcher.query.filter_by(faculty = auth.faculty).all()
     is_auth = verify_author(f"{auth.first_name} {auth.last_name}")
+    print(is_auth)
     title = "Author Verification"
 
-    if is_auth :
+    if is_auth:
         auth.verify()
         db.session.commit()
         return True

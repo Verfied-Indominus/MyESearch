@@ -1,5 +1,4 @@
 from scholarly import scholarly, ProxyGenerator
-# from open_ai import prompt
 
 pg = ProxyGenerator()
 
@@ -147,11 +146,18 @@ def search_pub_title(pub):
     if not found:
         while True:
             try:
-                pub1 = scholarly.search_pubs(query='allintitle:"{}"'.format(pub.title), citations=False)
+                # pub1 = scholarly.search_pubs(query='allintitle:"{}"'.format(pub.title), citations=False)
+                pub1 = scholarly.search_pubs(query=pub.title, citations=False)
                 break
             except Exception:
                 set_new_proxy() 
                 print('search title alone')
+                try:
+                    pub1 = scholarly.search_pubs(query='allintitle:"{}"'.format(pub.title), citations=False)
+                    break
+                except Exception:
+                    set_new_proxy()
+                    print('search title alone again')
         while True:
             try:
                 pub1 = next(pub1)

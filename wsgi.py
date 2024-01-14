@@ -6,7 +6,8 @@ from flask.cli import AppGroup
 from App.database import create_db, get_migrate, drop_db
 from App.main import create_app
 from App.controllers import ( get_researcher_by_email, get_all_users_json, get_all_users,
-                                create_topic, get_topic_by_name, create_topic_with_parent, get_all_topics
+                                create_topic, get_topic_by_name, create_topic_with_parent, get_all_topics,
+                                delete_pub, delete_researcher
 )
 
 from App.models import User, Student, Researcher
@@ -91,6 +92,12 @@ def list_user_command(format):
 @click.argument("email", default="test@mail.com")
 def get_researcher_command(email):
     print(get_researcher_by_email(email).toDict())
+
+@researcher_cli.command("delete", help="Deletes a specific researcher")
+@click.argument("id")
+def get_researcher_command(id):
+    delete_researcher(id)
+    print('deleted')
 
 app.cli.add_command(researcher_cli) # add the group to the cli
 
@@ -178,27 +185,3 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "App"]))
 
 app.cli.add_command(test)
-
-
-
-# if len(get_all_topics()) == 0:
-#     topics = {}
-#     with open('topics.txt') as f:
-#         for line in f.readlines():
-#             if line[0] != '\n':
-#                 top = line.rstrip()
-#                 temp = top.split(':', 1)
-#                 topics[temp[0]] = temp[1].strip().split(', ')
-
-#     for key in topics:
-#         create_topic(key)
-#         for index, top in enumerate(topics[key]):
-#             if str(top).islower():
-#                 topics[key][index] = top.title()
-
-#     for key in topics:
-#         parent = get_topic_by_name(key)
-#         for topic in topics[key]:
-#             top = create_topic_with_parent(topic, parent.id)
-
-#     f.close()
