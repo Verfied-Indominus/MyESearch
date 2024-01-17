@@ -942,9 +942,10 @@ async function loadPublications(publications){
                     </div>
                 </li>
             `;
-            if (x % (publications.length - 1) == 0){
-                ap_ul.innerHTML = html1;
-            }
+            ap_ul.innerHTML = html1;
+            // if (x % (publications.length - 1) == 0){
+            //     ap_ul.innerHTML = html1;
+            // }
         }, 0); 
     }
     

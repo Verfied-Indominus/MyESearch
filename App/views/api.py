@@ -162,7 +162,6 @@ def scholarly_update():
             request = f"Extract the main topics pertaining to Computer Science from the following text as a python list: '{abstract}'"
             # keywords  = prompt(request)["choices"][0]["text"]
             keywords  = ai_prompt(request)
-            # print(keywords)
             keywords = '[' + keywords.split('[')[1]
             keywords = keywords.split(']')[0] + ']'
             print(keywords)
